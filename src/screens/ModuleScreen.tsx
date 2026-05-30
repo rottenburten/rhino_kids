@@ -76,8 +76,9 @@ export default function ModuleScreen() {
   const [answered, setAnswered] = useState(false)
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null)
   const [showRoundEnd, setShowRoundEnd] = useState(false)
-  // 10/10 bonus kutlaması ("🥭 Bir mango daha topladın!") görünürlüğü.
+  // 10/10 bonus kutlaması görünürlüğü + gösterilecek mesaj (mango durumuna göre).
   const [bonusCelebrate, setBonusCelebrate] = useState(false)
+  const [bonusMessage, setBonusMessage] = useState('')
   // Bu turda yeni kazanılan rozetler (sırayla kutlanır, sonra tur-sonu özeti).
   const [pendingBadges, setPendingBadges] = useState<BadgeDef[]>([])
   const { mood, flash } = useCharacterMood() // base: 'idle'
@@ -97,9 +98,13 @@ export default function ModuleScreen() {
       fn()
     }, delay)
   }, [])
+  // 10/10 kutlamasını kapatan AYRI timer — soru-ilerletme timer'ıyla (nextTimeoutRef)
+  // çakışmasın diye bağımsız. Kapanma her zaman bu timer'a bağlı, animasyona DEĞİL.
+  const bonusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(
     () => () => {
       if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current)
+      if (bonusTimeoutRef.current) clearTimeout(bonusTimeoutRef.current)
     },
     []
   )
@@ -130,8 +135,10 @@ export default function ModuleScreen() {
     setFeedback(null)
     setShowRoundEnd(false)
     setBonusCelebrate(false)
+    setBonusMessage('')
     setPendingBadges([])
     if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current)
+    if (bonusTimeoutRef.current) clearTimeout(bonusTimeoutRef.current)
   }, [module, level])
 
   useEffect(() => {
@@ -263,11 +270,17 @@ export default function ModuleScreen() {
         // Tur bitti → bu mod+seviyeyi oturum için kilitle (10/10 şartı YOK).
         markCompleted(module.id, level)
         if (isPerfect) {
-          // 1) bonus mango düş → animasyon oynar, 2) kısa kutlama,
-          // 3) BONUS_WAIT sonra finalize (+ rozet) → tur-sonu özetine geç.
-          reward()
+          // 10/10 kutlaması — mango durumundan BAĞIMSIZ tek akış:
+          // Mango varsa düşür + mango mesajı; bittiyse sadece 10/10 mesajı.
+          // Mango durumu SADECE mesajı değiştirir; akış ve kapanma aynı.
+          const hadMango = remainingSeconds > 0
+          if (hadMango) reward()
+          setBonusMessage(hadMango ? '🥭 Bir mango daha topladın!' : '🎉 Mükemmel! 10/10!')
           setBonusCelebrate(true)
-          scheduleNext(() => {
+          // KOŞULSUZ kapanma garantisi (ayrı ref, animasyona bağlı değil):
+          if (bonusTimeoutRef.current) clearTimeout(bonusTimeoutRef.current)
+          bonusTimeoutRef.current = setTimeout(() => {
+            bonusTimeoutRef.current = null
             setBonusCelebrate(false)
             finishRound(roundPoints + pts, true)
           }, BONUS_WAIT)
@@ -313,7 +326,7 @@ export default function ModuleScreen() {
             className="mb-3 flex justify-center"
           >
             <div className="bg-white border-2 border-mango rounded-full px-5 py-2 font-display font-bold text-mango-dark shadow-kid">
-              🥭 Bir mango daha topladın!
+              {bonusMessage}
             </div>
           </motion.div>
         )}
