@@ -14,8 +14,7 @@ import { markCompleted } from '../services/sessionLock'
 import { recordAnswer } from '../services/history'
 import MangoTree from '../components/MangoTree'
 import BadgeCelebration from '../components/BadgeCelebration'
-import LottieOverlay from '../components/LottieOverlay'
-import { getCelebration, type CelebrationKind } from '../animations'
+import Confetti from '../components/Confetti'
 import TimerEndScreen from '../components/TimerEndScreen'
 
 const CORRECT_WAIT = 1500
@@ -81,8 +80,6 @@ export default function ModuleScreen() {
   const [bonusCelebrate, setBonusCelebrate] = useState(false)
   // Bu turda yeni kazanılan rozetler (sırayla kutlanır, sonra tur-sonu özeti).
   const [pendingBadges, setPendingBadges] = useState<BadgeDef[]>([])
-  // Aktif Lottie kutlama efekti (JSON yoksa LottieOverlay sessizce geçer).
-  const [celebration, setCelebration] = useState<CelebrationKind | null>(null)
   const { mood, flash } = useCharacterMood() // base: 'idle'
   // Havuç/Mango timer (global). Süre Home ↔ Module geçişinde devam eder.
   const { startTimer, reward, isFinished, endScreenDismissed, dismissEndScreen } =
@@ -114,7 +111,6 @@ export default function ModuleScreen() {
     finalizeRound(totalPoints, perfect).then((newBadges) => {
       if (newBadges.length > 0) {
         setPendingBadges(newBadges)
-        setCelebration('badge') // Lottie (JSON yoksa sessiz geçer)
       } else {
         setShowRoundEnd(true)
       }
@@ -135,7 +131,6 @@ export default function ModuleScreen() {
     setShowRoundEnd(false)
     setBonusCelebrate(false)
     setPendingBadges([])
-    setCelebration(null)
     if (nextTimeoutRef.current) clearTimeout(nextTimeoutRef.current)
   }, [module, level])
 
@@ -272,7 +267,6 @@ export default function ModuleScreen() {
           // 3) BONUS_WAIT sonra finalize (+ rozet) → tur-sonu özetine geç.
           reward()
           setBonusCelebrate(true)
-          setCelebration('perfect') // Lottie konfeti (JSON yoksa sessiz geçer)
           scheduleNext(() => {
             setBonusCelebrate(false)
             finishRound(roundPoints + pts, true)
@@ -306,6 +300,10 @@ export default function ModuleScreen() {
           <MangoTree />
         </div>
 
+        {/* 10/10 konfeti — bonusCelebrate'e bağlı; BONUS_WAIT setTimeout'u
+            bunu kesin kapatır (animasyon bitişine bağlı DEĞİL → takılma olmaz). */}
+        {bonusCelebrate && <Confetti />}
+
         {/* 10/10 BONUS KUTLAMASI — bonus mango düşerken görünür */}
         {bonusCelebrate && (
           <motion.div
@@ -320,13 +318,6 @@ export default function ModuleScreen() {
           </motion.div>
         )}
 
-        {/* Lottie kutlama efekti — JSON yoksa hiçbir şey çizmez, akışı bozmaz. */}
-        {celebration && (
-          <LottieOverlay
-            data={getCelebration(celebration)}
-            onComplete={() => setCelebration(null)}
-          />
-        )}
 
         {/* HEADER */}
         <header className="flex justify-between items-center mb-4">
