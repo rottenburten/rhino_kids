@@ -1,0 +1,191 @@
+import { useNavigate } from 'react-router-dom'
+import Reno from '../characters/Reno'
+import { getCharacter } from '../characters'
+import SavannaBackground from '../components/SavannaBackground'
+import { MODULES } from '../modules/moduleList'
+import { usePlayerData } from '../hooks/usePlayerData'
+import { isCompleted } from '../services/sessionLock'
+import { useLevel } from '../contexts/LevelContext'
+import type { Level } from '../types'
+
+// Seviye seçici seçenekleri — savana temalı (kolaydan zora).
+const LEVEL_OPTIONS: { id: Level; label: string; emoji: string }[] = [
+  { id: 'easy', label: 'Kolay', emoji: '🐣' },
+  { id: 'mid', label: 'Orta', emoji: '🦔' },
+  { id: 'hard', label: 'Zor', emoji: '🦁' },
+]
+
+export default function HomeScreen() {
+  const navigate = useNavigate()
+  const { data, loading } = usePlayerData()
+  const { level, loaded: levelLoaded, setLevel } = useLevel()
+
+  if (loading || !data || !levelLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-savana-sky">
+        <div className="text-4xl animate-bob">🦏</div>
+      </div>
+    )
+  }
+
+  // Seçili seviyede oynanabilir (yakında olmayan) tüm modüller bu oturumda
+  // tamamlandı mı? → "seviyeyi bitirdin" banner'ı için.
+  const playable = MODULES.filter((m) => !m.comingSoon)
+  const allCompleted =
+    playable.length > 0 && playable.every((m) => isCompleted(m.id, level))
+
+  return (
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-savana-sky via-savana-sun to-savana-earth">
+      <SavannaBackground />
+
+      <div className="relative z-10 max-w-3xl mx-auto px-4 pt-6 pb-8">
+        {/* HEADER */}
+        <header className="flex justify-between items-center mb-2">
+          <h1 className="font-display text-3xl font-bold text-savana-deep">
+            🦏 Rhi<span className="text-savana-accent">no</span>
+          </h1>
+          <div className="flex gap-2">
+            <div className="bg-white border-2 border-mango rounded-full px-3 py-1 font-bold text-mango-dark text-sm">
+              🥭 {data.mangos}
+            </div>
+            <div className="bg-white border-2 border-red-400 rounded-full px-3 py-1 font-bold text-red-700 text-sm">
+              🔥 {data.dailyStreak}
+            </div>
+          </div>
+        </header>
+
+        {/* RENO */}
+        <div className="text-center py-4">
+          <div className="inline-block bg-white border-[3px] border-savana-deep rounded-2xl px-4 py-2 mb-3 font-display font-semibold text-savana-deep shadow-kid">
+            Selam {data.playerName}! Bugün hangi macera? 🌟
+          </div>
+          <div className="relative inline-block">
+            <Reno />
+          </div>
+        </div>
+
+        {/* SEVİYE SEÇİCİ */}
+        <div className="flex justify-center gap-2 mb-2">
+          {LEVEL_OPTIONS.map((opt) => {
+            const active = opt.id === level
+            return (
+              <button
+                key={opt.id}
+                onClick={() => setLevel(opt.id)}
+                aria-pressed={active}
+                className={`flex items-center gap-1 rounded-full px-4 py-1.5 font-display font-bold text-sm border-2 transition-all ${
+                  active
+                    ? 'bg-savana-deep text-white border-savana-deep shadow-kid scale-105'
+                    : 'bg-white text-savana-deep border-savana-deep/40 opacity-80'
+                }`}
+              >
+                <span>{opt.emoji}</span>
+                <span>{opt.label}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* MODÜLLER */}
+        <div className="mt-4">
+          <h2 className="text-center font-display font-bold text-savana-deep text-sm tracking-wider mb-3">
+            🎯 BUGÜN NE ÖĞRENELİM?
+          </h2>
+
+          {/* Bu oturumda oynanabilir tüm modüller tamamlandıysa kutla. */}
+          {allCompleted && (
+            <div className="mb-3 bg-savana-grass border-[3px] border-savana-deep rounded-2xl px-4 py-3 text-center font-display font-bold text-savana-deep shadow-kid">
+              🏆 Bu seviyeyi bitirdin!
+            </div>
+          )}
+
+          <div className="grid grid-cols-4 gap-3">
+            {MODULES.map((mod) => {
+              // Modülün kendi çizdiğimiz karakteri (count/add/sub/mul/div).
+              // Henüz karakteri olmayan modüller (seq/shape/clock) emoji'de kalır.
+              const Character = getCharacter(mod.id)
+              // Bu oturumda oynandıysa kilitli görünür (sadece oynanabilir modüller).
+              const completed = !mod.comingSoon && isCompleted(mod.id, level)
+              return (
+                <button
+                  key={mod.id}
+                  onClick={() => {
+                    if (mod.comingSoon) {
+                      alert(`${mod.characterName} yakında geliyor! 🌟`)
+                    } else if (completed) {
+                      alert('Bu bölümü tamamladın! Başka bölüm seç 🌿')
+                    } else {
+                      navigate(`/module/${mod.id}`)
+                    }
+                  }}
+                  className={`kid-card p-3 text-center relative ${
+                    mod.comingSoon || completed ? 'opacity-50' : ''
+                  }`}
+                >
+                  {mod.comingSoon && (
+                    <div className="absolute top-1 right-1 text-xs">🔒</div>
+                  )}
+                  {completed && (
+                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-savana-grass border-2 border-savana-deep flex items-center justify-center text-[10px] font-bold text-savana-deep">
+                      ✓
+                    </div>
+                  )}
+                  {Character ? (
+                    // viewBox 0 0 200 200 olduğu için karakter 56px kutuda
+                    // ortalı ve taşmasız oturur (Zara'nın uzun boynu dahil).
+                    <div className="flex items-center justify-center h-14 mb-1 overflow-visible">
+                      <Character size={56} mood="idle" />
+                    </div>
+                  ) : (
+                    <div className="text-3xl mb-1 flex items-center justify-center h-14">
+                      {mod.icon}
+                    </div>
+                  )}
+                  <div className="font-display font-bold text-xs text-savana-deep">
+                    {mod.name}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Tüm bölümler kilitliyken cesaretlendirici alt mesaj —
+              "takılmış" değil "başardın" hissi versin. Seviye seçici sonra. */}
+          {allCompleted && (
+            <p className="mt-3 text-center font-display font-semibold text-savana-deep/80 text-sm">
+              Tüm bölümleri tamamladın, harikasın! Yarın yeni sorularla görüşürüz 🌟
+            </p>
+          )}
+        </div>
+
+        {/* İSTATİSTİK ÖZET */}
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
+            <div className="text-xl font-display font-bold text-savana-deep">
+              {data.totalCorrect}
+            </div>
+            <div className="text-[10px] font-bold text-savana-grass">
+              TOPLAM DOĞRU
+            </div>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
+            <div className="text-xl font-display font-bold text-savana-deep">
+              {data.bestScore}
+            </div>
+            <div className="text-[10px] font-bold text-savana-grass">
+              EN YÜKSEK PUAN
+            </div>
+          </div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
+            <div className="text-xl font-display font-bold text-savana-deep">
+              {data.maxStreak}
+            </div>
+            <div className="text-[10px] font-bold text-savana-grass">
+              EN UZUN SERİ
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

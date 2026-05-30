@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply font-body;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  body {
+    @apply bg-savana-sky;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+  /* Çocuk uygulaması: yazıları seçilemez yap (yanlışlıkla highlight olmasın) */
+  * {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Input'lar ve text alanlar hariç */
+  input,
+  textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+@layer components {
+  /* Çocuk-dostu kart stili (Duolingo benzeri) */
+  .kid-card {
+    @apply bg-white border-[3px] border-savana-deep rounded-2xl shadow-kid transition-all;
+  }
+  .kid-card:hover {
+    @apply -translate-y-1 shadow-kid-hover;
+  }
+  .kid-card:active {
+    @apply translate-y-0.5 shadow-kid-active;
+  }
+  /* Çocuk-dostu buton */
+  .kid-btn {
+    @apply bg-savana-deep text-white border-[3px] border-savana-deep rounded-2xl py-3 px-6 font-display font-bold shadow-kid transition-all cursor-pointer;
+  }
+  .kid-btn:hover {
+    @apply -translate-y-1 shadow-kid-hover;
+  }
+  .kid-btn:active {
+    @apply translate-y-0.5 shadow-kid-active;
+  }
+}
