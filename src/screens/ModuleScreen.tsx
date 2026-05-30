@@ -320,6 +320,14 @@ export default function ModuleScreen() {
           </motion.div>
         )}
 
+        {/* Lottie kutlama efekti — JSON yoksa hiçbir şey çizmez, akışı bozmaz. */}
+        {celebration && (
+          <LottieOverlay
+            data={getCelebration(celebration)}
+            onComplete={() => setCelebration(null)}
+          />
+        )}
+
         {/* HEADER */}
         <header className="flex justify-between items-center mb-4">
           <button
