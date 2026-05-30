@@ -83,8 +83,14 @@ export default function ModuleScreen() {
   const [pendingBadges, setPendingBadges] = useState<BadgeDef[]>([])
   const { mood, flash } = useCharacterMood() // base: 'idle'
   // Havuç/Mango timer (global). Süre Home ↔ Module geçişinde devam eder.
-  const { startTimer, reward, isFinished, endScreenDismissed, dismissEndScreen } =
-    useCarrotTimer()
+  const {
+    startTimer,
+    reward,
+    remainingSeconds,
+    isFinished,
+    endScreenDismissed,
+    dismissEndScreen,
+  } = useCarrotTimer()
   const showTimerEnd = isFinished && !endScreenDismissed
 
   // Soru ilerletme / tur-sonu geçişi için tek timer. useRef ile yönetilir:
