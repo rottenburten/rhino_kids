@@ -28,6 +28,9 @@ export interface PlayerData {
   totalScore: number
   mangos: number
 
+  // Kaç kez 10/10 (kusursuz tur) yapıldı — rozetler için
+  perfectRounds: number
+
   // Modül başına doğru sayısı
   byModule: Record<ModuleId, number>
 

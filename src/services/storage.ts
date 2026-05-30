@@ -1,5 +1,6 @@
 import { Preferences } from '@capacitor/preferences'
 import type { PlayerData, ModuleId } from '../types'
+import { computeEarnedBadgeIds, getBadge, type BadgeDef } from './badges'
 
 const PLAYER_KEY = 'rhino_player_data'
 
@@ -10,6 +11,7 @@ const defaultPlayerData: PlayerData = {
   maxStreak: 0,
   totalScore: 0,
   mangos: 0,
+  perfectRounds: 0,
   byModule: {
     count: 0, add: 0, sub: 0, mul: 0, div: 0,
     seq: 0, shape: 0, clock: 0,
@@ -82,6 +84,31 @@ export async function recordRoundEnd(roundPoints: number): Promise<PlayerData> {
     ...data,
     bestScore: Math.max(data.bestScore, roundPoints),
   }))
+}
+
+// ─── Tur sonu finalize + rozet ödüllendirme ───
+// En yüksek puanı günceller, kusursuz turda (10/10) perfectRounds'u artırır,
+// sonra hak edilen yeni rozetleri earnedBadges'e ekler. Yeni kazanılan
+// rozetlerin tanımlarını döndürür (kutlama UI'ı için).
+export async function finalizeRound(
+  roundPoints: number,
+  perfect: boolean
+): Promise<BadgeDef[]> {
+  let newlyEarnedIds: string[] = []
+  await updatePlayerData((data) => {
+    const next: PlayerData = {
+      ...data,
+      bestScore: Math.max(data.bestScore, roundPoints),
+      perfectRounds: perfect ? data.perfectRounds + 1 : data.perfectRounds,
+    }
+    const earned = computeEarnedBadgeIds(next)
+    newlyEarnedIds = earned.filter((id) => !data.earnedBadges.includes(id))
+    next.earnedBadges = [...data.earnedBadges, ...newlyEarnedIds]
+    return next
+  })
+  return newlyEarnedIds
+    .map(getBadge)
+    .filter((b): b is BadgeDef => b !== undefined)
 }
 
 // ─── Tüm veriyi sıfırla (ebeveyn paneli için) ───

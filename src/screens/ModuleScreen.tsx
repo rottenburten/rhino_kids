@@ -3,13 +3,15 @@ import { motion } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getModule } from '../modules/moduleList'
 import { buildRound, makeOptions, getRange } from '../modules/questionPool'
-import { recordCorrectAnswer, recordRoundEnd } from '../services/storage'
+import { recordCorrectAnswer, finalizeRound } from '../services/storage'
+import type { BadgeDef } from '../services/badges'
 import type { Question } from '../types'
 import { getCharacter, useCharacterMood } from '../characters'
 import { useCarrotTimer } from '../contexts/CarrotTimerContext'
 import { useLevel } from '../contexts/LevelContext'
 import { markCompleted } from '../services/sessionLock'
 import MangoTree from '../components/MangoTree'
+import BadgeCelebration from '../components/BadgeCelebration'
 import TimerEndScreen from '../components/TimerEndScreen'
 
 const CORRECT_WAIT = 1500
@@ -42,6 +44,8 @@ export default function ModuleScreen() {
   const [showRoundEnd, setShowRoundEnd] = useState(false)
   // 10/10 bonus kutlaması ("🥭 Bir mango daha topladın!") görünürlüğü.
   const [bonusCelebrate, setBonusCelebrate] = useState(false)
+  // Bu turda yeni kazanılan rozetler (sırayla kutlanır, sonra tur-sonu özeti).
+  const [pendingBadges, setPendingBadges] = useState<BadgeDef[]>([])
   const { mood, flash } = useCharacterMood() // base: 'idle'
   // Havuç/Mango timer (global). Süre Home ↔ Module geçişinde devam eder.
   const { startTimer, reward, isFinished, endScreenDismissed, dismissEndScreen } =
@@ -65,6 +69,19 @@ export default function ModuleScreen() {
     },
     []
   )
+
+  // Tur sonu: puanı/perfect'i kaydet + rozet ödüllendir. Yeni rozet varsa
+  // önce kutlamayı göster (sırayla), kapanınca tur-sonu özetine geç; yoksa
+  // doğrudan özete geç.
+  const finishRound = useCallback((totalPoints: number, perfect: boolean) => {
+    finalizeRound(totalPoints, perfect).then((newBadges) => {
+      if (newBadges.length > 0) {
+        setPendingBadges(newBadges)
+      } else {
+        setShowRoundEnd(true)
+      }
+    })
+  }, [])
 
   // Yeni tur başlat
   const startNewRound = useCallback(() => {
@@ -112,6 +129,15 @@ export default function ModuleScreen() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-savana-sky to-savana-earth p-6">
         {showTimerEnd && <TimerEndScreen onContinue={dismissEndScreen} />}
+        {pendingBadges.length > 0 && (
+          <BadgeCelebration
+            badges={pendingBadges}
+            onDone={() => {
+              setPendingBadges([])
+              setShowRoundEnd(true)
+            }}
+          />
+        )}
         <div className="bg-white border-[3px] border-savana-deep rounded-3xl p-8 max-w-md text-center shadow-kid">
           <div className="text-6xl mb-2">
             {roundCorrect === 10 ? '🏆' : roundCorrect >= 7 ? '🌟' : '💪'}
@@ -191,20 +217,19 @@ export default function ModuleScreen() {
           setQIndex((i) => i + 1)
           return
         }
-        recordRoundEnd(roundPoints + pts)
         // Tur bitti → bu mod+seviyeyi oturum için kilitle (10/10 şartı YOK).
         markCompleted(module.id, level)
         if (isPerfect) {
           // 1) bonus mango düş → animasyon oynar, 2) kısa kutlama,
-          // 3) BONUS_WAIT sonra tur-sonu özetine geç.
+          // 3) BONUS_WAIT sonra finalize (+ rozet) → tur-sonu özetine geç.
           reward()
           setBonusCelebrate(true)
           scheduleNext(() => {
             setBonusCelebrate(false)
-            setShowRoundEnd(true)
+            finishRound(roundPoints + pts, true)
           }, BONUS_WAIT)
         } else {
-          setShowRoundEnd(true)
+          finishRound(roundPoints + pts, false)
         }
       }, CORRECT_WAIT)
     } else {
@@ -213,10 +238,9 @@ export default function ModuleScreen() {
       flash('sad', WRONG_WAIT)
       scheduleNext(() => {
         if (qIndex + 1 >= questions.length) {
-          recordRoundEnd(roundPoints)
           // Tur bitti → kilitle (yanlışla bitse bile "bu oturumda oynandı").
           markCompleted(module.id, level)
-          setShowRoundEnd(true)
+          finishRound(roundPoints, false)
         } else {
           setQIndex((i) => i + 1)
         }

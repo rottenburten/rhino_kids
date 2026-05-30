@@ -6,6 +6,7 @@ import { MODULES } from '../modules/moduleList'
 import { usePlayerData } from '../hooks/usePlayerData'
 import { isCompleted } from '../services/sessionLock'
 import { useLevel } from '../contexts/LevelContext'
+import { BADGES } from '../services/badges'
 import type { Level } from '../types'
 
 // Seviye seçici seçenekleri — savana temalı (kolaydan zora).
@@ -33,6 +34,9 @@ export default function HomeScreen() {
   const playable = MODULES.filter((m) => !m.comingSoon)
   const allCompleted =
     playable.length > 0 && playable.every((m) => isCompleted(m.id, level))
+
+  // Kazanılan rozet id'leri — vitrin için hızlı arama.
+  const earnedBadgeIds = new Set(data.earnedBadges)
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-savana-sky via-savana-sun to-savana-earth">
@@ -183,6 +187,40 @@ export default function HomeScreen() {
             <div className="text-[10px] font-bold text-savana-grass">
               EN UZUN SERİ
             </div>
+          </div>
+        </div>
+
+        {/* ROZET VİTRİNİ — kazanılanlar renkli, kazanılmayanlar gri/kilitli */}
+        <div className="mt-6">
+          <h2 className="text-center font-display font-bold text-savana-deep text-sm tracking-wider mb-3">
+            🏅 ROZETLER ({earnedBadgeIds.size}/{BADGES.length})
+          </h2>
+          <div className="grid grid-cols-6 gap-2">
+            {BADGES.map((badge) => {
+              const earned = earnedBadgeIds.has(badge.id)
+              return (
+                <div
+                  key={badge.id}
+                  title={`${badge.name} — ${badge.description}`}
+                  className={`aspect-square rounded-xl border-2 flex flex-col items-center justify-center p-1 ${
+                    earned
+                      ? 'bg-white border-savana-deep shadow-kid'
+                      : 'bg-savana-deep/5 border-savana-deep/20'
+                  }`}
+                >
+                  <div className={`text-2xl ${earned ? '' : 'opacity-30 grayscale'}`}>
+                    {earned ? badge.emoji : '🔒'}
+                  </div>
+                  <div
+                    className={`text-[8px] font-bold leading-tight text-center mt-0.5 ${
+                      earned ? 'text-savana-deep' : 'text-savana-deep/40'
+                    }`}
+                  >
+                    {badge.name}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
