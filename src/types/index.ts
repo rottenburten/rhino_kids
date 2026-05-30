@@ -17,6 +17,21 @@ export interface Question {
   a: number
   b?: number
   ans: number
+
+  // ── Yeni modüller için opsiyonel alanlar ──
+  /** SIRA: gösterilecek tam dizi (doğru haliyle). Eksik yer missingIndex'te. */
+  seq?: number[]
+  /** SIRA: dizide '?' gösterilecek pozisyon. ans = seq[missingIndex]. */
+  missingIndex?: number
+  /** SAAT: saat (1-12). */
+  clockH?: number
+  /** SAAT: dakika (0 veya 30). */
+  clockM?: number
+  /**
+   * Hazır seçenek listesi (karışık, ans dahil). ŞEKİL ve SAAT için kullanılır;
+   * aritmetik modüller ve SIRA boş bırakır → makeOptions ile üretilir.
+   */
+  choices?: number[]
 }
 
 // ─── Oyuncu verileri (kalıcı) ───

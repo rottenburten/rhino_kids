@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getModule } from '../modules/moduleList'
-import { buildRound, makeOptions, getRange } from '../modules/questionPool'
+import { buildRound, makeOptions, getRange, formatClock } from '../modules/questionPool'
+import ShapeGlyph, { SHAPE_NAMES, SHAPE_NAMES_ACC } from '../components/ShapeGlyph'
 import { recordCorrectAnswer, finalizeRound } from '../services/storage'
 import type { BadgeDef } from '../services/badges'
 import type { Question } from '../types'
@@ -25,6 +26,37 @@ const EMOJIS = ['🍄', '🌰', '🍃', '🌿', '🐛', '🦋', '🐝', '🌸', 
 
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
+}
+
+// SAAT modülü için basit analog saat yüzü (akrep/yelkovan).
+function ClockFace({ hour, minute }: { hour: number; minute: number }) {
+  // Açılar: 12 = -90°. Saat akrebi dakikaya göre hafif ilerler.
+  const minAngle = minute * 6 - 90
+  const hourAngle = (hour % 12) * 30 + minute * 0.5 - 90
+  const hx = 50 + 26 * Math.cos((hourAngle * Math.PI) / 180)
+  const hy = 50 + 26 * Math.sin((hourAngle * Math.PI) / 180)
+  const mx = 50 + 38 * Math.cos((minAngle * Math.PI) / 180)
+  const my = 50 + 38 * Math.sin((minAngle * Math.PI) / 180)
+  return (
+    <svg width="120" height="120" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="#fff" stroke="#5b4636" strokeWidth="4" />
+      {Array.from({ length: 12 }, (_, i) => {
+        const a = (i * 30 - 90) * (Math.PI / 180)
+        return (
+          <circle
+            key={i}
+            cx={50 + 39 * Math.cos(a)}
+            cy={50 + 39 * Math.sin(a)}
+            r="2"
+            fill="#5b4636"
+          />
+        )
+      })}
+      <line x1="50" y1="50" x2={hx} y2={hy} stroke="#5b4636" strokeWidth="5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2={mx} y2={my} stroke="#ef6f6c" strokeWidth="3.5" strokeLinecap="round" />
+      <circle cx="50" cy="50" r="4" fill="#5b4636" />
+    </svg>
+  )
 }
 
 export default function ModuleScreen() {
@@ -108,8 +140,14 @@ export default function ModuleScreen() {
   useEffect(() => {
     if (qIndex >= questions.length || !questions[qIndex]) return
     const q = questions[qIndex]
-    const [, hi] = getRange(level)
-    setOptions(makeOptions(q.ans, hi))
+    // ŞEKİL/SAAT kendi hazır seçeneklerini taşır (choices); diğerleri sayısal
+    // mesafeyle üretilir (makeOptions).
+    if (q.choices && q.choices.length > 0) {
+      setOptions(q.choices)
+    } else {
+      const [, hi] = getRange(level)
+      setOptions(makeOptions(q.ans, hi))
+    }
     setAnswered(false)
     setFeedback(null)
   }, [qIndex, questions, level])
@@ -327,10 +365,15 @@ export default function ModuleScreen() {
               <div className="text-2xl font-display font-bold text-red-800">
                 Yanlış!
               </div>
-              <div className="mt-2 bg-white px-6 py-2 rounded-xl border-2 border-savana-deep">
-                <span className="font-display font-bold text-savana-deep text-xl">
-                  Doğrusu: {q.ans}
-                </span>
+              <div className="mt-2 bg-white px-6 py-2 rounded-xl border-2 border-savana-deep flex items-center gap-2">
+                <span className="font-display font-bold text-savana-deep text-xl">Doğrusu:</span>
+                {q.type === 'shape' ? (
+                  <ShapeGlyph kind={q.ans} size={32} />
+                ) : (
+                  <span className="font-display font-bold text-savana-deep text-xl">
+                    {q.type === 'clock' ? formatClock(q.ans) : q.ans}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -342,6 +385,10 @@ export default function ModuleScreen() {
             {q.type === 'sub' && `${q.a} − ${q.b} = ?`}
             {q.type === 'mul' && `${q.a} × ${q.b} = ?`}
             {q.type === 'div' && `${q.a} ÷ ${q.b} = ?`}
+            {q.type === 'seq' && 'Eksik sayıyı bul! 🔢'}
+            {q.type === 'shape' &&
+              `${SHAPE_NAMES_ACC[q.ans] ?? SHAPE_NAMES[q.ans]} bul! 👀`}
+            {q.type === 'clock' && 'Saat kaç? ⏰'}
           </h2>
 
           {/* GÖRSEL */}
@@ -352,6 +399,26 @@ export default function ModuleScreen() {
                   {emoji}
                 </span>
               ))}
+
+            {/* SIRA: diziyi göster, eksik konumda '?' */}
+            {q.type === 'seq' &&
+              q.seq?.map((n, i) => (
+                <div
+                  key={i}
+                  className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center text-2xl font-display font-bold ${
+                    i === q.missingIndex
+                      ? 'border-dashed border-savana-accent text-savana-accent bg-amber-50'
+                      : 'border-savana-deep text-savana-deep bg-white'
+                  }`}
+                >
+                  {i === q.missingIndex ? '?' : n}
+                </div>
+              ))}
+
+            {/* SAAT: basit analog saat */}
+            {q.type === 'clock' && q.clockH !== undefined && (
+              <ClockFace hour={q.clockH} minute={q.clockM ?? 0} />
+            )}
           </div>
 
           {/* SEÇENEKLER */}
@@ -361,9 +428,15 @@ export default function ModuleScreen() {
                 key={val}
                 onClick={() => onSelect(val)}
                 disabled={answered}
-                className="kid-card p-5 text-3xl font-display font-bold text-savana-deep disabled:opacity-50"
+                className="kid-card p-5 text-3xl font-display font-bold text-savana-deep disabled:opacity-50 flex items-center justify-center"
               >
-                {val}
+                {q.type === 'shape' ? (
+                  <ShapeGlyph kind={val} size={52} />
+                ) : q.type === 'clock' ? (
+                  <span>{formatClock(val)}</span>
+                ) : (
+                  val
+                )}
               </button>
             ))}
           </div>

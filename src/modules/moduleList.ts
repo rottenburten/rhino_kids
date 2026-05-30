@@ -48,7 +48,6 @@ export const MODULES: ModuleDef[] = [
     character: '🦅',
     characterName: 'Kartal Kira',
     description: 'Eksik sayıyı bul',
-    comingSoon: true,
   },
   {
     id: 'shape',
@@ -57,7 +56,6 @@ export const MODULES: ModuleDef[] = [
     character: '🐢',
     characterName: 'Kaplumbağa Tomi',
     description: 'Şekilleri tanı',
-    comingSoon: true,
   },
   {
     id: 'clock',
@@ -66,7 +64,6 @@ export const MODULES: ModuleDef[] = [
     character: '🦘',
     characterName: 'Kanguru Kalo',
     description: 'Saati öğren',
-    comingSoon: true,
   },
 ]
 

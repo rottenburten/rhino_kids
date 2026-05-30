@@ -69,12 +69,82 @@ export function buildPool(module: ModuleId, level: Level): Question[] {
       break
     }
 
+    case 'seq': {
+      // Eksik sayıyı bul: ardışık 3'lü dizi, biri "?" olur.
+      // adım: easy=1-2, mid=1-2, hard=1-3. Başlangıç hi'ye göre sınırlı.
+      // Her dizi için 3 eksik-konum varyantı → her seviyede 10+ benzersiz soru.
+      const steps = level === 'easy' ? [1, 2] : level === 'mid' ? [1, 2] : [1, 2, 3]
+      for (const step of steps) {
+        const maxStart = Math.max(lo, hi - step * 2)
+        for (let start = lo; start <= maxStart; start++) {
+          const s = [start, start + step, start + step * 2]
+          for (const mi of [0, 1, 2]) {
+            pool.push({ type: 'seq', a: start, ans: s[mi], seq: s, missingIndex: mi })
+          }
+        }
+      }
+      break
+    }
+
+    case 'shape': {
+      // Şekli tanı: 0=daire 1=kare 2=üçgen 3=yıldız 4=kalp.
+      // easy 3 şekil, mid 4, hard 5. Her şekil birkaç kez (3 tekrar) → 10+ soru.
+      const shapeCount = level === 'easy' ? 3 : level === 'mid' ? 4 : 5
+      for (let rep = 0; rep < 4; rep++) {
+        for (let k = 0; k < shapeCount; k++) {
+          // choices: doğru + 2 yanlış şekil index'i (karışık)
+          const wrongs = shuffle(
+            Array.from({ length: shapeCount }, (_, i) => i).filter((i) => i !== k)
+          ).slice(0, 2)
+          const choices = shuffle([k, ...wrongs])
+          pool.push({ type: 'shape', a: k, ans: k, choices })
+        }
+      }
+      break
+    }
+
+    case 'clock': {
+      // Saat oku: easy tam saat (m=0), mid/hard yarım saat de (m=0|30).
+      const minutes = level === 'easy' ? [0] : [0, 30]
+      for (let rep = 0; rep < 2; rep++) {
+        for (let h = 1; h <= 12; h++) {
+          for (const m of minutes) {
+            // ans kodu: h*100 + m (ör. 3:30 → 330). choices: 3 farklı saat.
+            const ansCode = h * 100 + m
+            const choiceSet = new Set<number>([ansCode])
+            let guard = 0
+            while (choiceSet.size < 3 && guard < 50) {
+              const rh = 1 + Math.floor(Math.random() * 12)
+              const rm = minutes[Math.floor(Math.random() * minutes.length)]
+              choiceSet.add(rh * 100 + rm)
+              guard++
+            }
+            pool.push({
+              type: 'clock',
+              a: ansCode,
+              ans: ansCode,
+              clockH: h,
+              clockM: m,
+              choices: shuffle(Array.from(choiceSet)),
+            })
+          }
+        }
+      }
+      break
+    }
+
     default:
-      // Diğer modüller (seq, shape, clock) sonra
       break
   }
 
   return shuffle(pool)
+}
+
+/** Saat kodunu (h*100+m) "3:00" / "3:30" metnine çevirir. */
+export function formatClock(code: number): string {
+  const h = Math.floor(code / 100)
+  const m = code % 100
+  return `${h}:${m.toString().padStart(2, '0')}`
 }
 
 // ─── Tur için 10 soru çıkar ───
