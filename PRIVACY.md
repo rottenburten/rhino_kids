@@ -41,7 +41,7 @@ engellemek için basit bir matematik sorusuyla korunmaktadır.
 
 ## İletişim
 
-Sorularınız için: <!-- TODO: ebeveyn/geliştirici e-posta adresi -->
+Sorularınız için: h.yalnizcan@gmail.com
 
 ---
 

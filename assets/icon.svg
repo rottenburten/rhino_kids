@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- App Store ikonu: OPAK zemin (alfa yok), kare köşeler (iOS yuvarlatır). -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="55%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#f6b34b"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff7e0"/>
+      <stop offset="100%" stop-color="#fde047"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <!-- güneş ışıltısı (köşe) -->
+  <circle cx="830" cy="210" r="120" fill="url(#sun)" opacity="0.85"/>
+
+  <!-- Reno — 200x200 içerik, 3.4x ölçek, ortalı (gölge dahil değil) -->
+  <g transform="translate(172, 150) scale(3.4)">
+    <!-- gövde -->
+    <ellipse cx="100" cy="120" rx="55" ry="58" fill="#9ca8b8"/>
+    <!-- karın -->
+    <ellipse cx="100" cy="132" rx="38" ry="42" fill="#b3bdca"/>
+    <!-- kulaklar -->
+    <ellipse cx="58" cy="74" rx="13" ry="18" fill="#9ca8b8"/>
+    <ellipse cx="142" cy="74" rx="13" ry="18" fill="#9ca8b8"/>
+    <ellipse cx="58" cy="76" rx="7" ry="11" fill="#7d8a9c"/>
+    <ellipse cx="142" cy="76" rx="7" ry="11" fill="#7d8a9c"/>
+    <!-- kafa -->
+    <ellipse cx="100" cy="86" rx="46" ry="42" fill="#9ca8b8"/>
+    <!-- yanaklar (pembe) -->
+    <ellipse cx="68" cy="96" rx="11" ry="8" fill="#f4a6b8" opacity="0.6"/>
+    <ellipse cx="132" cy="96" rx="11" ry="8" fill="#f4a6b8" opacity="0.6"/>
+    <!-- göz -->
+    <circle cx="84" cy="80" r="7" fill="#2d2d2d"/>
+    <circle cx="116" cy="80" r="7" fill="#2d2d2d"/>
+    <circle cx="86" cy="78" r="2.5" fill="#fff"/>
+    <circle cx="118" cy="78" r="2.5" fill="#fff"/>
+    <!-- burun + boynuz -->
+    <ellipse cx="100" cy="112" rx="22" ry="17" fill="#b3bdca"/>
+    <ellipse cx="92" cy="114" rx="3" ry="4" fill="#5a6472"/>
+    <ellipse cx="108" cy="114" rx="3" ry="4" fill="#5a6472"/>
+    <path d="M 100 96 L 94 106 L 106 106 Z" fill="#e8d4a0"/>
+    <!-- küçük boynuz (alın) -->
+    <path d="M 100 70 L 96 78 L 104 78 Z" fill="#e8d4a0"/>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2732" height="2732" viewBox="0 0 2732 2732">
+  <!-- Koyu mod açılış ekranı: koyu savana zemini, aynı Reno + logo. -->
+  <defs>
+    <linearGradient id="skyd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a3326"/>
+      <stop offset="100%" stop-color="#2a2419"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="2732" height="2732" fill="url(#skyd)"/>
+  <circle cx="2050" cy="640" r="240" fill="#5a5236" opacity="0.5"/>
+
+  <g transform="translate(866, 760) scale(5)">
+    <ellipse cx="100" cy="180" rx="50" ry="6" fill="rgba(0,0,0,0.25)"/>
+    <ellipse cx="100" cy="120" rx="55" ry="58" fill="#9ca8b8"/>
+    <ellipse cx="100" cy="132" rx="38" ry="42" fill="#b3bdca"/>
+    <ellipse cx="58" cy="74" rx="13" ry="18" fill="#9ca8b8"/>
+    <ellipse cx="142" cy="74" rx="13" ry="18" fill="#9ca8b8"/>
+    <ellipse cx="58" cy="76" rx="7" ry="11" fill="#7d8a9c"/>
+    <ellipse cx="142" cy="76" rx="7" ry="11" fill="#7d8a9c"/>
+    <ellipse cx="100" cy="86" rx="46" ry="42" fill="#9ca8b8"/>
+    <ellipse cx="68" cy="96" rx="11" ry="8" fill="#f4a6b8" opacity="0.6"/>
+    <ellipse cx="132" cy="96" rx="11" ry="8" fill="#f4a6b8" opacity="0.6"/>
+    <circle cx="84" cy="80" r="7" fill="#2d2d2d"/>
+    <circle cx="116" cy="80" r="7" fill="#2d2d2d"/>
+    <circle cx="86" cy="78" r="2.5" fill="#fff"/>
+    <circle cx="118" cy="78" r="2.5" fill="#fff"/>
+    <ellipse cx="100" cy="112" rx="22" ry="17" fill="#b3bdca"/>
+    <ellipse cx="92" cy="114" rx="3" ry="4" fill="#5a6472"/>
+    <ellipse cx="108" cy="114" rx="3" ry="4" fill="#5a6472"/>
+    <path d="M 100 96 L 94 106 L 106 106 Z" fill="#e8d4a0"/>
+    <path d="M 100 70 L 96 78 L 104 78 Z" fill="#e8d4a0"/>
+  </g>
+
+  <text x="1366" y="1960" text-anchor="middle"
+        font-family="'Fredoka','Baloo 2','Nunito',sans-serif"
+        font-size="200" font-weight="700" fill="#f4e4c1">Rhino Kids</text>
+</svg>
