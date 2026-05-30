@@ -10,6 +10,7 @@ import { getCharacter, useCharacterMood } from '../characters'
 import { useCarrotTimer } from '../contexts/CarrotTimerContext'
 import { useLevel } from '../contexts/LevelContext'
 import { markCompleted } from '../services/sessionLock'
+import { recordAnswer } from '../services/history'
 import MangoTree from '../components/MangoTree'
 import BadgeCelebration from '../components/BadgeCelebration'
 import TimerEndScreen from '../components/TimerEndScreen'
@@ -193,6 +194,8 @@ export default function ModuleScreen() {
     startTimer()
 
     const isCorrect = val === q.ans
+    // Günlük geçmişe işle (ebeveyn panelindeki haftalık grafik için).
+    recordAnswer(isCorrect)
     if (isCorrect) {
       const newStreak = streak + 1
       let pts = 10

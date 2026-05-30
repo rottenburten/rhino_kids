@@ -5,6 +5,7 @@ import { Preferences } from '@capacitor/preferences'
 // eşleşmiyorsa süre başlangıç değerine (900 sn) döner.
 
 const KEY = 'rhino_carrot_timer'
+const LIMIT_KEY = 'rhino_carrot_limit'
 
 /** Günlük başlangıç süresi: 15 dakika = 900 saniye (30 mango × 30 sn). */
 export const DEFAULT_SECONDS = 900
@@ -12,8 +13,13 @@ export const DEFAULT_SECONDS = 900
 /** Her mango = 30 saniye. */
 export const SECONDS_PER_MANGO = 30
 
-/** Toplam mango sayısı (900 / 30). */
-export const TOTAL_MANGOS = DEFAULT_SECONDS / SECONDS_PER_MANGO
+/** Ebeveyn panelinden seçilebilecek günlük süre seçenekleri (saniye). */
+export const LIMIT_OPTIONS = [300, 600, 900, 1200, 1800] // 5/10/15/20/30 dk
+
+/** Saniyeyi mango sayısına çevirir (yukarı yuvarlar). */
+export function secondsToMangos(seconds: number): number {
+  return Math.ceil(seconds / SECONDS_PER_MANGO)
+}
 
 export interface TimerState {
   remainingSeconds: number
@@ -27,12 +33,40 @@ function today(): string {
 }
 
 /**
+ * Ebeveynin ayarladığı günlük süre limitini yükler (saniye).
+ * Ayarlanmamışsa DEFAULT_SECONDS. Geçersizse de DEFAULT'a düşer.
+ */
+export async function loadLimit(): Promise<number> {
+  try {
+    const { value } = await Preferences.get({ key: LIMIT_KEY })
+    if (value) {
+      const n = parseInt(value, 10)
+      if (Number.isFinite(n) && n > 0) return n
+    }
+  } catch (e) {
+    console.error('Failed to load limit', e)
+  }
+  return DEFAULT_SECONDS
+}
+
+/** Günlük süre limitini kaydeder (saniye). */
+export async function saveLimit(seconds: number): Promise<void> {
+  try {
+    await Preferences.set({ key: LIMIT_KEY, value: String(seconds) })
+  } catch (e) {
+    console.error('Failed to save limit', e)
+  }
+}
+
+/**
  * Kayıtlı süreyi yükler. Kayıt yoksa ya da tarih bugüne ait değilse
  * (yeni gün) süreyi 900'e sıfırlar ve bu sıfırlanmış durumu döndürür.
  */
 export async function loadTimer(): Promise<TimerState> {
+  // Günlük süre tavanı artık ebeveyn ayarına bağlı (varsayılan DEFAULT_SECONDS).
+  const limit = await loadLimit()
   const { value } = await Preferences.get({ key: KEY })
-  const fresh: TimerState = { remainingSeconds: DEFAULT_SECONDS, date: today() }
+  const fresh: TimerState = { remainingSeconds: limit, date: today() }
 
   if (!value) return fresh
   try {
@@ -41,9 +75,9 @@ export async function loadTimer(): Promise<TimerState> {
     // Şu durumlarda sıfırla (fresh):
     //  - tarih eski (yeni gün → gece yarısı sıfırlaması)
     //  - kayıt geçersiz (sayı değil)
-    //  - kayıtlı süre DEFAULT'tan büyük → eski test kaydı veya ebeveyn
-    //    panelinden süre düşürülmüş; takılı büyük değer yeni limite tazelenir.
-    if (parsed.date !== today() || typeof raw !== 'number' || raw > DEFAULT_SECONDS) {
+    //  - kayıtlı süre limitten büyük → ebeveyn süreyi düşürmüş (veya eski
+    //    test kaydı); takılı büyük değer yeni limite tazelenir.
+    if (parsed.date !== today() || typeof raw !== 'number' || raw > limit) {
       return fresh
     }
     // Aynı gün, geçerli ve limit içi → kayıtlı süreyi kullan.
@@ -57,4 +91,10 @@ export async function loadTimer(): Promise<TimerState> {
 export async function saveTimer(seconds: number): Promise<void> {
   const state: TimerState = { remainingSeconds: seconds, date: today() }
   await Preferences.set({ key: KEY, value: JSON.stringify(state) })
+}
+
+/** Timer kalan-süre ve limit kayıtlarını siler (ebeveyn "verileri sıfırla"). */
+export async function clearTimer(): Promise<void> {
+  await Preferences.remove({ key: KEY })
+  await Preferences.remove({ key: LIMIT_KEY })
 }

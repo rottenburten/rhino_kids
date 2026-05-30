@@ -1,21 +1,19 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCarrotTimer } from '../contexts/CarrotTimerContext'
-import { SECONDS_PER_MANGO, TOTAL_MANGOS } from '../services/timerStorage'
+import { secondsToMangos } from '../services/timerStorage'
 
 /**
  * Mango Ağacı — havuç/mango timer'ının GÖRSEL temsili.
  * Sayı/dakika gösterilmez; sadece mango sayısı azalır.
- * Dolu mango sayısı = ceil(kalanSaniye / 30). Bir mango "düşerken"
- * Framer Motion ile aşağı düşme animasyonu oynar (y+40, rotate 180, fade).
+ * Toplam mango = ceil(günlükLimit / 30); dolu = ceil(kalan / 30).
+ * Bir mango "düşerken" Framer Motion ile düşme animasyonu oynar.
  */
 export default function MangoTree() {
-  const { remainingSeconds } = useCarrotTimer()
+  const { remainingSeconds, limitSeconds } = useCarrotTimer()
 
-  // Kaç mango ağaçta kalsın? (her mango = 30 sn)
-  const filled = Math.min(
-    TOTAL_MANGOS,
-    Math.max(0, Math.ceil(remainingSeconds / SECONDS_PER_MANGO))
-  )
+  // Toplam ve dolu mango sayısı — günlük limite (ebeveyn ayarı) göre dinamik.
+  const total = secondsToMangos(limitSeconds)
+  const filled = Math.min(total, Math.max(0, secondsToMangos(remainingSeconds)))
 
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-white/70 backdrop-blur-sm border-2 border-savana-deep/30 px-3 py-2">
@@ -31,9 +29,9 @@ export default function MangoTree() {
         <ellipse cx="33" cy="20" rx="9" ry="7" fill="#7cab63" />
       </svg>
 
-      {/* 30 mango grid */}
+      {/* mango grid (günlük limite göre dinamik adet) */}
       <div className="grid grid-cols-10 gap-1 flex-1">
-        {Array.from({ length: TOTAL_MANGOS }).map((_, i) => (
+        {Array.from({ length: total }).map((_, i) => (
           <div key={i} className="flex items-center justify-center h-4">
             <AnimatePresence>
               {i < filled && (

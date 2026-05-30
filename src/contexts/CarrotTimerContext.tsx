@@ -9,7 +9,9 @@ import {
 } from 'react'
 import {
   DEFAULT_SECONDS,
+  loadLimit,
   loadTimer,
+  saveLimit,
   saveTimer,
   SECONDS_PER_MANGO,
 } from '../services/timerStorage'
@@ -20,8 +22,10 @@ import {
  * tutulur. App.tsx'te <CarrotTimerProvider> ile sarılır.
  */
 interface CarrotTimerValue {
-  /** Kalan saniye (0..900). */
+  /** Kalan saniye (0..limitSeconds). */
   remainingSeconds: number
+  /** Ebeveynin ayarladığı günlük süre tavanı (saniye). Mango sayısı buradan. */
+  limitSeconds: number
   /** Geri sayım aktif mi? (başladı ve süre > 0) */
   isRunning: boolean
   /** İlk cevap verilip timer başlatıldı mı? */
@@ -36,22 +40,26 @@ interface CarrotTimerValue {
   reward: () => void
   /** Bitiş ekranı "Devam Et" ile kapatıldığında çağrılır. */
   dismissEndScreen: () => void
+  /** Ebeveyn paneli: günlük süre tavanını değiştirir (anında bugüne uygulanır). */
+  setLimit: (seconds: number) => void
 }
 
 const CarrotTimerContext = createContext<CarrotTimerValue | undefined>(undefined)
 
 export function CarrotTimerProvider({ children }: { children: ReactNode }) {
   const [remainingSeconds, setRemainingSeconds] = useState(DEFAULT_SECONDS)
+  const [limitSeconds, setLimitSeconds] = useState(DEFAULT_SECONDS)
   const [hasStarted, setHasStarted] = useState(false)
   const [endScreenDismissed, setEndScreenDismissed] = useState(false)
   // Storage'tan ilk yükleme bitene kadar kaydetme/tetikleme yapma.
   const [loaded, setLoaded] = useState(false)
 
-  // ── İlk yükleme: bugünün süresini al (yeni günse 900'e resetlenir) ──
+  // ── İlk yükleme: ebeveyn limiti + bugünün süresi (yeni günse resetlenir) ──
   useEffect(() => {
     let alive = true
-    loadTimer().then((t) => {
+    Promise.all([loadLimit(), loadTimer()]).then(([limit, t]) => {
       if (!alive) return
+      setLimitSeconds(limit)
       setRemainingSeconds(t.remainingSeconds)
       setLoaded(true)
     })
@@ -92,9 +100,21 @@ export function CarrotTimerProvider({ children }: { children: ReactNode }) {
     setEndScreenDismissed(true)
   }, [])
 
+  // Ebeveyn günlük süreyi değiştirince: yeni tavanı kaydet + bugünün
+  // kalan süresini yeni tavana sıfırla (taze süre ver). Bitiş bayrağını
+  // da temizle ki yeni süreyle "bitti" durumu kalkar.
+  const setLimit = useCallback((seconds: number) => {
+    setLimitSeconds(seconds)
+    setRemainingSeconds(seconds)
+    setEndScreenDismissed(false)
+    saveLimit(seconds)
+    saveTimer(seconds)
+  }, [])
+
   const value = useMemo<CarrotTimerValue>(
     () => ({
       remainingSeconds,
+      limitSeconds,
       isRunning,
       hasStarted,
       isFinished,
@@ -102,9 +122,11 @@ export function CarrotTimerProvider({ children }: { children: ReactNode }) {
       startTimer,
       reward,
       dismissEndScreen,
+      setLimit,
     }),
     [
       remainingSeconds,
+      limitSeconds,
       isRunning,
       hasStarted,
       isFinished,
@@ -112,6 +134,7 @@ export function CarrotTimerProvider({ children }: { children: ReactNode }) {
       startTimer,
       reward,
       dismissEndScreen,
+      setLimit,
     ]
   )
 

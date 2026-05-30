@@ -42,6 +42,16 @@ export default function HomeScreen() {
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-savana-sky via-savana-sun to-savana-earth">
       <SavannaBackground />
 
+      {/* Ebeveyn paneli — köşede küçük ve soluk, çocuğun dikkatini çekmesin.
+          Girişte matematik PIN kapısı var. */}
+      <button
+        onClick={() => navigate('/parent')}
+        aria-label="Ebeveyn paneli"
+        className="fixed bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
+      >
+        ⚙️
+      </button>
+
       <div className="relative z-10 max-w-3xl mx-auto px-4 pt-6 pb-8">
         {/* HEADER */}
         <header className="flex justify-between items-center mb-2">
