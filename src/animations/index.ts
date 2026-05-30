@@ -1,24 +1,21 @@
 // Kutlama Lottie animasyonları — merkezi kayıt.
 //
-// JSON dosyaları (LottieFiles'tan indirilecek) bu klasöre konunca aşağıdaki
-// import'ları aç. Dosya yokken kayıt `undefined` döner; LottieOverlay bunu
-// algılayıp hiçbir şey render etmez ve akışı bozmadan onComplete'i tetikler.
-// Böylece JSON'lar gelmeden de uygulama tam çalışır.
+// JSON'lar elle üretildi (telifsiz, Rhino Kids savana paleti):
+//   confetti.json → 10/10 kusursuz tur (renkli parçacık yağmuru)
+//   badge.json    → yeni rozet (büyüyen yıldız + parıltı halkası)
+// Üreteç: scripts/genLottie.mjs (yeniden üretmek için çalıştırılabilir).
 //
-// Beklenen dosyalar (öneri — LottieFiles'ta "confetti", "stars", "trophy"):
-//   src/animations/confetti.json   → 10/10 kusursuz tur
-//   src/animations/badge.json      → yeni rozet
-//   src/animations/correct.json    → (opsiyonel) doğru cevap parıltısı
+// Bir kayıt undefined olursa LottieOverlay hiçbir şey çizmez ve akışı
+// bozmadan onComplete'i tetikler (güvenli fallback korunur).
 
 export type CelebrationKind = 'perfect' | 'badge'
 
-// JSON eklenince şu satırları aç (ve aşağıdaki REGISTRY'yi güncelle):
-// import confetti from './confetti.json'
-// import badge from './badge.json'
+import confetti from './confetti.json'
+import badge from './badge.json'
 
 const REGISTRY: Record<CelebrationKind, unknown> = {
-  perfect: undefined, // confetti
-  badge: undefined, // badge
+  perfect: confetti,
+  badge: badge,
 }
 
 /** İlgili kutlama için Lottie JSON'u (yoksa undefined). */
