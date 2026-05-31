@@ -10,16 +10,15 @@ const LIMIT_KEY = 'rhino_carrot_limit'
 /** Günlük başlangıç süresi: 15 dakika = 900 saniye (30 mango × 30 sn). */
 export const DEFAULT_SECONDS = 900
 
-/** Her mango = 30 saniye. */
+/**
+ * 10/10 ödülünde Reno'nun eve yolculuğunda atacağı adım (saniye).
+ * (Tarihsel ad: bir "mango"luk süre = 30 sn. reward() bunu remainingSeconds'tan
+ *  düşer → Reno eve doğru ilerler.)
+ */
 export const SECONDS_PER_MANGO = 30
 
 /** Ebeveyn panelinden seçilebilecek günlük süre seçenekleri (saniye). */
 export const LIMIT_OPTIONS = [300, 600, 900, 1200, 1800] // 5/10/15/20/30 dk
-
-/** Saniyeyi mango sayısına çevirir (yukarı yuvarlar). */
-export function secondsToMangos(seconds: number): number {
-  return Math.ceil(seconds / SECONDS_PER_MANGO)
-}
 
 export interface TimerState {
   remainingSeconds: number
