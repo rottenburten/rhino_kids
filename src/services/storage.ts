@@ -65,11 +65,11 @@ export async function recordCorrectAnswer(
   points: number,
   newStreak: number
 ): Promise<PlayerData> {
+  // NOT: mango burada ARTMAZ. Mango artık yalnızca 10/10 ödülü (finalizeRound).
   return updatePlayerData((data) => ({
     ...data,
     totalCorrect: data.totalCorrect + 1,
     totalScore: data.totalScore + points,
-    mangos: data.mangos + 1,
     maxStreak: Math.max(data.maxStreak, newStreak),
     byModule: {
       ...data.byModule,
@@ -100,6 +100,8 @@ export async function finalizeRound(
       ...data,
       bestScore: Math.max(data.bestScore, roundPoints),
       perfectRounds: perfect ? data.perfectRounds + 1 : data.perfectRounds,
+      // Mango = kazanılan ödül: SADECE kusursuz turda (10/10) +1, hiç azalmaz.
+      mangos: perfect ? data.mangos + 1 : data.mangos,
     }
     const earned = computeEarnedBadgeIds(next)
     newlyEarnedIds = earned.filter((id) => !data.earnedBadges.includes(id))
