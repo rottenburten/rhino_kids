@@ -110,6 +110,7 @@
     "playTimeDesc": "Çocuğun günlük mango (havuç) süresi. Değiştirince bugünden geçerli olur.",
     "minutesShort": "dk",
     "weekChart": "Son 7 Gün",
+    "days": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
     "legendCorrect": "Doğru",
     "legendWrong": "Yanlış",
     "stats": "İstatistikler",

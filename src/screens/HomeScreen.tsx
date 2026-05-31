@@ -205,7 +205,7 @@ export default function HomeScreen() {
         {/* ROZET VİTRİNİ — kazanılanlar renkli, kazanılmayanlar gri/kilitli */}
         <div className="mt-6">
           <h2 className="text-center font-display font-bold text-savana-deep text-sm tracking-wider mb-3">
-            🏅 ROZETLER ({earnedBadgeIds.size}/{BADGES.length})
+            {t('badgesShowcase.title')} ({earnedBadgeIds.size}/{BADGES.length})
           </h2>
           <div className="grid grid-cols-6 gap-2">
             {BADGES.map((badge) => {
@@ -213,7 +213,7 @@ export default function HomeScreen() {
               return (
                 <div
                   key={badge.id}
-                  title={`${badge.name} — ${badge.description}`}
+                  title={`${t(`badges.${badge.id}.name`)} — ${t(`badges.${badge.id}.description`)}`}
                   className={`aspect-square rounded-xl border-2 flex flex-col items-center justify-center p-1 ${
                     earned
                       ? 'bg-white border-savana-deep shadow-kid'
@@ -228,7 +228,7 @@ export default function HomeScreen() {
                       earned ? 'text-savana-deep' : 'text-savana-deep/40'
                     }`}
                   >
-                    {badge.name}
+                    {t(`badges.${badge.id}.name`)}
                   </div>
                 </div>
               )

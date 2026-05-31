@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import Reno from '../characters/Reno'
 import type { BadgeDef } from '../services/badges'
 
@@ -17,6 +18,7 @@ export default function BadgeCelebration({
   badges: BadgeDef[]
   onDone: () => void
 }) {
+  const { t } = useTranslation()
   const [index, setIndex] = useState(0)
   const badge = badges[index]
   if (!badge) return null
@@ -53,7 +55,7 @@ export default function BadgeCelebration({
             <Reno mood="celebrate" size={110} />
           </div>
           <div className="font-display text-sm font-bold tracking-wider text-savana-accent mb-2">
-            🎊 YENİ ROZET!
+            {t('badgeCelebration.title')}
           </div>
           <motion.div
             initial={{ scale: 0 }}
@@ -63,12 +65,16 @@ export default function BadgeCelebration({
           >
             {badge.emoji}
           </motion.div>
-          <h2 className="font-display text-2xl font-bold text-savana-deep">{badge.name}</h2>
+          <h2 className="font-display text-2xl font-bold text-savana-deep">
+            {t(`badges.${badge.id}.name`)}
+          </h2>
           <p className="font-display font-semibold text-savana-deep/70 mb-5">
-            {badge.description}
+            {t(`badges.${badge.id}.description`)}
           </p>
           <button onClick={next} className="kid-btn w-full bg-savana-grass border-savana-deep">
-            {isLast ? 'Devam Et' : `Sıradaki (${index + 1}/${badges.length})`}
+            {isLast
+              ? t('badgeCelebration.continue')
+              : t('badgeCelebration.next', { current: index + 1, total: badges.length })}
           </button>
         </motion.div>
       </AnimatePresence>

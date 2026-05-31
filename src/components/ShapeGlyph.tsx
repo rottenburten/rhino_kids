@@ -1,9 +1,6 @@
-// ŞEKİL modülü için şekil çizimleri ve adları.
+// ŞEKİL modülü için şekil çizimleri.
 // Şekil "kind" = 0..4 sıralı index (Question.ans bu index'i tutar).
-
-export const SHAPE_NAMES = ['Daire', 'Kare', 'Üçgen', 'Yıldız', 'Kalp']
-// Soru cümlesi için -i hâli ("Daireyi bul").
-export const SHAPE_NAMES_ACC = ['Daireyi', 'Kareyi', 'Üçgeni', 'Yıldızı', 'Kalbi']
+// Şekil adları i18n'de (shapes.name / shapes.acc) — burada sadece çizim var.
 
 const COLORS = ['#ef6f6c', '#4d9de0', '#7cab63', '#f4c842', '#e86a92']
 

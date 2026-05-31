@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import Reno from '../characters/Reno'
+import { usePlayerData } from '../hooks/usePlayerData'
 
 /**
  * Süre (günlük mango) bitince gösterilen kutlama ekranı.
@@ -6,6 +8,9 @@ import Reno from '../characters/Reno'
  * ve bir daha açılmaz (çağıran taraf endScreenDismissed flag'i ile yönetir).
  */
 export default function TimerEndScreen({ onContinue }: { onContinue: () => void }) {
+  const { t } = useTranslation()
+  const { data } = usePlayerData()
+  const name = data?.playerName ?? ''
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-savana-deep/60 backdrop-blur-sm p-6">
       <div className="bg-white border-[3px] border-savana-deep rounded-3xl p-8 max-w-md w-full text-center shadow-kid">
@@ -13,16 +18,16 @@ export default function TimerEndScreen({ onContinue }: { onContinue: () => void 
           <Reno mood="celebrate" size={140} />
         </div>
         <h2 className="font-display text-2xl font-bold text-savana-deep mb-2">
-          🌙 Aferin Renan!
+          {t('timerEnd.title', { name })}
         </h2>
         <p className="font-display font-semibold text-savana-deep/80 mb-6">
-          Bugünkü ödevini tamamladın!
+          {t('timerEnd.subtitle')}
         </p>
         <button
           onClick={onContinue}
           className="kid-btn w-full bg-savana-grass border-savana-deep"
         >
-          Devam Et
+          {t('timerEnd.continue')}
         </button>
       </div>
     </div>

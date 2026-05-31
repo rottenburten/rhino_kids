@@ -49,8 +49,8 @@
     "acc": ["Circle", "Square", "Triangle", "Star", "Heart"]
   },
   "feedback": {
-    "correct": "Correct!",
-    "wrong": "Wrong!",
+    "correct": "Great!",
+    "wrong": "Oops!",
     "correctAnswer": "Answer:"
   },
   "roundEnd": {
@@ -110,6 +110,7 @@
     "playTimeDesc": "Your child's daily mango (carrot) time. Changes apply from today.",
     "minutesShort": "min",
     "weekChart": "Last 7 Days",
+    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     "legendCorrect": "Correct",
     "legendWrong": "Wrong",
     "stats": "Statistics",

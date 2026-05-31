@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useCarrotTimer } from '../contexts/CarrotTimerContext'
 import Reno from '../characters/Reno'
 
@@ -11,6 +12,7 @@ import Reno from '../characters/Reno'
  * Konum CSS `left %` + transition ile yumuşak kayar. Sayı/dakika GÖSTERİLMEZ.
  */
 export default function RenoJourney() {
+  const { t } = useTranslation()
   const { remainingSeconds, limitSeconds } = useCarrotTimer()
 
   const safeLimit = limitSeconds > 0 ? limitSeconds : 1
@@ -22,7 +24,7 @@ export default function RenoJourney() {
   return (
     <div className="rounded-2xl bg-white border-2 border-savana-deep shadow-kid px-3 py-2">
       <div className="text-[10px] font-display font-bold tracking-wider text-savana-deep mb-2">
-        🏠 RENO EVE DÖNÜYOR
+        {t('journey.label')}
       </div>
 
       <div className="relative h-12">

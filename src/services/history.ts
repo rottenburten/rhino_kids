@@ -44,14 +44,11 @@ export async function recordAnswer(isCorrect: boolean): Promise<void> {
 
 export interface WeekDay {
   date: string
-  /** Kısa gün etiketi (Pt, Sa, ...) */
-  label: string
+  /** Haftanın günü indeksi (Pazar=0 ... Cumartesi=6); etiket i18n'den gelir. */
+  dayIndex: number
   correct: number
   wrong: number
 }
-
-// Pazar=0 ... Cumartesi=6 (Date.getDay sırası)
-const DAY_LABELS = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
 
 /** Son 7 gün (bugün dahil), eskiden yeniye sıralı. */
 export async function loadWeek(): Promise<WeekDay[]> {
@@ -65,7 +62,7 @@ export async function loadWeek(): Promise<WeekDay[]> {
     const stat = hist[key] || { correct: 0, wrong: 0 }
     days.push({
       date: key,
-      label: DAY_LABELS[dt.getDay()],
+      dayIndex: dt.getDay(),
       correct: stat.correct,
       wrong: stat.wrong,
     })
