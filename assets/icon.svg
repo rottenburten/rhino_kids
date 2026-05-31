@@ -13,11 +13,12 @@
   </defs>
 
   <rect width="1024" height="1024" fill="url(#sky)"/>
-  <!-- güneş ışıltısı (köşe) -->
-  <circle cx="830" cy="210" r="120" fill="url(#sun)" opacity="0.85"/>
+  <!-- güneş ışıltısı (sağ üst köşe — Reno ile çakışmaz) -->
+  <circle cx="868" cy="165" r="98" fill="url(#sun)" opacity="0.85"/>
 
-  <!-- Reno — 200x200 içerik, 3.4x ölçek, ortalı (gölge dahil değil) -->
-  <g transform="translate(172, 150) scale(3.4)">
+  <!-- Reno — 200x200 içerik (bbox merkezi 100,111), 4.0x ölçek, tam ortalı.
+       translate = 512 - merkez*ölçek → X:512-100*4=112, Y:512-111*4=68 -->
+  <g transform="translate(112, 68) scale(4.0)">
     <!-- gövde -->
     <ellipse cx="100" cy="120" rx="55" ry="58" fill="#9ca8b8"/>
     <!-- karın -->

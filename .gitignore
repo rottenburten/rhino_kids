@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Claude Code harness yerel dosyaları
+.claude/scheduled_tasks.lock
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +25,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Secrets / credentials (API keys, RevenueCat, signing) — NEVER push
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.mobileprovision
+*.cer
+*.certSigningRequest
+google-services.json
+GoogleService-Info.plist
+secrets*.json
