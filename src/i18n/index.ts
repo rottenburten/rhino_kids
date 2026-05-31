@@ -14,6 +14,17 @@ import ar from './locales/ar.json'
 export const SUPPORTED_LANGUAGES = ['tr', 'en', 'ar'] as const
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
 
+// Sağdan-sola yazılan diller. Yeni RTL dil eklenince buraya eklenir.
+export const RTL_LANGUAGES = ['ar']
+
+/** <html dir> ve lang'ı seçili dile göre ayarlar (RTL/LTR). */
+function applyDocumentDir(lng: string | undefined) {
+  if (typeof document === 'undefined') return
+  const base = (lng || 'tr').split('-')[0]
+  document.documentElement.dir = RTL_LANGUAGES.includes(base) ? 'rtl' : 'ltr'
+  document.documentElement.lang = base
+}
+
 export const resources = {
   tr: { translation: tr },
   en: { translation: en },
@@ -44,5 +55,10 @@ i18n
     },
     returnObjects: false,
   })
+
+// Dil değişiminde <html dir/lang> güncelle (Arapça → rtl, tr/en → ltr).
+i18n.on('languageChanged', applyDocumentDir)
+// İlk yüklemede de uygula (tespit edilen dile göre).
+applyDocumentDir(i18n.resolvedLanguage)
 
 export default i18n

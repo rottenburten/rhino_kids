@@ -49,7 +49,7 @@ export default function HomeScreen() {
       <button
         onClick={() => navigate('/parent')}
         aria-label={t('home.parentPanelAria')}
-        className="fixed bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
+        className="fixed bottom-3 end-3 z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
       >
         ⚙️
       </button>
@@ -139,10 +139,10 @@ export default function HomeScreen() {
                   }`}
                 >
                   {mod.comingSoon && (
-                    <div className="absolute top-1 right-1 text-xs">🔒</div>
+                    <div className="absolute top-1 end-1 text-xs">🔒</div>
                   )}
                   {completed && (
-                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-savana-grass border-2 border-savana-deep flex items-center justify-center text-[10px] font-bold text-savana-deep">
+                    <div className="absolute top-1 end-1 w-5 h-5 rounded-full bg-savana-grass border-2 border-savana-deep flex items-center justify-center text-[10px] font-bold text-savana-deep">
                       ✓
                     </div>
                   )}
