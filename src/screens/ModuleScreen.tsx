@@ -179,19 +179,26 @@ export default function ModuleScreen() {
     )
   }
 
+  // Rozet kutlaması — showRoundEnd'DEN BAĞIMSIZ, en üst seviyede.
+  // (Eskiden showRoundEnd bloğunun içindeydi → showRoundEnd false iken
+  //  pendingBadges dolar ama BadgeCelebration hiç render olmaz; onDone da
+  //  showRoundEnd'i set edemez → döngüsel kilit, ekran donardı. Artık burada.)
+  if (pendingBadges.length > 0) {
+    return (
+      <BadgeCelebration
+        badges={pendingBadges}
+        onDone={() => {
+          setPendingBadges([])
+          setShowRoundEnd(true)
+        }}
+      />
+    )
+  }
+
   if (showRoundEnd) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-savana-sky to-savana-earth p-6">
         {showTimerEnd && <TimerEndScreen onContinue={dismissEndScreen} />}
-        {pendingBadges.length > 0 && (
-          <BadgeCelebration
-            badges={pendingBadges}
-            onDone={() => {
-              setPendingBadges([])
-              setShowRoundEnd(true)
-            }}
-          />
-        )}
         <div className="bg-white border-[3px] border-savana-deep rounded-3xl p-8 max-w-md text-center shadow-kid">
           <div className="text-6xl mb-2">
             {roundCorrect === 10 ? '🏆' : roundCorrect >= 7 ? '🌟' : '💪'}
@@ -219,17 +226,15 @@ export default function ModuleScreen() {
               <div className="text-xs font-bold text-savana-grass">EN UZUN SERİ</div>
             </div>
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate('/')}
-              className="kid-btn flex-1 bg-savana-grass border-savana-deep"
-            >
-              🏠 Ana Ekran
-            </button>
-            <button onClick={startNewRound} className="kid-btn flex-1">
-              🌿 Yeni Tur
-            </button>
-          </div>
+          {/* Oturum kilidi felsefesi: bölüm bir oturumda BİR KEZ oynanır ve
+              tur biter bitmez kilitlenir. Bu yüzden "Yeni Tur/Tekrar Dene"
+              YOK (tekrar oynatmak kilitle çelişir) — sadece Ana Ekran. */}
+          <button
+            onClick={() => navigate('/')}
+            className="kid-btn w-full bg-savana-grass border-savana-deep"
+          >
+            🏠 Ana Ekran
+          </button>
         </div>
       </div>
     )
