@@ -12,7 +12,7 @@ import { useCarrotTimer } from '../contexts/CarrotTimerContext'
 import { useLevel } from '../contexts/LevelContext'
 import { markCompleted } from '../services/sessionLock'
 import { recordAnswer } from '../services/history'
-import MangoTree from '../components/MangoTree'
+import RenoJourney from '../components/RenoJourney'
 import BadgeCelebration from '../components/BadgeCelebration'
 import Confetti from '../components/Confetti'
 import TimerEndScreen from '../components/TimerEndScreen'
@@ -319,9 +319,9 @@ export default function ModuleScreen() {
     <div className="min-h-screen bg-gradient-to-b from-savana-sky to-savana-earth p-4">
       {showTimerEnd && <TimerEndScreen onContinue={dismissEndScreen} />}
       <div className="max-w-2xl mx-auto">
-        {/* MANGO TIMER (görsel geri sayım — sayı/dakika gösterilmez) */}
+        {/* ZAMAN GÖSTERGESİ — Reno'nun eve yolculuğu (sayı/dakika gösterilmez) */}
         <div className="mb-3">
-          <MangoTree />
+          <RenoJourney />
         </div>
 
         {/* 10/10 konfeti — bonusCelebrate'e bağlı; BONUS_WAIT setTimeout'u
