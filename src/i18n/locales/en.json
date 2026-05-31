@@ -104,6 +104,7 @@
     "language": "Language",
     "pinTitle": "Parent Login",
     "pinPrompt": "Solve the question to continue",
+    "gatePrompt": "Type the number shown below using digits:",
     "pinError": "Wrong, please try again.",
     "pinBack": "Back",
     "pinSubmit": "Enter",

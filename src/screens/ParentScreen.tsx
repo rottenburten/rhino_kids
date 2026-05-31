@@ -9,46 +9,49 @@ import { resetPlayerData } from '../services/storage'
 import { clearHistory, loadWeek, type WeekDay } from '../services/history'
 import { BADGES } from '../services/badges'
 import { MODULES } from '../modules/moduleList'
-import { useLocalizeNumber } from '../i18n/digits'
+import { useLocalizeNumber, normalizeDigits } from '../i18n/digits'
+import { numberToWords, randomGateNumber } from '../i18n/numberWords'
 
-// ── PIN kapısı: basit toplama (iki haneli) — çocuk çözemesin, ebeveyn çözsün.
-// Sayılar 5-9 arası seçilir, böylece sonuç 10-18 olur (5 yaş için zor).
-function makeChallenge() {
-  const a = 5 + Math.floor(Math.random() * 5) // 5..9
-  const b = 5 + Math.floor(Math.random() * 5) // 5..9
-  return { a, b, ans: a + b }
-}
-
+// ── Ebeveyn kapısı: ekranda YAZIYLA 4 basamaklı sayı (1000-9999), kullanıcı
+// RAKAMLA girer. Çocuk yazamaz; ebeveyn kolay çözer. Sayı kelimeleri aktif
+// dilde (tr/en/ar). Apple çocuk kategorisi: abonelik paneli de bunun arkasında.
 function PinGate({ onUnlock, onCancel }: { onUnlock: () => void; onCancel: () => void }) {
-  const { t } = useTranslation()
-  const n = useLocalizeNumber()
-  const [challenge, setChallenge] = useState(makeChallenge)
+  const { t, i18n } = useTranslation()
+  const [target, setTarget] = useState(randomGateNumber)
   const [input, setInput] = useState('')
   const [error, setError] = useState(false)
 
   const submit = () => {
-    if (parseInt(input, 10) === challenge.ans) {
+    // Arapça/Batı rakam girişini Batı'ya normalize edip karşılaştır.
+    const entered = parseInt(normalizeDigits(input.trim()), 10)
+    if (entered === target) {
       onUnlock()
     } else {
       setError(true)
       setInput('')
-      setChallenge(makeChallenge())
+      setTarget(randomGateNumber())
     }
   }
+
+  // Hedef sayının aktif dilde yazıyla karşılığı (ör. "üç bin yüz yirmi dört").
+  const words = numberToWords(target, i18n.resolvedLanguage || i18n.language)
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-savana-sky to-savana-earth p-6">
       <div className="bg-white border-[3px] border-savana-deep rounded-3xl p-8 max-w-sm w-full text-center shadow-kid">
         <div className="text-5xl mb-3">🔒</div>
         <h1 className="font-display text-xl font-bold text-savana-deep mb-1">{t('parent.pinTitle')}</h1>
-        <p className="font-display text-sm text-savana-deep/70 mb-5">
-          {t('parent.pinPrompt')}
+        <p className="font-display text-sm text-savana-deep/70 mb-4">
+          {t('parent.gatePrompt')}
         </p>
-        <div className="font-display text-3xl font-bold text-savana-deep mb-4">
-          {n(challenge.a)} + {n(challenge.b)} = ?
+        <div
+          dir="auto"
+          className="font-display text-2xl font-bold text-savana-deep mb-4 leading-snug"
+        >
+          {words}
         </div>
         <input
-          type="number"
+          type="text"
           inputMode="numeric"
           value={input}
           onChange={(e) => setInput(e.target.value)}

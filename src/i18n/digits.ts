@@ -32,3 +32,18 @@ export function useLocalizeNumber(): (value: string | number) => string {
   const lng = i18n.resolvedLanguage || i18n.language
   return (value: string | number) => localizeDigits(value, lng)
 }
+
+// Arapça-Hint (٠-٩, U+0660) ve Farsça (۰-۹, U+06F0) rakam blokları.
+const EASTERN_ARABIC = '٠١٢٣٤٥٦٧٨٩'
+const PERSIAN = '۰۱۲۳۴۵۶۷۸۹'
+
+/**
+ * Metindeki Doğu-Arapça / Farsça rakamları Batı rakamlarına (0-9) çevirir.
+ * Girdi normalizasyonu için: kullanıcı Arapça VEYA Batı rakamıyla yazabilir,
+ * karşılaştırma her zaman Batı rakamı üzerinden yapılır (parseInt öncesi).
+ */
+export function normalizeDigits(input: string): string {
+  return input
+    .replace(/[٠-٩]/g, (d) => String(EASTERN_ARABIC.indexOf(d)))
+    .replace(/[۰-۹]/g, (d) => String(PERSIAN.indexOf(d)))
+}

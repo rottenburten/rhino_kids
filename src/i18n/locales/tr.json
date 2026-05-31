@@ -104,6 +104,7 @@
     "language": "Dil",
     "pinTitle": "Ebeveyn Girişi",
     "pinPrompt": "Devam etmek için soruyu çözün",
+    "gatePrompt": "Aşağıdaki sayıyı rakamla yazın:",
     "pinError": "Yanlış, tekrar deneyin.",
     "pinBack": "Geri",
     "pinSubmit": "Gir",
