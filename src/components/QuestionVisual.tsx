@@ -40,7 +40,7 @@ export default function QuestionVisual({ question, seed }: Props) {
 
   // ─── TOPLAMA ───
   // Mantık: "iki şeyi bir araya getirince toplanır". İki grup ("+" ile ayrı)
-  // başlar; ~1.6s sonra birbirine kayar, "+" kaybolur, tek sıra (a+b) olur.
+  // başlar; ~1s sonra birbirine kayar, "+" kaybolur, tek sıra (a+b) olur.
   // Toplamada İKİ grup DOĞRU (birleştirme) — çıkarmadaki tek-sıradan farklı.
   if (q.type === 'add' && q.b !== undefined) {
     const merge = { delay: HINT_DELAY, duration: 0.6, ease: 'easeOut' as const }
@@ -121,7 +121,7 @@ export default function QuestionVisual({ question, seed }: Props) {
   // ─── ÇARPMA ───
   // Mantık: "çarpma = aynı grubu tekrar tekrar toplamak". b'li emoji grubu
   // SIRAYLA a kez belirir (her grup ~0.3s arayla pop-in, scale 0→1). Gruplar
-  // ayrı dursun (boşluk + "+") ki "a kere b" hissi olsun. ~1.6s sonra başlar.
+  // ayrı dursun (boşluk + "+") ki "a kere b" hissi olsun. ~1s sonra başlar.
   if (q.type === 'mul' && q.b !== undefined) {
     return (
       <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
