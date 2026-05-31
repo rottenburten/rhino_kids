@@ -19,9 +19,9 @@ import TimerEndScreen from '../components/TimerEndScreen'
 
 const CORRECT_WAIT = 1500
 const WRONG_WAIT = 2800
-// 10/10 olunca: bonus mango düşme animasyonu + kutlama izlensin diye
-// tur-sonu özetine geçmeden önce kısa bekleme.
-const BONUS_WAIT = 1200
+// 10/10 olunca: bonus mango + konfeti kutlaması çocuk tarafından izlensin
+// diye tur-sonu/rozet ekranına geçmeden önce bu kadar beklenir (~2.8s).
+const BONUS_WAIT = 2800
 
 const EMOJIS = ['🍄', '🌰', '🍃', '🌿', '🐛', '🦋', '🐝', '🌸', '🍀', '🌻', '🫐', '🍓', '🥕']
 
