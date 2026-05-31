@@ -47,12 +47,14 @@ const moodVariants: Variants = {
     rotate: -7,
     transition: { duration: 0.5, ease: 'easeInOut' },
   },
-  // Kutlama: büyük zıplama + tam dönüş
+  // Kutlama: neşeli zıplama + hafif büyüme + nazik sağa-sola sallanma.
+  // Tam dönüş YOK (baş döndürmesin); ufak boyutta (header) da hoş durur.
   celebrate: {
     x: 0,
-    y: [0, -30, 0],
-    rotate: [0, 360],
-    transition: { duration: 0.9, repeat: Infinity, repeatDelay: 0.2, ease: 'easeInOut' },
+    y: [0, -22, 0, -10, 0],
+    scale: [1, 1.12, 1, 1.06, 1],
+    rotate: [0, -8, 8, -4, 0],
+    transition: { duration: 1, repeat: Infinity, repeatDelay: 0.5, ease: 'easeOut' },
   },
 }
 
