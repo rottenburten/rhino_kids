@@ -152,23 +152,57 @@ export default function QuestionVisual({ question, seed }: Props) {
     )
   }
 
-  // ─── BÖLME (hayvanlar arasında paylaşım) ───
+  // ─── BÖLME ───
+  // Mantık: "bölme = eşit paylaştırma". Başta a emoji tek küme halinde durur;
+  // ~1s sonra küme solar ve aynı anda b grup (her grupta a÷b) sırayla belirir
+  // (hayvanların önünde paylaştırılmış gibi). a = q.ans * q.b (toplam emoji).
   if (q.type === 'div' && q.b !== undefined) {
     return (
-      <div className="flex flex-wrap justify-center items-end gap-3 min-h-[60px]">
-        {Array.from({ length: q.b }, (_, i) => {
-          const animal = pickWithSeed(ANIMALS, seed + i * 3)
-          return (
-            <div key={i} className="flex flex-col items-center gap-1">
-              <span className="text-2xl">{animal}</span>
-              <div className="flex gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
-                {Array.from({ length: q.ans }, (_, j) => (
-                  <span key={j} className="text-2xl">{emoji}</span>
-                ))}
-              </div>
-            </div>
-          )
-        })}
+      <div className="relative flex justify-center items-center min-h-[80px]">
+        {/* 1) Başlangıç: a emoji tek küme — ~1s sonra solar */}
+        <motion.div
+          className="absolute flex flex-wrap justify-center gap-1 max-w-[280px]"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: HINT_DELAY, duration: 0.4, ease: 'easeIn' }}
+        >
+          {Array.from({ length: q.a }, (_, i) => (
+            <span key={i} className="text-2xl">{emoji}</span>
+          ))}
+        </motion.div>
+
+        {/* 2) Sonuç: b grup, her grupta a÷b — küme solarken sırayla belirir */}
+        <motion.div
+          className="flex flex-wrap justify-center items-end gap-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: HINT_DELAY + 0.3, duration: 0.3 }}
+        >
+          {Array.from({ length: q.b }, (_, i) => {
+            const animal = pickWithSeed(ANIMALS, seed + i * 3)
+            return (
+              <motion.div
+                key={`${seed}-${i}`}
+                className="flex flex-col items-center gap-1"
+                initial={{ opacity: 0, scale: 0.4, y: -16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{
+                  delay: HINT_DELAY + 0.4 + i * 0.25,
+                  type: 'spring',
+                  stiffness: 320,
+                  damping: 18,
+                }}
+              >
+                <span className="text-2xl">{animal}</span>
+                <div className="flex gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
+                  {Array.from({ length: q.ans }, (_, j) => (
+                    <span key={j} className="text-2xl">{emoji}</span>
+                  ))}
+                </div>
+              </motion.div>
+            )
+          })}
+        </motion.div>
       </div>
     )
   }
