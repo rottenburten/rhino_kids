@@ -14,6 +14,10 @@ function pickWithSeed<T>(arr: T[], seed: number): T {
   return arr[seed % arr.length]
 }
 
+// Animasyonlu ipucu başlangıç gecikmesi (sn) — çocuk önce sayıları görsün,
+// sonra animasyon yardımcı olsun. Tüm aritmetik görsellerde ortak.
+const HINT_DELAY = 1.0
+
 export default function QuestionVisual({ question, seed }: Props) {
   const q = question
 
@@ -39,7 +43,7 @@ export default function QuestionVisual({ question, seed }: Props) {
   // başlar; ~1.6s sonra birbirine kayar, "+" kaybolur, tek sıra (a+b) olur.
   // Toplamada İKİ grup DOĞRU (birleştirme) — çıkarmadaki tek-sıradan farklı.
   if (q.type === 'add' && q.b !== undefined) {
-    const merge = { delay: 1.6, duration: 0.6, ease: 'easeOut' as const }
+    const merge = { delay: HINT_DELAY, duration: 0.6, ease: 'easeOut' as const }
     return (
       <div className="flex justify-center items-center min-h-[60px]">
         {/* 1. grup (a tane) — sağa doğru kayıp birleşir */}
@@ -59,7 +63,7 @@ export default function QuestionVisual({ question, seed }: Props) {
           className="text-2xl font-bold text-savana-deep overflow-hidden inline-block"
           initial={{ opacity: 1, width: 28 }}
           animate={{ opacity: 0, width: 0 }}
-          transition={{ delay: 1.6, duration: 0.4, ease: 'easeIn' }}
+          transition={{ delay: HINT_DELAY, duration: 0.4, ease: 'easeIn' }}
         >
           +
         </motion.span>
@@ -102,7 +106,7 @@ export default function QuestionVisual({ question, seed }: Props) {
               }
               transition={
                 leaving
-                  ? { duration: 0.5, ease: 'easeIn', delay: 1.6 + (i - removeFrom) * 0.25 }
+                  ? { duration: 0.5, ease: 'easeIn', delay: HINT_DELAY + (i - removeFrom) * 0.25 }
                   : { duration: 0 }
               }
             >
@@ -128,7 +132,7 @@ export default function QuestionVisual({ question, seed }: Props) {
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
-              delay: 1.6 + i * 0.3,
+              delay: HINT_DELAY + i * 0.3,
               type: 'spring',
               stiffness: 320,
               damping: 18,
