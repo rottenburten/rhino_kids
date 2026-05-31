@@ -443,7 +443,9 @@ export default function ModuleScreen() {
             {(q.type === 'add' ||
               q.type === 'sub' ||
               q.type === 'mul' ||
-              q.type === 'div') && <QuestionVisual question={q} seed={qIndex} />}
+              q.type === 'div') && (
+              <QuestionVisual key={qIndex} question={q} seed={qIndex} />
+            )}
 
             {/* SIRA: diziyi göster, eksik konumda '?' */}
             {q.type === 'seq' &&

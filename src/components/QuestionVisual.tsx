@@ -35,20 +35,46 @@ export default function QuestionVisual({ question, seed }: Props) {
   }
 
   // ─── TOPLAMA ───
+  // Mantık: "iki şeyi bir araya getirince toplanır". İki grup ("+" ile ayrı)
+  // başlar; ~1.6s sonra birbirine kayar, "+" kaybolur, tek sıra (a+b) olur.
+  // Toplamada İKİ grup DOĞRU (birleştirme) — çıkarmadaki tek-sıradan farklı.
   if (q.type === 'add' && q.b !== undefined) {
+    const merge = { delay: 1.6, duration: 0.6, ease: 'easeOut' as const }
     return (
-      <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
-        <div className="flex gap-1 px-3 py-2 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
+      <div className="flex justify-center items-center min-h-[60px]">
+        {/* 1. grup (a tane) — sağa doğru kayıp birleşir */}
+        <motion.div
+          className="flex gap-1"
+          initial={{ x: -28 }}
+          animate={{ x: 0 }}
+          transition={merge}
+        >
           {Array.from({ length: q.a }, (_, i) => (
             <span key={i} className="text-3xl">{emoji}</span>
           ))}
-        </div>
-        <span className="text-2xl font-bold text-savana-deep mx-1">+</span>
-        <div className="flex gap-1 px-3 py-2 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
+        </motion.div>
+
+        {/* "+" — birleşince kaybolur ve yer kaplamaz olur */}
+        <motion.span
+          className="text-2xl font-bold text-savana-deep overflow-hidden inline-block"
+          initial={{ opacity: 1, width: 28 }}
+          animate={{ opacity: 0, width: 0 }}
+          transition={{ delay: 1.6, duration: 0.4, ease: 'easeIn' }}
+        >
+          +
+        </motion.span>
+
+        {/* 2. grup (b tane) — sola doğru kayıp birleşir */}
+        <motion.div
+          className="flex gap-1"
+          initial={{ x: 28 }}
+          animate={{ x: 0 }}
+          transition={merge}
+        >
           {Array.from({ length: q.b }, (_, i) => (
             <span key={i} className="text-3xl">{emoji2}</span>
           ))}
-        </div>
+        </motion.div>
       </div>
     )
   }
