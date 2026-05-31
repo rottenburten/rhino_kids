@@ -127,5 +127,24 @@
     "reset": "Reset",
     "resetCancel": "Cancel",
     "resetConfirm": "Yes, Delete"
+  },
+  "paywall": {
+    "parentBadge": "🔒 Parent Screen",
+    "title": "Keep the Learning Adventure with Reno Going!",
+    "subtitle": "Let your child explore math by playing in the savanna — fun, safe, ad-free.",
+    "features": {
+      "modules": "8 fun modules: counting, addition, subtraction, multiplication, division, sequence, shapes, clock",
+      "animations": "Animated visual teaching — brings every operation to life",
+      "parent": "Parent panel: progress tracking, time limit, weekly report",
+      "safe": "Ad-free and safe — all data stays on the device"
+    },
+    "trialBadge": "3 DAYS FREE",
+    "priceLine": "Then {{price}}",
+    "pricePlaceholder": "$XX.XX/year",
+    "cta": "Start 3 Days Free",
+    "cancelInfo": "Cancel before the trial ends and you won't be charged. Cancel: App Store → Account → Subscriptions.",
+    "restore": "Restore purchase",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
   }
 }

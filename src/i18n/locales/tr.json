@@ -127,5 +127,24 @@
     "reset": "Sıfırla",
     "resetCancel": "Vazgeç",
     "resetConfirm": "Evet, Sil"
+  },
+  "paywall": {
+    "parentBadge": "🔒 Ebeveyn Ekranı",
+    "title": "Reno ile Öğrenme Macerası Devam Etsin!",
+    "subtitle": "Çocuğunuz savanada oynayarak matematiği keşfetsin — eğlenceli, güvenli, reklamsız.",
+    "features": {
+      "modules": "8 eğlenceli modül: sayma, toplama, çıkarma, çarpma, bölme, sıra, şekil, saat",
+      "animations": "Animasyonlu görsel anlatım — her işlemi canlandırarak öğretir",
+      "parent": "Ebeveyn paneli: ilerleme takibi, süre ayarı, haftalık rapor",
+      "safe": "Reklamsız ve güvenli — tüm veriler cihazda kalır"
+    },
+    "trialBadge": "3 GÜN ÜCRETSİZ",
+    "priceLine": "Sonra yıllık {{price}}",
+    "pricePlaceholder": "₺XXX/yıl",
+    "cta": "3 Gün Ücretsiz Başla",
+    "cancelInfo": "Deneme bitmeden iptal et, ücret alınmaz. İptal: App Store → Hesap → Abonelikler.",
+    "restore": "Satın alımı geri yükle",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Şartları"
   }
 }
