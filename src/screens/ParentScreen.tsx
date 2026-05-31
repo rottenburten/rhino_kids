@@ -161,7 +161,7 @@ export default function ParentScreen() {
         <header className="flex items-center justify-between mb-4">
           <button
             onClick={() => navigate('/')}
-            className="bg-white border-2 border-savana-deep rounded-full w-10 h-10 flex items-center justify-center font-bold text-savana-deep"
+            className="bg-white border-2 border-savana-deep rounded-full w-10 h-10 flex items-center justify-center font-bold text-savana-deep rtl:-scale-x-100"
           >
             ←
           </button>

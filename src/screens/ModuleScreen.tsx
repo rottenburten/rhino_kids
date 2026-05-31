@@ -354,7 +354,7 @@ export default function ModuleScreen() {
         <header className="flex justify-between items-center mb-4">
           <button
             onClick={() => navigate('/')}
-            className="bg-white border-2 border-savana-deep rounded-full w-10 h-10 flex items-center justify-center font-bold text-savana-deep"
+            className="bg-white border-2 border-savana-deep rounded-full w-10 h-10 flex items-center justify-center font-bold text-savana-deep rtl:-scale-x-100"
           >
             ←
           </button>
@@ -376,8 +376,9 @@ export default function ModuleScreen() {
           </div>
         </header>
 
-        {/* PROGRESS */}
-        <div className="bg-white/70 rounded-full h-3 overflow-hidden mb-2">
+        {/* PROGRESS — RTL'de sağdan dolsun (ms-auto: inline-start'ı iter,
+            bar inline-end'den, yani RTL'de soldan→sağ değil sağdan başlar) */}
+        <div className="bg-white/70 rounded-full h-3 overflow-hidden mb-2 flex">
           <div
             className="h-full bg-savana-deep transition-all duration-500"
             style={{ width: `${((qIndex + 1) / 10) * 100}%` }}
