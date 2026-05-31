@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Reno from '../characters/Reno'
 import { getCharacter } from '../characters'
 import SavannaBackground from '../components/SavannaBackground'
@@ -9,15 +10,16 @@ import { useLevel } from '../contexts/LevelContext'
 import { BADGES } from '../services/badges'
 import type { Level } from '../types'
 
-// Seviye seçici seçenekleri — savana temalı (kolaydan zora).
-const LEVEL_OPTIONS: { id: Level; label: string; emoji: string }[] = [
-  { id: 'easy', label: 'Kolay', emoji: '🐣' },
-  { id: 'mid', label: 'Orta', emoji: '🦔' },
-  { id: 'hard', label: 'Zor', emoji: '🦁' },
+// Seviye seçici seçenekleri (etiket i18n'den, emoji sabit).
+const LEVEL_OPTIONS: { id: Level; emoji: string }[] = [
+  { id: 'easy', emoji: '🐣' },
+  { id: 'mid', emoji: '🦔' },
+  { id: 'hard', emoji: '🦁' },
 ]
 
 export default function HomeScreen() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { data, loading } = usePlayerData()
   const { level, loaded: levelLoaded, setLevel } = useLevel()
 
@@ -46,7 +48,7 @@ export default function HomeScreen() {
           Girişte matematik PIN kapısı var. */}
       <button
         onClick={() => navigate('/parent')}
-        aria-label="Ebeveyn paneli"
+        aria-label={t('home.parentPanelAria')}
         className="fixed bottom-3 right-3 z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
       >
         ⚙️
@@ -71,7 +73,7 @@ export default function HomeScreen() {
         {/* RENO */}
         <div className="text-center py-4">
           <div className="inline-block bg-white border-[3px] border-savana-deep rounded-2xl px-4 py-2 mb-3 font-display font-semibold text-savana-deep shadow-kid">
-            Selam {data.playerName}! Bugün hangi macera? 🌟
+            {t('home.greeting', { name: data.playerName })}
           </div>
           <div className="relative inline-block">
             <Reno />
@@ -94,7 +96,7 @@ export default function HomeScreen() {
                 }`}
               >
                 <span>{opt.emoji}</span>
-                <span>{opt.label}</span>
+                <span>{t(`levels.${opt.id}`)}</span>
               </button>
             )
           })}
@@ -103,13 +105,13 @@ export default function HomeScreen() {
         {/* MODÜLLER */}
         <div className="mt-4">
           <h2 className="text-center font-display font-bold text-savana-deep text-sm tracking-wider mb-3">
-            🎯 BUGÜN NE ÖĞRENELİM?
+            {t('home.whatToLearn')}
           </h2>
 
           {/* Bu oturumda oynanabilir tüm modüller tamamlandıysa kutla. */}
           {allCompleted && (
             <div className="mb-3 bg-savana-grass border-[3px] border-savana-deep rounded-2xl px-4 py-3 text-center font-display font-bold text-savana-deep shadow-kid">
-              🏆 Bu seviyeyi bitirdin!
+              {t('home.levelDone')}
             </div>
           )}
 
@@ -125,9 +127,9 @@ export default function HomeScreen() {
                   key={mod.id}
                   onClick={() => {
                     if (mod.comingSoon) {
-                      alert(`${mod.characterName} yakında geliyor! 🌟`)
+                      alert(t('home.comingSoonAlert', { name: t(`modules.${mod.id}.character`) }))
                     } else if (completed) {
-                      alert('Bu bölümü tamamladın! Başka bölüm seç 🌿')
+                      alert(t('home.completedAlert'))
                     } else {
                       navigate(`/module/${mod.id}`)
                     }
@@ -156,7 +158,7 @@ export default function HomeScreen() {
                     </div>
                   )}
                   <div className="font-display font-bold text-xs text-savana-deep">
-                    {mod.name}
+                    {t(`modules.${mod.id}.name`)}
                   </div>
                 </button>
               )
@@ -167,7 +169,7 @@ export default function HomeScreen() {
               "takılmış" değil "başardın" hissi versin. Seviye seçici sonra. */}
           {allCompleted && (
             <p className="mt-3 text-center font-display font-semibold text-savana-deep/80 text-sm">
-              Tüm bölümleri tamamladın, harikasın! Yarın yeni sorularla görüşürüz 🌟
+              {t('home.allDone')}
             </p>
           )}
         </div>
@@ -179,7 +181,7 @@ export default function HomeScreen() {
               {data.totalCorrect}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
-              TOPLAM DOĞRU
+              {t('stats.totalCorrect')}
             </div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
@@ -187,7 +189,7 @@ export default function HomeScreen() {
               {data.bestScore}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
-              EN YÜKSEK PUAN
+              {t('stats.bestScore')}
             </div>
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
@@ -195,7 +197,7 @@ export default function HomeScreen() {
               {data.maxStreak}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
-              EN UZUN SERİ
+              {t('stats.maxStreak')}
             </div>
           </div>
         </div>

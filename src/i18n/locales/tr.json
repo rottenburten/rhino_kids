@@ -1,0 +1,129 @@
+{
+  "common": {
+    "back": "Geri"
+  },
+  "home": {
+    "greeting": "Selam {{name}}! Bugün hangi macera? 🌟",
+    "whatToLearn": "🎯 BUGÜN NE ÖĞRENELİM?",
+    "levelDone": "🏆 Bu seviyeyi bitirdin!",
+    "allDone": "Tüm bölümleri tamamladın, harikasın! Yarın yeni sorularla görüşürüz 🌟",
+    "completedAlert": "Bu bölümü tamamladın! Başka bölüm seç 🌿",
+    "comingSoonAlert": "{{name}} yakında geliyor! 🌟",
+    "parentPanelAria": "Ebeveyn paneli"
+  },
+  "levels": {
+    "easy": "Kolay",
+    "mid": "Orta",
+    "hard": "Zor"
+  },
+  "stats": {
+    "totalCorrect": "TOPLAM DOĞRU",
+    "bestScore": "EN YÜKSEK PUAN",
+    "maxStreak": "EN UZUN SERİ"
+  },
+  "badgesShowcase": {
+    "title": "🏅 ROZETLER"
+  },
+  "modules": {
+    "count": { "name": "SAYMA", "character": "Zürafa Zara", "description": "Zara ile sayıları öğren" },
+    "add": { "name": "TOPLAMA", "character": "Fil Eko", "description": "Eko ile toplama oyna" },
+    "sub": { "name": "ÇIKARMA", "character": "Zebra Zigi", "description": "Zigi ile çıkarma yap" },
+    "mul": { "name": "ÇARPMA", "character": "Aslan Leo", "description": "Leo ile çarpma uzmanı ol" },
+    "div": { "name": "BÖLME", "character": "Maymun Momo", "description": "Momo ile paylaş" },
+    "seq": { "name": "SIRA", "character": "Kartal Kira", "description": "Eksik sayıyı bul" },
+    "shape": { "name": "ŞEKİL", "character": "Kaplumbağa Tomi", "description": "Şekilleri tanı" },
+    "clock": { "name": "SAAT", "character": "Kanguru Kalo", "description": "Saati öğren" }
+  },
+  "module": {
+    "notFound": "Modül bulunamadı",
+    "questionCounter": "Soru {{current}} / {{total}}"
+  },
+  "prompt": {
+    "count": "Kaç tane var? 👀",
+    "seq": "Eksik sayıyı bul! 🔢",
+    "shapeFind": "{{shape}} bul! 👀",
+    "clock": "Saat kaç? ⏰"
+  },
+  "shapes": {
+    "name": ["Daire", "Kare", "Üçgen", "Yıldız", "Kalp"],
+    "acc": ["Daireyi", "Kareyi", "Üçgeni", "Yıldızı", "Kalbi"]
+  },
+  "feedback": {
+    "correct": "Doğru!",
+    "wrong": "Yanlış!",
+    "correctAnswer": "Doğrusu:"
+  },
+  "roundEnd": {
+    "perfect": "Mükemmel!",
+    "great": "Harika!",
+    "good": "İyi Deneme!",
+    "correct": "DOĞRU",
+    "points": "PUAN",
+    "maxStreak": "EN UZUN SERİ",
+    "home": "🏠 Ana Ekran"
+  },
+  "mango": {
+    "earned": "🥭 Bir mango daha topladın!",
+    "perfect": "🎉 Mükemmel! 10/10!"
+  },
+  "journey": {
+    "label": "🏠 RENO EVE DÖNÜYOR"
+  },
+  "timerEnd": {
+    "title": "🌙 Aferin {{name}}!",
+    "subtitle": "Bugünkü ödevini tamamladın!",
+    "continue": "Devam Et"
+  },
+  "badgeCelebration": {
+    "title": "🎊 YENİ ROZET!",
+    "continue": "Devam Et",
+    "next": "Sıradaki ({{current}}/{{total}})"
+  },
+  "badges": {
+    "first_correct": { "name": "İlk Adım", "description": "İlk doğru cevap" },
+    "correct_5": { "name": "Filiz", "description": "5 doğru cevap" },
+    "correct_10": { "name": "Tomurcuk", "description": "10 doğru cevap" },
+    "correct_20": { "name": "Çiçek", "description": "20 doğru cevap" },
+    "correct_50": { "name": "Ağaç", "description": "50 doğru cevap" },
+    "correct_100": { "name": "Orman", "description": "100 doğru cevap" },
+    "streak_3": { "name": "Isındı", "description": "3 doğru üst üste" },
+    "streak_5": { "name": "Alev", "description": "5 doğru üst üste" },
+    "streak_10": { "name": "Yangın", "description": "10 doğru üst üste" },
+    "expert_count": { "name": "Sayma Uzmanı", "description": "Saymada 10 doğru" },
+    "expert_add": { "name": "Toplama Uzmanı", "description": "Toplamada 10 doğru" },
+    "expert_sub": { "name": "Çıkarma Uzmanı", "description": "Çıkarmada 10 doğru" },
+    "expert_mul": { "name": "Çarpma Uzmanı", "description": "Çarpmada 10 doğru" },
+    "expert_div": { "name": "Bölme Uzmanı", "description": "Bölmede 10 doğru" },
+    "perfect_1": { "name": "Kusursuz!", "description": "İlk kez 10/10" },
+    "perfect_5": { "name": "Şampiyon", "description": "5 kez 10/10" },
+    "score_1000": { "name": "Puan Canavarı", "description": "1000 puan" },
+    "first_mango_bonus": { "name": "Mango Ustası", "description": "İlk mango bonusu" }
+  },
+  "parent": {
+    "title": "👨‍👩‍👧 Ebeveyn Paneli",
+    "pinTitle": "Ebeveyn Girişi",
+    "pinPrompt": "Devam etmek için soruyu çözün",
+    "pinError": "Yanlış, tekrar deneyin.",
+    "pinBack": "Geri",
+    "pinSubmit": "Gir",
+    "playTime": "Günlük Oyun Süresi",
+    "playTimeDesc": "Çocuğun günlük mango (havuç) süresi. Değiştirince bugünden geçerli olur.",
+    "minutesShort": "dk",
+    "weekChart": "Son 7 Gün",
+    "legendCorrect": "Doğru",
+    "legendWrong": "Yanlış",
+    "stats": "İstatistikler",
+    "statTotalCorrect": "TOPLAM DOĞRU",
+    "statBestScore": "EN YÜKSEK PUAN",
+    "statMaxStreak": "EN UZUN SERİ",
+    "statBadges": "ROZETLER",
+    "perModule": "Modül Başına Doğru",
+    "childName": "Çocuğun Adı",
+    "save": "Kaydet",
+    "resetTitle": "Tüm Verileri Sıfırla",
+    "resetDesc": "İstatistikler, rozetler, geçmiş ve süre ayarı silinir. Geri alınamaz.",
+    "reset": "Sıfırla",
+    "resetCancel": "Vazgeç",
+    "resetConfirm": "Evet, Sil"
+  }
+}

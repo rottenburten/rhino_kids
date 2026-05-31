@@ -1,0 +1,44 @@
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
+import tr from './locales/tr.json'
+import en from './locales/en.json'
+
+// Çok dilli yapı — şimdilik TR + EN, 10+ dile genişlemeye hazır.
+// Yeni dil eklemek için: locales/<kod>.json oluştur + resources'a ekle.
+// Anahtarlar STABİL — ileride her anahtara Qwen TTS ses dosyası bağlanacak.
+
+export const SUPPORTED_LANGUAGES = ['tr', 'en'] as const
+export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
+
+export const resources = {
+  tr: { translation: tr },
+  en: { translation: en },
+} as const
+
+i18n
+  // Cihaz/tarayıcı dilini otomatik tespit eder (navigator + localStorage).
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    // Desteklenmeyen dil → tr. Tespit edilen dil tr/en değilse fallback devreye girer.
+    fallbackLng: 'tr',
+    supportedLngs: SUPPORTED_LANGUAGES as unknown as string[],
+    // 'tr-TR' gibi bölgesel kodları ana dile indir (tr-TR → tr).
+    load: 'languageOnly',
+    nonExplicitSupportedLngs: true,
+    interpolation: {
+      escapeValue: false, // React zaten XSS'e karşı kaçışlıyor
+    },
+    detection: {
+      // Sıra: ?lng= (test/manuel) → kayıtlı tercih → cihaz dili → html lang
+      order: ['querystring', 'localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+      lookupQuerystring: 'lng',
+      lookupLocalStorage: 'rhino_lang',
+    },
+    returnObjects: false,
+  })
+
+export default i18n

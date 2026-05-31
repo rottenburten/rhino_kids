@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getModule } from '../modules/moduleList'
 import { buildRound, makeOptions, getRange, formatClock } from '../modules/questionPool'
-import ShapeGlyph, { SHAPE_NAMES, SHAPE_NAMES_ACC } from '../components/ShapeGlyph'
+import ShapeGlyph from '../components/ShapeGlyph'
 import { recordCorrectAnswer, finalizeRound } from '../services/storage'
 import type { BadgeDef } from '../services/badges'
 import type { Question } from '../types'
@@ -63,6 +64,7 @@ function ClockFace({ hour, minute }: { hour: number; minute: number }) {
 export default function ModuleScreen() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const module = getModule(id || '')
 
   // Seviye global context'ten (HomeScreen'deki seçici ile aynı, Preferences kalıcı).
@@ -168,7 +170,7 @@ export default function ModuleScreen() {
   }, [qIndex, questions, level])
 
   if (!module) {
-    return <div>Modül bulunamadı</div>
+    return <div>{t('module.notFound')}</div>
   }
 
   if (questions.length === 0) {
@@ -204,26 +206,30 @@ export default function ModuleScreen() {
             {roundCorrect === 10 ? '🏆' : roundCorrect >= 7 ? '🌟' : '💪'}
           </div>
           <h2 className="font-display text-2xl font-bold text-savana-deep mb-2">
-            {roundCorrect === 10 ? 'Mükemmel!' : roundCorrect >= 7 ? 'Harika!' : 'İyi Deneme!'}
+            {roundCorrect === 10
+              ? t('roundEnd.perfect')
+              : roundCorrect >= 7
+                ? t('roundEnd.great')
+                : t('roundEnd.good')}
           </h2>
           <div className="grid grid-cols-3 gap-4 mt-4 mb-6">
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
                 {roundCorrect}/10
               </div>
-              <div className="text-xs font-bold text-savana-grass">DOĞRU</div>
+              <div className="text-xs font-bold text-savana-grass">{t('roundEnd.correct')}</div>
             </div>
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
                 {roundPoints}
               </div>
-              <div className="text-xs font-bold text-savana-grass">PUAN</div>
+              <div className="text-xs font-bold text-savana-grass">{t('roundEnd.points')}</div>
             </div>
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
                 {streak}
               </div>
-              <div className="text-xs font-bold text-savana-grass">EN UZUN SERİ</div>
+              <div className="text-xs font-bold text-savana-grass">{t('roundEnd.maxStreak')}</div>
             </div>
           </div>
           {/* Oturum kilidi felsefesi: bölüm bir oturumda BİR KEZ oynanır ve
@@ -233,7 +239,7 @@ export default function ModuleScreen() {
             onClick={() => navigate('/')}
             className="kid-btn w-full bg-savana-grass border-savana-deep"
           >
-            🏠 Ana Ekran
+            {t('roundEnd.home')}
           </button>
         </div>
       </div>
@@ -286,7 +292,7 @@ export default function ModuleScreen() {
           // Mango durumu SADECE mesajı değiştirir; akış ve kapanma aynı.
           const hadMango = remainingSeconds > 0
           if (hadMango) reward()
-          setBonusMessage(hadMango ? '🥭 Bir mango daha topladın!' : '🎉 Mükemmel! 10/10!')
+          setBonusMessage(hadMango ? t('mango.earned') : t('mango.perfect'))
           setBonusCelebrate(true)
           // KOŞULSUZ kapanma garantisi (ayrı ref, animasyona bağlı değil):
           if (bonusTimeoutRef.current) clearTimeout(bonusTimeoutRef.current)
@@ -377,7 +383,7 @@ export default function ModuleScreen() {
           />
         </div>
         <div className="text-center text-xs font-bold text-savana-deep mb-4">
-          Soru {qIndex + 1} / 10
+          {t('module.questionCounter', { current: qIndex + 1, total: 10 })}
         </div>
 
         {/* OYUN KARTI */}
@@ -386,7 +392,7 @@ export default function ModuleScreen() {
             <div className="absolute inset-0 bg-green-100/95 rounded-2xl flex flex-col items-center justify-center z-10">
               <div className="text-6xl mb-2">🎉</div>
               <div className="text-2xl font-display font-bold text-green-800">
-                Doğru!
+                {t('feedback.correct')}
               </div>
             </div>
           )}
@@ -394,10 +400,10 @@ export default function ModuleScreen() {
             <div className="absolute inset-0 bg-red-100/95 rounded-2xl flex flex-col items-center justify-center z-10">
               <div className="text-6xl mb-2">😅</div>
               <div className="text-2xl font-display font-bold text-red-800">
-                Yanlış!
+                {t('feedback.wrong')}
               </div>
               <div className="mt-2 bg-white px-6 py-2 rounded-xl border-2 border-savana-deep flex items-center gap-2">
-                <span className="font-display font-bold text-savana-deep text-xl">Doğrusu:</span>
+                <span className="font-display font-bold text-savana-deep text-xl">{t('feedback.correctAnswer')}</span>
                 {q.type === 'shape' ? (
                   <ShapeGlyph kind={q.ans} size={32} />
                 ) : (
@@ -411,15 +417,15 @@ export default function ModuleScreen() {
 
           {/* SORU */}
           <h2 className="text-center font-display text-2xl font-bold text-savana-deep mb-4">
-            {q.type === 'count' && 'Kaç tane var? 👀'}
+            {q.type === 'count' && t('prompt.count')}
             {q.type === 'add' && `${q.a} + ${q.b} = ?`}
             {q.type === 'sub' && `${q.a} − ${q.b} = ?`}
             {q.type === 'mul' && `${q.a} × ${q.b} = ?`}
             {q.type === 'div' && `${q.a} ÷ ${q.b} = ?`}
-            {q.type === 'seq' && 'Eksik sayıyı bul! 🔢'}
+            {q.type === 'seq' && t('prompt.seq')}
             {q.type === 'shape' &&
-              `${SHAPE_NAMES_ACC[q.ans] ?? SHAPE_NAMES[q.ans]} bul! 👀`}
-            {q.type === 'clock' && 'Saat kaç? ⏰'}
+              t('prompt.shapeFind', { shape: t(`shapes.acc.${q.ans}`) })}
+            {q.type === 'clock' && t('prompt.clock')}
           </h2>
 
           {/* GÖRSEL */}

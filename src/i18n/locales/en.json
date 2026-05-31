@@ -1,0 +1,129 @@
+{
+  "common": {
+    "back": "Back"
+  },
+  "home": {
+    "greeting": "Hi {{name}}! What adventure today? 🌟",
+    "whatToLearn": "🎯 WHAT SHALL WE LEARN TODAY?",
+    "levelDone": "🏆 You finished this level!",
+    "allDone": "You completed all the sections, amazing! See you tomorrow with new questions 🌟",
+    "completedAlert": "You finished this section! Pick another one 🌿",
+    "comingSoonAlert": "{{name}} is coming soon! 🌟",
+    "parentPanelAria": "Parent panel"
+  },
+  "levels": {
+    "easy": "Easy",
+    "mid": "Medium",
+    "hard": "Hard"
+  },
+  "stats": {
+    "totalCorrect": "TOTAL CORRECT",
+    "bestScore": "BEST SCORE",
+    "maxStreak": "LONGEST STREAK"
+  },
+  "badgesShowcase": {
+    "title": "🏅 BADGES"
+  },
+  "modules": {
+    "count": { "name": "COUNTING", "character": "Zara the Giraffe", "description": "Learn numbers with Zara" },
+    "add": { "name": "ADDITION", "character": "Eko the Elephant", "description": "Play addition with Eko" },
+    "sub": { "name": "SUBTRACTION", "character": "Zigi the Zebra", "description": "Do subtraction with Zigi" },
+    "mul": { "name": "MULTIPLICATION", "character": "Leo the Lion", "description": "Become a multiplication pro with Leo" },
+    "div": { "name": "DIVISION", "character": "Momo the Monkey", "description": "Share with Momo" },
+    "seq": { "name": "SEQUENCE", "character": "Kira the Eagle", "description": "Find the missing number" },
+    "shape": { "name": "SHAPES", "character": "Tomi the Turtle", "description": "Recognize shapes" },
+    "clock": { "name": "CLOCK", "character": "Kalo the Kangaroo", "description": "Learn to tell time" }
+  },
+  "module": {
+    "notFound": "Module not found",
+    "questionCounter": "Question {{current}} / {{total}}"
+  },
+  "prompt": {
+    "count": "How many are there? 👀",
+    "seq": "Find the missing number! 🔢",
+    "shapeFind": "Find the {{shape}}! 👀",
+    "clock": "What time is it? ⏰"
+  },
+  "shapes": {
+    "name": ["Circle", "Square", "Triangle", "Star", "Heart"],
+    "acc": ["Circle", "Square", "Triangle", "Star", "Heart"]
+  },
+  "feedback": {
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "correctAnswer": "Answer:"
+  },
+  "roundEnd": {
+    "perfect": "Perfect!",
+    "great": "Great!",
+    "good": "Nice Try!",
+    "correct": "CORRECT",
+    "points": "POINTS",
+    "maxStreak": "LONGEST STREAK",
+    "home": "🏠 Home"
+  },
+  "mango": {
+    "earned": "🥭 You earned another mango!",
+    "perfect": "🎉 Perfect! 10/10!"
+  },
+  "journey": {
+    "label": "🏠 RENO IS HEADING HOME"
+  },
+  "timerEnd": {
+    "title": "🌙 Well done {{name}}!",
+    "subtitle": "You finished today's homework!",
+    "continue": "Continue"
+  },
+  "badgeCelebration": {
+    "title": "🎊 NEW BADGE!",
+    "continue": "Continue",
+    "next": "Next ({{current}}/{{total}})"
+  },
+  "badges": {
+    "first_correct": { "name": "First Step", "description": "First correct answer" },
+    "correct_5": { "name": "Sprout", "description": "5 correct answers" },
+    "correct_10": { "name": "Bud", "description": "10 correct answers" },
+    "correct_20": { "name": "Flower", "description": "20 correct answers" },
+    "correct_50": { "name": "Tree", "description": "50 correct answers" },
+    "correct_100": { "name": "Forest", "description": "100 correct answers" },
+    "streak_3": { "name": "Warmed Up", "description": "3 correct in a row" },
+    "streak_5": { "name": "On Fire", "description": "5 correct in a row" },
+    "streak_10": { "name": "Blazing", "description": "10 correct in a row" },
+    "expert_count": { "name": "Counting Expert", "description": "10 correct in Counting" },
+    "expert_add": { "name": "Addition Expert", "description": "10 correct in Addition" },
+    "expert_sub": { "name": "Subtraction Expert", "description": "10 correct in Subtraction" },
+    "expert_mul": { "name": "Multiplication Expert", "description": "10 correct in Multiplication" },
+    "expert_div": { "name": "Division Expert", "description": "10 correct in Division" },
+    "perfect_1": { "name": "Flawless!", "description": "First 10/10" },
+    "perfect_5": { "name": "Champion", "description": "10/10 five times" },
+    "score_1000": { "name": "Score Monster", "description": "1000 points" },
+    "first_mango_bonus": { "name": "Mango Master", "description": "First mango bonus" }
+  },
+  "parent": {
+    "title": "👨‍👩‍👧 Parent Panel",
+    "pinTitle": "Parent Login",
+    "pinPrompt": "Solve the question to continue",
+    "pinError": "Wrong, please try again.",
+    "pinBack": "Back",
+    "pinSubmit": "Enter",
+    "playTime": "Daily Play Time",
+    "playTimeDesc": "Your child's daily mango (carrot) time. Changes apply from today.",
+    "minutesShort": "min",
+    "weekChart": "Last 7 Days",
+    "legendCorrect": "Correct",
+    "legendWrong": "Wrong",
+    "stats": "Statistics",
+    "statTotalCorrect": "TOTAL CORRECT",
+    "statBestScore": "BEST SCORE",
+    "statMaxStreak": "LONGEST STREAK",
+    "statBadges": "BADGES",
+    "perModule": "Correct per Module",
+    "childName": "Child's Name",
+    "save": "Save",
+    "resetTitle": "Reset All Data",
+    "resetDesc": "Statistics, badges, history and time settings will be deleted. This cannot be undone.",
+    "reset": "Reset",
+    "resetCancel": "Cancel",
+    "resetConfirm": "Yes, Delete"
+  }
+}
