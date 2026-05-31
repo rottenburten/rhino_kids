@@ -15,6 +15,7 @@ import { useLevel } from '../contexts/LevelContext'
 import { markCompleted } from '../services/sessionLock'
 import { recordAnswer } from '../services/history'
 import RenoJourney from '../components/RenoJourney'
+import { useLocalizeNumber } from '../i18n/digits'
 import BadgeCelebration from '../components/BadgeCelebration'
 import Confetti from '../components/Confetti'
 import TimerEndScreen from '../components/TimerEndScreen'
@@ -66,6 +67,7 @@ export default function ModuleScreen() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const localizeNum = useLocalizeNumber()
   const module = getModule(id || '')
 
   // Seviye global context'ten (HomeScreen'deki seçici ile aynı, Preferences kalıcı).
@@ -216,19 +218,19 @@ export default function ModuleScreen() {
           <div className="grid grid-cols-3 gap-4 mt-4 mb-6">
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
-                {roundCorrect}/10
+                {localizeNum(roundCorrect)}/{localizeNum(10)}
               </div>
               <div className="text-xs font-bold text-savana-grass">{t('roundEnd.correct')}</div>
             </div>
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
-                {roundPoints}
+                {localizeNum(roundPoints)}
               </div>
               <div className="text-xs font-bold text-savana-grass">{t('roundEnd.points')}</div>
             </div>
             <div>
               <div className="text-3xl font-display font-bold text-savana-deep">
-                {streak}
+                {localizeNum(streak)}
               </div>
               <div className="text-xs font-bold text-savana-grass">{t('roundEnd.maxStreak')}</div>
             </div>
@@ -385,7 +387,10 @@ export default function ModuleScreen() {
           />
         </div>
         <div className="text-center text-xs font-bold text-savana-deep mb-4">
-          {t('module.questionCounter', { current: qIndex + 1, total: 10 })}
+          {t('module.questionCounter', {
+            current: localizeNum(qIndex + 1),
+            total: localizeNum(10),
+          })}
         </div>
 
         {/* OYUN KARTI */}
@@ -410,7 +415,7 @@ export default function ModuleScreen() {
                   <ShapeGlyph kind={q.ans} size={32} />
                 ) : (
                   <span className="font-display font-bold text-savana-deep text-xl">
-                    {q.type === 'clock' ? formatClock(q.ans) : q.ans}
+                    {localizeNum(q.type === 'clock' ? formatClock(q.ans) : q.ans)}
                   </span>
                 )}
               </div>
@@ -420,10 +425,10 @@ export default function ModuleScreen() {
           {/* SORU */}
           <h2 className="text-center font-display text-2xl font-bold text-savana-deep mb-4">
             {q.type === 'count' && t('prompt.count')}
-            {q.type === 'add' && `${q.a} + ${q.b} = ?`}
-            {q.type === 'sub' && `${q.a} − ${q.b} = ?`}
-            {q.type === 'mul' && `${q.a} × ${q.b} = ?`}
-            {q.type === 'div' && `${q.a} ÷ ${q.b} = ?`}
+            {q.type === 'add' && localizeNum(`${q.a} + ${q.b} = ?`)}
+            {q.type === 'sub' && localizeNum(`${q.a} − ${q.b} = ?`)}
+            {q.type === 'mul' && localizeNum(`${q.a} × ${q.b} = ?`)}
+            {q.type === 'div' && localizeNum(`${q.a} ÷ ${q.b} = ?`)}
             {q.type === 'seq' && t('prompt.seq')}
             {q.type === 'shape' &&
               t('prompt.shapeFind', { shape: t(`shapes.acc.${q.ans}`) })}
@@ -459,7 +464,7 @@ export default function ModuleScreen() {
                       : 'border-savana-deep text-savana-deep bg-white'
                   }`}
                 >
-                  {i === q.missingIndex ? '?' : n}
+                  {i === q.missingIndex ? '?' : localizeNum(n)}
                 </div>
               ))}
 
@@ -481,9 +486,9 @@ export default function ModuleScreen() {
                 {q.type === 'shape' ? (
                   <ShapeGlyph kind={val} size={52} />
                 ) : q.type === 'clock' ? (
-                  <span>{formatClock(val)}</span>
+                  <span>{localizeNum(formatClock(val))}</span>
                 ) : (
-                  val
+                  localizeNum(val)
                 )}
               </button>
             ))}

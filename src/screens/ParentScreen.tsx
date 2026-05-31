@@ -9,6 +9,7 @@ import { resetPlayerData } from '../services/storage'
 import { clearHistory, loadWeek, type WeekDay } from '../services/history'
 import { BADGES } from '../services/badges'
 import { MODULES } from '../modules/moduleList'
+import { useLocalizeNumber } from '../i18n/digits'
 
 // ── PIN kapısı: basit toplama (iki haneli) — çocuk çözemesin, ebeveyn çözsün.
 // Sayılar 5-9 arası seçilir, böylece sonuç 10-18 olur (5 yaş için zor).
@@ -20,6 +21,7 @@ function makeChallenge() {
 
 function PinGate({ onUnlock, onCancel }: { onUnlock: () => void; onCancel: () => void }) {
   const { t } = useTranslation()
+  const n = useLocalizeNumber()
   const [challenge, setChallenge] = useState(makeChallenge)
   const [input, setInput] = useState('')
   const [error, setError] = useState(false)
@@ -43,7 +45,7 @@ function PinGate({ onUnlock, onCancel }: { onUnlock: () => void; onCancel: () =>
           {t('parent.pinPrompt')}
         </p>
         <div className="font-display text-3xl font-bold text-savana-deep mb-4">
-          {challenge.a} + {challenge.b} = ?
+          {n(challenge.a)} + {n(challenge.b)} = ?
         </div>
         <input
           type="number"
@@ -73,6 +75,7 @@ function PinGate({ onUnlock, onCancel }: { onUnlock: () => void; onCancel: () =>
 // ── Haftalık doğru/yanlış bar grafiği ──
 function WeekChart({ week }: { week: WeekDay[] }) {
   const { t } = useTranslation()
+  const n = useLocalizeNumber()
   const max = Math.max(1, ...week.map((d) => d.correct + d.wrong))
   return (
     <div className="flex items-end justify-between gap-2 h-32">
@@ -85,12 +88,12 @@ function WeekChart({ week }: { week: WeekDay[] }) {
               <div
                 className="w-full bg-savana-grass rounded-t"
                 style={{ height: `${cH}%` }}
-                title={`${d.correct} ${t('parent.legendCorrect')}`}
+                title={`${n(d.correct)} ${t('parent.legendCorrect')}`}
               />
               <div
                 className="w-full bg-red-400 rounded-b"
                 style={{ height: `${wH}%` }}
-                title={`${d.wrong} ${t('parent.legendWrong')}`}
+                title={`${n(d.wrong)} ${t('parent.legendWrong')}`}
               />
             </div>
             <div className="text-[10px] font-bold text-savana-deep">
@@ -107,10 +110,12 @@ function WeekChart({ week }: { week: WeekDay[] }) {
 const LANGUAGES: { code: string; label: string }[] = [
   { code: 'tr', label: 'Türkçe' },
   { code: 'en', label: 'English' },
+  { code: 'ar', label: 'العربية' },
 ]
 
 export default function ParentScreen() {
   const { t, i18n } = useTranslation()
+  const n = useLocalizeNumber()
   const navigate = useNavigate()
   const { data, loading, update } = usePlayerData()
   const { limitSeconds, setLimit } = useCarrotTimer()
@@ -211,7 +216,7 @@ export default function ParentScreen() {
                       : 'bg-white text-savana-deep border-savana-deep/40'
                   }`}
                 >
-                  {opt / 60} {t('parent.minutesShort')}
+                  {n(opt / 60)} {t('parent.minutesShort')}
                 </button>
               )
             })}
@@ -232,10 +237,10 @@ export default function ParentScreen() {
         <section className="bg-white border-2 border-savana-deep rounded-2xl p-4 mb-4">
           <h2 className="font-display font-bold text-savana-deep mb-3">📈 {t('parent.stats')}</h2>
           <div className="grid grid-cols-2 gap-3 mb-4 text-center">
-            <Stat label={t('parent.statTotalCorrect')} value={data.totalCorrect} />
-            <Stat label={t('parent.statBestScore')} value={data.bestScore} />
-            <Stat label={t('parent.statMaxStreak')} value={data.maxStreak} />
-            <Stat label={t('parent.statBadges')} value={`${earnedCount}/${BADGES.length}`} />
+            <Stat label={t('parent.statTotalCorrect')} value={n(data.totalCorrect)} />
+            <Stat label={t('parent.statBestScore')} value={n(data.bestScore)} />
+            <Stat label={t('parent.statMaxStreak')} value={n(data.maxStreak)} />
+            <Stat label={t('parent.statBadges')} value={`${n(earnedCount)}/${n(BADGES.length)}`} />
           </div>
           <h3 className="font-display font-bold text-sm text-savana-deep mb-2">{t('parent.perModule')}</h3>
           <div className="space-y-1">
@@ -244,7 +249,7 @@ export default function ParentScreen() {
                 <span className="font-semibold text-savana-deep">
                   {m.icon} {t(`modules.${m.id}.name`)}
                 </span>
-                <span className="font-bold text-savana-deep">{data.byModule[m.id] || 0}</span>
+                <span className="font-bold text-savana-deep">{n(data.byModule[m.id] || 0)}</span>
               </div>
             ))}
           </div>

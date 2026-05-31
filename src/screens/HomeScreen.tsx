@@ -8,6 +8,7 @@ import { usePlayerData } from '../hooks/usePlayerData'
 import { isCompleted } from '../services/sessionLock'
 import { useLevel } from '../contexts/LevelContext'
 import { BADGES } from '../services/badges'
+import { useLocalizeNumber } from '../i18n/digits'
 import type { Level } from '../types'
 
 // Seviye seçici seçenekleri (etiket i18n'den, emoji sabit).
@@ -20,6 +21,7 @@ const LEVEL_OPTIONS: { id: Level; emoji: string }[] = [
 export default function HomeScreen() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const n = useLocalizeNumber()
   const { data, loading } = usePlayerData()
   const { level, loaded: levelLoaded, setLevel } = useLevel()
 
@@ -62,10 +64,10 @@ export default function HomeScreen() {
           </h1>
           <div className="flex gap-2">
             <div className="bg-white border-2 border-mango rounded-full px-3 py-1 font-bold text-mango-dark text-sm">
-              🥭 {data.mangos}
+              🥭 {n(data.mangos)}
             </div>
             <div className="bg-white border-2 border-red-400 rounded-full px-3 py-1 font-bold text-red-700 text-sm">
-              🔥 {data.dailyStreak}
+              🔥 {n(data.dailyStreak)}
             </div>
           </div>
         </header>
@@ -178,7 +180,7 @@ export default function HomeScreen() {
         <div className="mt-6 grid grid-cols-3 gap-2">
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
             <div className="text-xl font-display font-bold text-savana-deep">
-              {data.totalCorrect}
+              {n(data.totalCorrect)}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
               {t('stats.totalCorrect')}
@@ -186,7 +188,7 @@ export default function HomeScreen() {
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
             <div className="text-xl font-display font-bold text-savana-deep">
-              {data.bestScore}
+              {n(data.bestScore)}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
               {t('stats.bestScore')}
@@ -194,7 +196,7 @@ export default function HomeScreen() {
           </div>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 text-center border-2 border-savana-deep">
             <div className="text-xl font-display font-bold text-savana-deep">
-              {data.maxStreak}
+              {n(data.maxStreak)}
             </div>
             <div className="text-[10px] font-bold text-savana-grass">
               {t('stats.maxStreak')}
@@ -205,7 +207,7 @@ export default function HomeScreen() {
         {/* ROZET VİTRİNİ — kazanılanlar renkli, kazanılmayanlar gri/kilitli */}
         <div className="mt-6">
           <h2 className="text-center font-display font-bold text-savana-deep text-sm tracking-wider mb-3">
-            {t('badgesShowcase.title')} ({earnedBadgeIds.size}/{BADGES.length})
+            {t('badgesShowcase.title')} ({n(earnedBadgeIds.size)}/{n(BADGES.length)})
           </h2>
           <div className="grid grid-cols-6 gap-2">
             {BADGES.map((badge) => {
