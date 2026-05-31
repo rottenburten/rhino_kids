@@ -7,7 +7,8 @@
     "whatToLearn": "🎯 WHAT SHALL WE LEARN TODAY?",
     "levelDone": "🏆 You finished this level!",
     "allDone": "You completed all the sections, amazing! See you tomorrow with new questions 🌟",
-    "completedAlert": "You finished this section! Pick another one 🌿",
+    "completedAlert": "You finished this today! Come back tomorrow for more 🌿",
+    "sectionCompletedBubble": "Well done! You finished this today 🌟 Come back tomorrow for more!",
     "comingSoonAlert": "{{name}} is coming soon! 🌟",
     "parentPanelAria": "Parent panel"
   },

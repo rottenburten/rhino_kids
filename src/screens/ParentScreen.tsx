@@ -37,7 +37,7 @@ function PinGate({ onUnlock, onCancel }: { onUnlock: () => void; onCancel: () =>
   const words = numberToWords(target, i18n.resolvedLanguage || i18n.language)
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-savana-sky to-savana-earth p-6">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-savana-sky to-savana-earth px-6 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <div className="bg-white border-[3px] border-savana-deep rounded-3xl p-8 max-w-sm w-full text-center shadow-kid">
         <div className="text-5xl mb-3">🔒</div>
         <h1 className="font-display text-xl font-bold text-savana-deep mb-1">{t('parent.pinTitle')}</h1>
@@ -163,7 +163,7 @@ export default function ParentScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-savana-sky to-savana-earth p-4">
+    <div className="min-h-screen bg-gradient-to-b from-savana-sky to-savana-earth px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]">
       <div className="max-w-2xl mx-auto pb-10">
         {/* HEADER */}
         <header className="flex items-center justify-between mb-4">

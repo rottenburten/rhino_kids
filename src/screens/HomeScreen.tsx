@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Reno from '../characters/Reno'
@@ -5,11 +7,12 @@ import { getCharacter } from '../characters'
 import SavannaBackground from '../components/SavannaBackground'
 import { MODULES } from '../modules/moduleList'
 import { usePlayerData } from '../hooks/usePlayerData'
-import { isCompleted } from '../services/sessionLock'
+import { isCompleted, getPendingBubble, markBubbleShown } from '../services/dailyLock'
+import { useDailyLock } from '../hooks/useDailyLock'
 import { useLevel } from '../contexts/LevelContext'
 import { BADGES } from '../services/badges'
 import { useLocalizeNumber } from '../i18n/digits'
-import type { Level } from '../types'
+import type { Level, ModuleId } from '../types'
 
 // Seviye seçici seçenekleri (etiket i18n'den, emoji sabit).
 const LEVEL_OPTIONS: { id: Level; emoji: string }[] = [
@@ -24,8 +27,41 @@ export default function HomeScreen() {
   const n = useLocalizeNumber()
   const { data, loading } = usePlayerData()
   const { level, loaded: levelLoaded, setLevel } = useLevel()
+  const { loaded: lockLoaded } = useDailyLock()
 
-  if (loading || !data || !levelLoaded) {
+  // ── Kutlama balonu: bir bölüm BUGÜN ilk kez kilitlenince, o bölümün kartı
+  // üzerinde tek seferlik kutlama gösterilir. 4 sn sonra otomatik kapanır
+  // (dokununca da kapanır). getPendingBubble tek-sefer mantığını yürütür.
+  const [bubbleModuleId, setBubbleModuleId] = useState<ModuleId | null>(null)
+  const bubbleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    if (!lockLoaded) return
+    const pending = getPendingBubble(level)
+    if (!pending) return
+    markBubbleShown(pending, level) // tek-sefer: hemen işaretle (tekrar açılmasın)
+    setBubbleModuleId(pending)
+    if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current)
+    bubbleTimerRef.current = setTimeout(() => {
+      bubbleTimerRef.current = null
+      setBubbleModuleId(null)
+    }, 4000)
+  }, [lockLoaded, level])
+
+  useEffect(
+    () => () => {
+      if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current)
+    },
+    []
+  )
+
+  const dismissBubble = () => {
+    if (bubbleTimerRef.current) clearTimeout(bubbleTimerRef.current)
+    bubbleTimerRef.current = null
+    setBubbleModuleId(null)
+  }
+
+  if (loading || !data || !levelLoaded || !lockLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-savana-sky">
         <div className="text-4xl animate-bob">🦏</div>
@@ -33,7 +69,7 @@ export default function HomeScreen() {
     )
   }
 
-  // Seçili seviyede oynanabilir (yakında olmayan) tüm modüller bu oturumda
+  // Seçili seviyede oynanabilir (yakında olmayan) tüm modüller bugün
   // tamamlandı mı? → "seviyeyi bitirdin" banner'ı için.
   const playable = MODULES.filter((m) => !m.comingSoon)
   const allCompleted =
@@ -110,7 +146,7 @@ export default function HomeScreen() {
             {t('home.whatToLearn')}
           </h2>
 
-          {/* Bu oturumda oynanabilir tüm modüller tamamlandıysa kutla. */}
+          {/* Bugün oynanabilir tüm modüller tamamlandıysa kutla. */}
           {allCompleted && (
             <div className="mb-3 bg-savana-grass border-[3px] border-savana-deep rounded-2xl px-4 py-3 text-center font-display font-bold text-savana-deep shadow-kid">
               {t('home.levelDone')}
@@ -122,53 +158,75 @@ export default function HomeScreen() {
               // Modülün kendi çizdiğimiz karakteri (count/add/sub/mul/div).
               // Henüz karakteri olmayan modüller (seq/shape/clock) emoji'de kalır.
               const Character = getCharacter(mod.id)
-              // Bu oturumda oynandıysa kilitli görünür (sadece oynanabilir modüller).
+              // Bugün oynandıysa kilitli görünür (sadece oynanabilir modüller).
               const completed = !mod.comingSoon && isCompleted(mod.id, level)
               return (
-                <button
-                  key={mod.id}
-                  onClick={() => {
-                    if (mod.comingSoon) {
-                      alert(t('home.comingSoonAlert', { name: t(`modules.${mod.id}.character`) }))
-                    } else if (completed) {
-                      alert(t('home.completedAlert'))
-                    } else {
-                      navigate(`/module/${mod.id}`)
-                    }
-                  }}
-                  className={`kid-card p-3 text-center relative ${
-                    mod.comingSoon || completed ? 'opacity-50' : ''
-                  }`}
-                >
-                  {mod.comingSoon && (
-                    <div className="absolute top-1 end-1 text-xs">🔒</div>
-                  )}
-                  {completed && (
-                    <div className="absolute top-1 end-1 w-5 h-5 rounded-full bg-savana-grass border-2 border-savana-deep flex items-center justify-center text-[10px] font-bold text-savana-deep">
-                      ✓
+                <div key={mod.id} className="relative">
+                  {/* Kutlama balonu — kartın ÜSTÜNDE, kartı kapatmadan. Pop-in. */}
+                  <AnimatePresence>
+                    {bubbleModuleId === mod.id && (
+                      <motion.button
+                        type="button"
+                        onClick={dismissBubble}
+                        initial={{ scale: 0.6, opacity: 0, y: 6 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.7, opacity: 0, y: 4 }}
+                        transition={{ type: 'spring', stiffness: 380, damping: 20 }}
+                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 w-44 max-w-[44vw] bg-white border-[3px] border-savana-deep rounded-2xl px-3 py-2 shadow-kid text-center"
+                      >
+                        <p className="font-display font-bold text-[11px] leading-snug text-savana-deep">
+                          {t('home.sectionCompletedBubble')}
+                        </p>
+                        {/* Aşağıyı işaret eden küçük üçgen (konuşma balonu kuyruğu) */}
+                        <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-px w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-savana-deep" />
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
+
+                  <button
+                    onClick={() => {
+                      if (mod.comingSoon) {
+                        alert(t('home.comingSoonAlert', { name: t(`modules.${mod.id}.character`) }))
+                      } else if (completed) {
+                        alert(t('home.completedAlert'))
+                      } else {
+                        navigate(`/module/${mod.id}`)
+                      }
+                    }}
+                    className={`kid-card p-3 text-center relative w-full ${
+                      mod.comingSoon || completed ? 'opacity-50' : ''
+                    }`}
+                  >
+                    {mod.comingSoon && (
+                      <div className="absolute top-1 end-1 text-xs">🔒</div>
+                    )}
+                    {completed && (
+                      <div className="absolute top-1 end-1 w-5 h-5 rounded-full bg-savana-grass border-2 border-savana-deep flex items-center justify-center text-[10px] font-bold text-savana-deep">
+                        ✓
+                      </div>
+                    )}
+                    {Character ? (
+                      // viewBox 0 0 200 200 olduğu için karakter 56px kutuda
+                      // ortalı ve taşmasız oturur (Zara'nın uzun boynu dahil).
+                      <div className="flex items-center justify-center h-14 mb-1 overflow-visible">
+                        <Character size={56} mood="idle" />
+                      </div>
+                    ) : (
+                      <div className="text-3xl mb-1 flex items-center justify-center h-14">
+                        {mod.icon}
+                      </div>
+                    )}
+                    <div className="font-display font-bold text-xs text-savana-deep">
+                      {t(`modules.${mod.id}.name`)}
                     </div>
-                  )}
-                  {Character ? (
-                    // viewBox 0 0 200 200 olduğu için karakter 56px kutuda
-                    // ortalı ve taşmasız oturur (Zara'nın uzun boynu dahil).
-                    <div className="flex items-center justify-center h-14 mb-1 overflow-visible">
-                      <Character size={56} mood="idle" />
-                    </div>
-                  ) : (
-                    <div className="text-3xl mb-1 flex items-center justify-center h-14">
-                      {mod.icon}
-                    </div>
-                  )}
-                  <div className="font-display font-bold text-xs text-savana-deep">
-                    {t(`modules.${mod.id}.name`)}
-                  </div>
-                </button>
+                  </button>
+                </div>
               )
             })}
           </div>
 
           {/* Tüm bölümler kilitliyken cesaretlendirici alt mesaj —
-              "takılmış" değil "başardın" hissi versin. Seviye seçici sonra. */}
+              "takılmış" değil "başardın" hissi versin. */}
           {allCompleted && (
             <p className="mt-3 text-center font-display font-semibold text-savana-deep/80 text-sm">
               {t('home.allDone')}

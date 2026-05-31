@@ -12,7 +12,7 @@ import type { Question } from '../types'
 import { getCharacter, useCharacterMood } from '../characters'
 import { useCarrotTimer } from '../contexts/CarrotTimerContext'
 import { useLevel } from '../contexts/LevelContext'
-import { markCompleted } from '../services/sessionLock'
+import { markCompleted, loadDailyLock } from '../services/dailyLock'
 import { recordAnswer } from '../services/history'
 import RenoJourney from '../components/RenoJourney'
 import { useLocalizeNumber } from '../i18n/digits'
@@ -155,6 +155,12 @@ export default function ModuleScreen() {
   useEffect(() => {
     startNewRound()
   }, [startNewRound])
+
+  // Günlük kilit cache'inin yüklü olduğundan emin ol (doğrudan /module deep-link
+  // ile gelinirse Home henüz yüklememiş olabilir → markCompleted veri kaybetmesin).
+  useEffect(() => {
+    loadDailyLock()
+  }, [])
 
   // Soru değişince seçenekleri üret
   useEffect(() => {

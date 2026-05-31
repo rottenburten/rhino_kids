@@ -7,7 +7,8 @@
     "whatToLearn": "🎯 BUGÜN NE ÖĞRENELİM?",
     "levelDone": "🏆 Bu seviyeyi bitirdin!",
     "allDone": "Tüm bölümleri tamamladın, harikasın! Yarın yeni sorularla görüşürüz 🌟",
-    "completedAlert": "Bu bölümü tamamladın! Başka bölüm seç 🌿",
+    "completedAlert": "Bu bölümü bugün tamamladın! Yarın yeni sorularla tekrar gel 🌿",
+    "sectionCompletedBubble": "Tebrikler! Bunu bugün tamamladın 🌟 Yarın yeni sorularla tekrar gel!",
     "comingSoonAlert": "{{name}} yakında geliyor! 🌟",
     "parentPanelAria": "Ebeveyn paneli"
   },
