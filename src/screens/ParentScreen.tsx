@@ -103,8 +103,14 @@ function WeekChart({ week }: { week: WeekDay[] }) {
   )
 }
 
+// Dil seçenekleri — kod stabil, etiket o dilin kendi adıyla (native).
+const LANGUAGES: { code: string; label: string }[] = [
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'en', label: 'English' },
+]
+
 export default function ParentScreen() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { data, loading, update } = usePlayerData()
   const { limitSeconds, setLimit } = useCarrotTimer()
@@ -162,6 +168,29 @@ export default function ParentScreen() {
           <h1 className="font-display text-xl font-bold text-savana-deep">{t('parent.title')}</h1>
           <div className="w-10" />
         </header>
+
+        {/* DİL / LANGUAGE */}
+        <section className="bg-white border-2 border-savana-deep rounded-2xl p-4 mb-4">
+          <h2 className="font-display font-bold text-savana-deep mb-3">🌍 {t('parent.language')}</h2>
+          <div className="flex flex-wrap gap-2">
+            {LANGUAGES.map((lng) => {
+              const active = i18n.resolvedLanguage === lng.code
+              return (
+                <button
+                  key={lng.code}
+                  onClick={() => i18n.changeLanguage(lng.code)}
+                  className={`rounded-full px-4 py-1.5 font-display font-bold text-sm border-2 ${
+                    active
+                      ? 'bg-savana-deep text-white border-savana-deep'
+                      : 'bg-white text-savana-deep border-savana-deep/40'
+                  }`}
+                >
+                  {lng.label}
+                </button>
+              )
+            })}
+          </div>
+        </section>
 
         {/* HAVUÇ SÜRESİ */}
         <section className="bg-white border-2 border-savana-deep rounded-2xl p-4 mb-4">

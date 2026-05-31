@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getModule } from '../modules/moduleList'
 import { buildRound, makeOptions, getRange, formatClock } from '../modules/questionPool'
 import ShapeGlyph from '../components/ShapeGlyph'
+import QuestionVisual from '../components/QuestionVisual'
 import { recordCorrectAnswer, finalizeRound } from '../services/storage'
 import type { BadgeDef } from '../services/badges'
 import type { Question } from '../types'
@@ -436,6 +437,13 @@ export default function ModuleScreen() {
                   {emoji}
                 </span>
               ))}
+
+            {/* TOPLAMA/ÇIKARMA/ÇARPMA/BÖLME: emoji grup görselleri (QuestionVisual).
+                seed=qIndex → aynı soruda emoji sabit, soru değişince yenilenir. */}
+            {(q.type === 'add' ||
+              q.type === 'sub' ||
+              q.type === 'mul' ||
+              q.type === 'div') && <QuestionVisual question={q} seed={qIndex} />}
 
             {/* SIRA: diziyi göster, eksik konumda '?' */}
             {q.type === 'seq' &&

@@ -101,6 +101,7 @@
   },
   "parent": {
     "title": "👨‍👩‍👧 Ebeveyn Paneli",
+    "language": "Dil",
     "pinTitle": "Ebeveyn Girişi",
     "pinPrompt": "Devam etmek için soruyu çözün",
     "pinError": "Yanlış, tekrar deneyin.",

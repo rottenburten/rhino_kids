@@ -101,6 +101,7 @@
   },
   "parent": {
     "title": "👨‍👩‍👧 Parent Panel",
+    "language": "Language",
     "pinTitle": "Parent Login",
     "pinPrompt": "Solve the question to continue",
     "pinError": "Wrong, please try again.",
