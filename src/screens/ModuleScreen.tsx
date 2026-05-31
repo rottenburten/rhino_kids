@@ -331,7 +331,7 @@ export default function ModuleScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-savana-sky to-savana-earth p-4">
+    <div className="min-h-screen bg-gradient-to-b from-savana-sky to-savana-earth px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]">
       {showTimerEnd && <TimerEndScreen onContinue={dismissEndScreen} />}
       <div className="max-w-2xl mx-auto">
         {/* ZAMAN GÖSTERGESİ — Reno'nun eve yolculuğu (sayı/dakika gösterilmez) */}

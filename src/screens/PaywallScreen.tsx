@@ -19,7 +19,7 @@ export default function PaywallScreen() {
   const featureKeys = ['modules', 'animations', 'parent', 'safe'] as const
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-savana-sky via-savana-sun to-savana-earth p-4">
+    <div className="min-h-screen bg-gradient-to-b from-savana-sky via-savana-sun to-savana-earth px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1rem+env(safe-area-inset-bottom))]">
       <div className="max-w-md mx-auto pb-8">
         {/* Ebeveyn etiketi */}
         <div className="flex justify-center pt-2 mb-2">

@@ -87,12 +87,12 @@ export default function HomeScreen() {
       <button
         onClick={() => navigate('/parent')}
         aria-label={t('home.parentPanelAria')}
-        className="fixed bottom-3 end-3 z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
+        className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] end-[calc(0.75rem+env(safe-area-inset-right))] z-20 w-9 h-9 rounded-full bg-white/40 text-savana-deep/50 text-base flex items-center justify-center"
       >
         ⚙️
       </button>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 pt-6 pb-8">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(2rem+env(safe-area-inset-bottom))]">
         {/* HEADER */}
         <header className="flex justify-between items-center mb-2">
           <h1 className="font-display text-3xl font-bold text-savana-deep">

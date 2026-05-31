@@ -11,6 +11,7 @@ import { BADGES } from '../services/badges'
 import { MODULES } from '../modules/moduleList'
 import { useLocalizeNumber, normalizeDigits } from '../i18n/digits'
 import { numberToWords, randomGateNumber } from '../i18n/numberWords'
+import { clearDailyLock } from '../services/dailyLock'
 
 // ── Ebeveyn kapısı: ekranda YAZIYLA 4 basamaklı sayı (1000-9999), kullanıcı
 // RAKAMLA girer. Çocuk yazamaz; ebeveyn kolay çözer. Sayı kelimeleri aktif
@@ -158,6 +159,7 @@ export default function ParentScreen() {
     await resetPlayerData()
     await clearHistory()
     await clearTimer()
+    await clearDailyLock()
     // Tam temiz başlangıç için sayfayı yeniden yükle (tüm context'ler resetlenir).
     window.location.href = '/'
   }
