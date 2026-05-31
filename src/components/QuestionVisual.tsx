@@ -114,12 +114,26 @@ export default function QuestionVisual({ question, seed }: Props) {
     )
   }
 
-  // ─── ÇARPMA (gruplar) ───
+  // ─── ÇARPMA ───
+  // Mantık: "çarpma = aynı grubu tekrar tekrar toplamak". b'li emoji grubu
+  // SIRAYLA a kez belirir (her grup ~0.3s arayla pop-in, scale 0→1). Gruplar
+  // ayrı dursun (boşluk + "+") ki "a kere b" hissi olsun. ~1.6s sonra başlar.
   if (q.type === 'mul' && q.b !== undefined) {
     return (
       <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
         {Array.from({ length: q.a }, (_, i) => (
-          <div key={i} className="flex items-center">
+          <motion.div
+            key={`${seed}-${i}`}
+            className="flex items-center"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              delay: 1.6 + i * 0.3,
+              type: 'spring',
+              stiffness: 320,
+              damping: 18,
+            }}
+          >
             <div className="flex gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
               {Array.from({ length: q.b! }, (_, j) => (
                 <span key={j} className="text-2xl">{emoji}</span>
@@ -128,7 +142,7 @@ export default function QuestionVisual({ question, seed }: Props) {
             {i < q.a - 1 && (
               <span className="text-lg font-bold text-savana-deep mx-1">+</span>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
     )
