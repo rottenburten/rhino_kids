@@ -3,17 +3,21 @@ import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import tr from './locales/tr.json'
 import en from './locales/en.json'
+import ar from './locales/ar.json'
 
-// Çok dilli yapı — şimdilik TR + EN, 10+ dile genişlemeye hazır.
+// Çok dilli yapı — TR + EN + AR, 10+ dile genişlemeye hazır.
 // Yeni dil eklemek için: locales/<kod>.json oluştur + resources'a ekle.
 // Anahtarlar STABİL — ileride her anahtara Qwen TTS ses dosyası bağlanacak.
+// NOT: ar (Arapça) çevirisi TASLAK — Arapça konuşan biri tarafından
+// doğrulanmalı. RTL düzeni Aşama 2'de eklenecek (şimdilik sadece çeviri).
 
-export const SUPPORTED_LANGUAGES = ['tr', 'en'] as const
+export const SUPPORTED_LANGUAGES = ['tr', 'en', 'ar'] as const
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
 
 export const resources = {
   tr: { translation: tr },
   en: { translation: en },
+  ar: { translation: ar },
 } as const
 
 i18n

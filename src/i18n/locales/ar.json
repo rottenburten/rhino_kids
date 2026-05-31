@@ -1,0 +1,145 @@
+{
+  "common": {
+    "back": "رجوع"
+  },
+  "home": {
+    "greeting": "مرحباً {{name}}! ما هي مغامرة اليوم؟ 🌟",
+    "whatToLearn": "🎯 ماذا نتعلّم اليوم؟",
+    "levelDone": "🏆 لقد أنهيت هذا المستوى!",
+    "allDone": "أنهيت كل الأقسام، رائع! نراك غداً مع أسئلة جديدة 🌟",
+    "completedAlert": "لقد أنهيت هذا القسم! اختر قسماً آخر 🌿",
+    "comingSoonAlert": "{{name}} قادم قريباً! 🌟",
+    "parentPanelAria": "لوحة الوالدين"
+  },
+  "levels": {
+    "easy": "سهل",
+    "mid": "متوسط",
+    "hard": "صعب"
+  },
+  "stats": {
+    "totalCorrect": "مجموع الصحيح",
+    "bestScore": "أعلى نتيجة",
+    "maxStreak": "أطول سلسلة"
+  },
+  "badgesShowcase": {
+    "title": "🏅 الأوسمة"
+  },
+  "modules": {
+    "count": { "name": "العدّ", "character": "زارا الزرافة", "description": "تعلّم الأرقام مع زارا" },
+    "add": { "name": "الجمع", "character": "إيكو الفيل", "description": "العب الجمع مع إيكو" },
+    "sub": { "name": "الطرح", "character": "زيجي الحمار الوحشي", "description": "اطرح مع زيجي" },
+    "mul": { "name": "الضرب", "character": "ليو الأسد", "description": "كن بطل الضرب مع ليو" },
+    "div": { "name": "القسمة", "character": "مومو القرد", "description": "شارك مع مومو" },
+    "seq": { "name": "التسلسل", "character": "كيرا النسر", "description": "جد الرقم الناقص" },
+    "shape": { "name": "الأشكال", "character": "تومي السلحفاة", "description": "تعرّف على الأشكال" },
+    "clock": { "name": "الساعة", "character": "كالو الكنغر", "description": "تعلّم قراءة الساعة" }
+  },
+  "module": {
+    "notFound": "الوحدة غير موجودة",
+    "questionCounter": "سؤال {{current}} / {{total}}"
+  },
+  "prompt": {
+    "count": "كم العدد؟ 👀",
+    "seq": "جد الرقم الناقص! 🔢",
+    "shapeFind": "جد {{shape}}! 👀",
+    "clock": "كم الساعة؟ ⏰"
+  },
+  "shapes": {
+    "name": ["دائرة", "مربع", "مثلث", "نجمة", "قلب"],
+    "acc": ["الدائرة", "المربع", "المثلث", "النجمة", "القلب"]
+  },
+  "feedback": {
+    "correct": "أحسنت!",
+    "wrong": "أوبس!",
+    "correctAnswer": "الإجابة:"
+  },
+  "roundEnd": {
+    "perfect": "ممتاز!",
+    "great": "رائع!",
+    "good": "محاولة جيدة!",
+    "correct": "صحيح",
+    "points": "نقاط",
+    "maxStreak": "أطول سلسلة",
+    "home": "🏠 الرئيسية"
+  },
+  "mango": {
+    "earned": "🥭 جمعت مانجو أخرى!",
+    "perfect": "🎉 ممتاز! ١٠/١٠!"
+  },
+  "journey": {
+    "label": "🏠 رينو عائد إلى البيت"
+  },
+  "timerEnd": {
+    "title": "🌙 أحسنت يا {{name}}!",
+    "subtitle": "لقد أنهيت واجب اليوم!",
+    "continue": "متابعة"
+  },
+  "badgeCelebration": {
+    "title": "🎊 وسام جديد!",
+    "continue": "متابعة",
+    "next": "التالي ({{current}}/{{total}})"
+  },
+  "badges": {
+    "first_correct": { "name": "الخطوة الأولى", "description": "أول إجابة صحيحة" },
+    "correct_5": { "name": "برعم", "description": "٥ إجابات صحيحة" },
+    "correct_10": { "name": "زهرة صغيرة", "description": "١٠ إجابات صحيحة" },
+    "correct_20": { "name": "زهرة", "description": "٢٠ إجابة صحيحة" },
+    "correct_50": { "name": "شجرة", "description": "٥٠ إجابة صحيحة" },
+    "correct_100": { "name": "غابة", "description": "١٠٠ إجابة صحيحة" },
+    "streak_3": { "name": "بدأ الحماس", "description": "٣ إجابات صحيحة متتالية" },
+    "streak_5": { "name": "مشتعل", "description": "٥ إجابات صحيحة متتالية" },
+    "streak_10": { "name": "نار متّقدة", "description": "١٠ إجابات صحيحة متتالية" },
+    "expert_count": { "name": "خبير العدّ", "description": "١٠ صحيحة في العدّ" },
+    "expert_add": { "name": "خبير الجمع", "description": "١٠ صحيحة في الجمع" },
+    "expert_sub": { "name": "خبير الطرح", "description": "١٠ صحيحة في الطرح" },
+    "expert_mul": { "name": "خبير الضرب", "description": "١٠ صحيحة في الضرب" },
+    "expert_div": { "name": "خبير القسمة", "description": "١٠ صحيحة في القسمة" },
+    "perfect_1": { "name": "بلا أخطاء!", "description": "أول ١٠/١٠" },
+    "perfect_5": { "name": "بطل", "description": "١٠/١٠ خمس مرات" },
+    "score_1000": { "name": "وحش النقاط", "description": "١٠٠٠ نقطة" },
+    "first_mango_bonus": { "name": "سيّد المانجو", "description": "أول مكافأة مانجو" }
+  },
+  "parent": {
+    "title": "👨‍👩‍👧 لوحة الوالدين",
+    "language": "اللغة",
+    "playTime": "وقت اللعب اليومي",
+    "playTimeDesc": "وقت المانجو (الجزرة) اليومي لطفلك. يسري التغيير من اليوم.",
+    "minutesShort": "د",
+    "weekChart": "آخر ٧ أيام",
+    "days": ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"],
+    "legendCorrect": "صحيح",
+    "legendWrong": "خطأ",
+    "stats": "الإحصائيات",
+    "statTotalCorrect": "مجموع الصحيح",
+    "statBestScore": "أعلى نتيجة",
+    "statMaxStreak": "أطول سلسلة",
+    "statBadges": "الأوسمة",
+    "perModule": "الصحيح لكل وحدة",
+    "childName": "اسم الطفل",
+    "save": "حفظ",
+    "resetTitle": "إعادة تعيين كل البيانات",
+    "resetDesc": "ستُحذف الإحصائيات والأوسمة والسجل وإعداد الوقت. لا يمكن التراجع.",
+    "reset": "إعادة تعيين",
+    "resetCancel": "إلغاء",
+    "resetConfirm": "نعم، احذف"
+  },
+  "paywall": {
+    "parentBadge": "🔒 شاشة الوالدين",
+    "title": "واصل التعلّم مع Rhino!",
+    "subtitle": "دع طفلك يكتشف الرياضيات باللعب في السافانا — ممتع وآمن وبلا إعلانات.",
+    "features": {
+      "modules": "٨ وحدات ممتعة: العدّ، الجمع، الطرح، الضرب، القسمة، التسلسل، الأشكال، الساعة",
+      "animations": "شرح بصري متحرّك — يُحيي كل عملية حسابية",
+      "parent": "لوحة الوالدين: متابعة التقدّم، ضبط الوقت، تقرير أسبوعي",
+      "safe": "بلا إعلانات وآمن — كل البيانات تبقى على الجهاز"
+    },
+    "trialBadge": "٣ أيام مجاناً",
+    "priceLine": "ثم {{price}}",
+    "pricePlaceholder": "XX.XX$/سنة",
+    "cta": "ابدأ ٣ أيام مجاناً",
+    "cancelInfo": "ألغِ قبل انتهاء التجربة ولن يتم خصم أي مبلغ. الإلغاء: App Store ← الحساب ← الاشتراكات.",
+    "restore": "استعادة الشراء",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الاستخدام"
+  }
+}
