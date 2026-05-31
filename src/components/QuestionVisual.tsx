@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { Question } from '../types'
 
 const EMOJIS = ['🍄', '🌰', '🍃', '🌿', '🐛', '🦋', '🐝', '🌸', '🍀', '🌻', '🫐', '🍓', '🥕', '🐞', '🌵']
@@ -52,28 +53,37 @@ export default function QuestionVisual({ question, seed }: Props) {
     )
   }
 
-  // ─── ÇIKARMA (yeşil kalanlar + kırmızı çıkanlar) ───
+  // ─── ÇIKARMA ───
+  // Doğru mantık: TEK SIRA, a tane canlı emoji yan yana. Sondaki b tanesi
+  // solup uçar (opacity→0, küçülme, yukarı kayma) → geriye a−b canlı kalır.
+  // "kalanlar vs çıkanlar" diye İKİ ayrı kutu YOK.
   if (q.type === 'sub' && q.b !== undefined) {
-    const kept = q.a - q.b
+    const total = q.a
+    const removeFrom = q.a - q.b // bu index ve sonrası "çıkan" (solar/uçar)
     return (
       <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
-        <div className="flex gap-1 px-3 py-2 border-2 border-savana-leaf rounded-xl bg-green-50">
-          {Array.from({ length: kept }, (_, i) => (
-            <span key={i} className="text-3xl">{emoji}</span>
-          ))}
-        </div>
-        <span className="text-2xl font-bold text-red-500 mx-1">−</span>
-        <div className="flex gap-1 px-3 py-2 border-2 border-dashed border-red-400 rounded-xl bg-red-50">
-          {Array.from({ length: q.b }, (_, i) => (
-            <span
-              key={i}
-              className="text-3xl opacity-30 line-through"
-              style={{ filter: 'grayscale(1)' }}
+        {Array.from({ length: total }, (_, i) => {
+          const leaving = i >= removeFrom
+          return (
+            <motion.span
+              key={`${seed}-${i}`}
+              className="text-3xl"
+              initial={{ opacity: 1, scale: 1, y: 0 }}
+              animate={
+                leaving
+                  ? { opacity: 0, scale: 0.4, y: -28 }
+                  : { opacity: 1, scale: 1, y: 0 }
+              }
+              transition={
+                leaving
+                  ? { duration: 0.5, ease: 'easeIn', delay: 1.6 + (i - removeFrom) * 0.25 }
+                  : { duration: 0 }
+              }
             >
-              {emoji2}
-            </span>
-          ))}
-        </div>
+              {emoji}
+            </motion.span>
+          )
+        })}
       </div>
     )
   }
