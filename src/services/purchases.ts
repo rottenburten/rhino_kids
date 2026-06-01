@@ -38,28 +38,17 @@ let configured = false
  * Web/dev'de veya anahtar yoksa sessizce atlar (idempotent).
  */
 export async function initPurchases(): Promise<void> {
-  // TEŞHİS LOG'LARI (geçici): paywall fiyat sorununu çözmek için. Sorun
-  // bulununca LOG_LEVEL.DEBUG → WARN'a düşür ve fazla log'ları temizle.
-  console.log('[purchases] init başlıyor | native:', isNative(),
-    '| anahtar var mı:', !!IOS_KEY,
-    '| anahtar prefix:', IOS_KEY ? IOS_KEY.slice(0, 9) + '…' : '(yok)')
-  if (!isNative() || configured) {
-    console.log('[purchases] init atlandı (native değil veya zaten yapılandırılmış)')
-    return
-  }
+  if (!isNative() || configured) return
   if (!IOS_KEY) {
     console.warn('[purchases] VITE_REVENUECAT_IOS_KEY yok — RevenueCat başlatılmadı')
     return
   }
   try {
-    // DEBUG: RevenueCat'in kendi iç log'ları Xcode konsolunda görünsün
-    // (offering neden boş — product eksik mi, StoreKit bağlantısı mı).
-    await Purchases.setLogLevel({ level: LOG_LEVEL.DEBUG })
+    await Purchases.setLogLevel({ level: LOG_LEVEL.WARN })
     await Purchases.configure({ apiKey: IOS_KEY })
     configured = true
-    console.log('[purchases] configure BAŞARILI ✓')
   } catch (e) {
-    console.error('[purchases] configure HATASI', JSON.stringify(e))
+    console.error('[purchases] configure hatası', e)
   }
 }
 
@@ -68,38 +57,15 @@ export async function initPurchases(): Promise<void> {
  * Paketin localizedPriceString'i kullanıcının ülkesine göre dinamik fiyattır.
  */
 export async function getAnnualPackage(): Promise<PurchasesPackage | null> {
-  if (!isNative() || !configured) {
-    console.log('[purchases] getAnnualPackage atlandı | native:', isNative(), '| configured:', configured)
-    return null
-  }
+  if (!isNative() || !configured) return null
   try {
-    const offerings = await Purchases.getOfferings()
-    const { current, all } = offerings
-    // TEŞHİS: offering yapısını dök — current var mı, kaç paket, ID'ler ne.
-    console.log('[purchases] getOfferings döndü |',
-      'current:', current ? current.identifier : '(NULL — default offering yok!)',
-      '| tüm offering sayısı:', Object.keys(all || {}).length,
-      '| current paket sayısı:', current ? current.availablePackages.length : 0)
-    if (current) {
-      console.log('[purchases] current paketler:',
-        JSON.stringify(current.availablePackages.map((p) => ({
-          id: p.identifier,
-          product: p.product?.identifier,
-          price: p.product?.priceString,
-        }))))
-    }
-    if (!current) {
-      console.warn('[purchases] current offering NULL — RevenueCat panelinde '
-        + '"default" offering "current" olarak işaretli değil VEYA App Store '
-        + 'Connect product onaylı/bağlı değil.')
-      return null
-    }
+    const { current } = await Purchases.getOfferings()
+    if (!current) return null
+    // Önce $rc_annual ID'sini, yoksa offering'in annual slotunu dene.
     const byId = current.availablePackages.find((p) => p.identifier === ANNUAL_PACKAGE_ID)
-    const pkg = byId ?? current.annual ?? current.availablePackages[0] ?? null
-    console.log('[purchases] seçilen paket:', pkg ? pkg.identifier + ' / ' + pkg.product?.priceString : '(YOK)')
-    return pkg
+    return byId ?? current.annual ?? current.availablePackages[0] ?? null
   } catch (e) {
-    console.error('[purchases] getOfferings HATASI', JSON.stringify(e))
+    console.error('[purchases] getOfferings hatası', e)
     return null
   }
 }

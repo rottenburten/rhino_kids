@@ -12,6 +12,7 @@ import { MODULES } from '../modules/moduleList'
 import { useLocalizeNumber, normalizeDigits } from '../i18n/digits'
 import { numberToWords, randomGateNumber } from '../i18n/numberWords'
 import { clearDailyLock } from '../services/dailyLock'
+import { usePremium } from '../contexts/PremiumContext'
 
 // ── Ebeveyn kapısı: ekranda YAZIYLA 4 basamaklı sayı (1000-9999), kullanıcı
 // RAKAMLA girer. Çocuk yazamaz; ebeveyn kolay çözer. Sayı kelimeleri aktif
@@ -123,6 +124,7 @@ export default function ParentScreen() {
   const navigate = useNavigate()
   const { data, loading, update } = usePlayerData()
   const { limitSeconds, setLimit } = useCarrotTimer()
+  const { premium } = usePremium()
   const [unlocked, setUnlocked] = useState(false)
   const [week, setWeek] = useState<WeekDay[]>([])
   const [nameInput, setNameInput] = useState('')
@@ -274,6 +276,28 @@ export default function ParentScreen() {
               {t('parent.save')}
             </button>
           </div>
+        </section>
+
+        {/* RHINO KIDS PREMIUM — kalıcı abonelik bölümü. Ebeveyn kapısının
+            arkasında (çocuk-güvenli). Premium aktifse durum, değilse paywall'a
+            götürür. App Review reviewer'ı IAP'yi buradan görüp test edebilir. */}
+        <section className="bg-white border-2 border-mango rounded-2xl p-4 mb-4">
+          <h2 className="font-display font-bold text-savana-deep mb-1">⭐ {t('parent.premiumTitle')}</h2>
+          {premium ? (
+            <p className="font-display font-semibold text-savana-grass text-sm">
+              {t('parent.premiumActive')}
+            </p>
+          ) : (
+            <>
+              <p className="text-xs text-savana-deep/60 mb-3">{t('parent.premiumDesc')}</p>
+              <button
+                onClick={() => navigate('/paywall')}
+                className="kid-btn w-full bg-mango border-savana-deep text-savana-deep"
+              >
+                {t('parent.premiumManage')}
+              </button>
+            </>
+          )}
         </section>
 
         {/* VERİLERİ SIFIRLA */}
