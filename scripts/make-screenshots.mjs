@@ -2,9 +2,13 @@ import sharp from 'sharp'
 import fs from 'fs'
 import path from 'path'
 
-// App Store 6.9" hedef tuval (Apple'ın kabul ettiği en büyük zorunlu boyut).
-const W = 1290
-const H = 2796
+// Hedef cihaz: --ipad → 13" iPad (2048×2732), aksi halde 6.9" iPhone (1290×2796).
+// İkisi de App Store'da zorunlu boyutlar.
+const IPAD = process.argv.includes('--ipad')
+
+// Hedef tuval boyutu.
+const W = IPAD ? 2048 : 1290
+const H = IPAD ? 2732 : 2796
 
 // Savana paleti (uygulamanın gradient'iyle uyumlu).
 const BG_TOP = '#fde68a'    // sıcak sarı
@@ -13,11 +17,12 @@ const BG_BOT = '#f59e0b'    // turuncu
 const DEEP = '#5b4636'      // savana-deep (metin)
 const ACCENT = '#ea7a3b'    // turuncu vurgu
 
-// Telefon çerçevesi yerleşimi: tuvalde ortalı, üstte metin için yer bırak.
-const PHONE_W = 980          // çerçeve genişliği
-const FRAME = 26             // çerçeve kalınlığı (bezel)
+// Cihaz çerçevesi yerleşimi: tuvalde ortalı, üstte metin için yer bırak.
+// iPad daha geniş tuval → çerçeve ve başlık bandı orantılı büyür.
+const PHONE_W = IPAD ? 1480 : 980   // çerçeve genişliği
+const FRAME = IPAD ? 34 : 26        // çerçeve kalınlığı (bezel)
 const SHOT_W = PHONE_W - FRAME * 2
-const TITLE_BAND = 420       // üstte başlık için ayrılan dikey alan
+const TITLE_BAND = IPAD ? 520 : 420 // üstte başlık için ayrılan dikey alan
 
 // Başlık SVG'si — iki satıra kadar otomatik sarmalı.
 function titleSvg(text, w, h) {
@@ -93,31 +98,47 @@ function phoneBodySvg(w, h, r) {
 }
 
 async function buildOne(srcPath, title, outPath) {
-  // 1) Ham ekranı telefon ekran boyutuna ölçekle, köşelerini yuvarlat.
+  // 1) Ham ekranı cihaz ekranına ölçekle, köşelerini yuvarlat.
+  // Kaynak telefon dikey-uzun (1170×2532). Önce genişliğe göre ölçekle; ama
+  // cihaz+çerçeve tuval yüksekliğini aşarsa (özellikle iPad'in göreli kısa
+  // tuvalinde) yüksekliğe göre yeniden sınırla → çerçeve asla taşmaz.
   const shotMeta = await sharp(srcPath).metadata()
-  const shotH = Math.round(SHOT_W * (shotMeta.height / shotMeta.width))
+  const ratio = shotMeta.height / shotMeta.width
+
+  let shotW = SHOT_W
+  let shotH = Math.round(shotW * ratio)
+  // Çerçeveli yükseklik tuvalde başlık bandından sonra sığmalı:
+  // kullanılabilir yükseklik = H - TITLE_BAND - alt boşluk (~120).
+  const maxPhoneH = H - TITLE_BAND - 120
+  if (shotH + FRAME * 2 > maxPhoneH) {
+    shotH = maxPhoneH - FRAME * 2
+    shotW = Math.round(shotH / ratio)
+  }
+
   const screenRadius = 56
   const shot = await sharp(srcPath)
-    .resize(SHOT_W, shotH)
-    .composite([{ input: roundedMask(SHOT_W, shotH, screenRadius), blend: 'dest-in' }])
+    .resize(shotW, shotH)
+    .composite([{ input: roundedMask(shotW, shotH, screenRadius), blend: 'dest-in' }])
     .png()
     .toBuffer()
 
-  // 2) Telefon gövdesi (bezel) — ekran + çerçeve.
+  // 2) Cihaz gövdesi (bezel) — ekran + çerçeve. Genişlik shotW'a bağlı
+  // (yükseklik sınırlaması shotW'u küçültmüş olabilir).
+  const phoneW = shotW + FRAME * 2
   const phoneH = shotH + FRAME * 2
   const phoneRadius = screenRadius + FRAME
-  const phone = await sharp(phoneBodySvg(PHONE_W, phoneH, phoneRadius))
+  const phone = await sharp(phoneBodySvg(phoneW, phoneH, phoneRadius))
     .composite([{ input: shot, top: FRAME, left: FRAME }])
     .png()
     .toBuffer()
 
-  // 3) Telefonun altına yumuşak gölge.
+  // 3) Cihazın altına yumuşak gölge.
   const shadow = await sharp({
-    create: { width: PHONE_W, height: phoneH, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
+    create: { width: phoneW, height: phoneH, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
   })
     .composite([
       {
-        input: await sharp(phoneBodySvg(PHONE_W, phoneH, phoneRadius))
+        input: await sharp(phoneBodySvg(phoneW, phoneH, phoneRadius))
           .blur(28)
           .png()
           .toBuffer(),
@@ -126,8 +147,8 @@ async function buildOne(srcPath, title, outPath) {
     .png()
     .toBuffer()
 
-  // 4) Arka plan + başlık + (gölge → telefon) kompozisyonu.
-  const phoneLeft = Math.round((W - PHONE_W) / 2)
+  // 4) Arka plan + başlık + (gölge → cihaz) kompozisyonu.
+  const phoneLeft = Math.round((W - phoneW) / 2)
   const phoneTop = TITLE_BAND // başlık bandının hemen altı
 
   const title_ = await sharp(titleSvg(title, W, TITLE_BAND)).png().toBuffer()
@@ -145,8 +166,8 @@ async function buildOne(srcPath, title, outPath) {
 // ─── İş listesi ───
 const EN_DIR = '/Users/creditreform/Downloads/rhino_kids_eng '
 const TR_DIR = '/Users/creditreform/Downloads/rhino_kids_tr'
-const OUT_EN = path.resolve('output/screenshots_en')
-const OUT_TR = path.resolve('output/screenshots_tr')
+const OUT_EN = path.resolve(IPAD ? 'output/screenshots_ipad_en' : 'output/screenshots_en')
+const OUT_TR = path.resolve(IPAD ? 'output/screenshots_ipad_tr' : 'output/screenshots_tr')
 
 const EN_MAP = [
   ['IMG_2610.PNG', '8 Fun Math Adventures'],
