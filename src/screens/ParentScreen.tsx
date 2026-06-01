@@ -276,18 +276,6 @@ export default function ParentScreen() {
           </div>
         </section>
 
-        {/* ⚠️ GEÇİCİ — RevenueCat sandbox testi için. Satın alma akışı doğrulanınca
-            BU BÖLÜMÜ KALDIR (i18n'e bağlı değil, bilinçli). */}
-        <section className="bg-white border-2 border-dashed border-savana-deep/40 rounded-2xl p-4 mb-4">
-          <h2 className="font-display font-bold text-savana-deep/70 mb-2">🧪 Geliştirici (geçici)</h2>
-          <button
-            onClick={() => navigate('/paywall')}
-            className="kid-btn w-full bg-mango border-savana-deep text-savana-deep"
-          >
-            Aboneliği Test Et (Paywall)
-          </button>
-        </section>
-
         {/* VERİLERİ SIFIRLA */}
         <section className="bg-white border-2 border-red-400 rounded-2xl p-4">
           <h2 className="font-display font-bold text-red-700 mb-2">⚠️ {t('parent.resetTitle')}</h2>
