@@ -35,9 +35,6 @@
   .kid-card {
     @apply bg-white border-[3px] border-savana-deep rounded-2xl shadow-kid transition-all;
   }
-  .kid-card:hover {
-    @apply -translate-y-1 shadow-kid-hover;
-  }
   .kid-card:active {
     @apply translate-y-0.5 shadow-kid-active;
   }
@@ -45,10 +42,20 @@
   .kid-btn {
     @apply bg-savana-deep text-white border-[3px] border-savana-deep rounded-2xl py-3 px-6 font-display font-bold shadow-kid transition-all cursor-pointer;
   }
-  .kid-btn:hover {
-    @apply -translate-y-1 shadow-kid-hover;
-  }
   .kid-btn:active {
     @apply translate-y-0.5 shadow-kid-active;
+  }
+
+  /* Hover efektleri YALNIZCA gerçek imleç olan cihazlarda (masaüstü).
+     Dokunmatikte (telefon/tablet) :hover dokununca "yapışır" → şık yukarıda
+     takılı kalır ve çocuk onu doğru cevap sanır. Bu yüzden hover'ı
+     @media (hover: hover) ile sınırlıyoruz; telefonda kart sabit durur. */
+  @media (hover: hover) {
+    .kid-card:hover {
+      @apply -translate-y-1 shadow-kid-hover;
+    }
+    .kid-btn:hover {
+      @apply -translate-y-1 shadow-kid-hover;
+    }
   }
 }

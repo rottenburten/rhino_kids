@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Üretilen App Store görselleri (büyük PNG'ler — repo'da tutma; scripts/ ile
+# yeniden üretilebilir). Ham ekran görüntüleri zaten Downloads'ta, repoda değil.
+output/
+
 # Claude Code harness yerel dosyaları
 .claude/scheduled_tasks.lock
 

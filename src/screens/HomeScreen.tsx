@@ -153,7 +153,7 @@ export default function HomeScreen() {
             </div>
           )}
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-3 items-stretch">
             {MODULES.map((mod) => {
               // Modülün kendi çizdiğimiz karakteri (count/add/sub/mul/div).
               // Henüz karakteri olmayan modüller (seq/shape/clock) emoji'de kalır.
@@ -161,7 +161,7 @@ export default function HomeScreen() {
               // Bugün oynandıysa kilitli görünür (sadece oynanabilir modüller).
               const completed = !mod.comingSoon && isCompleted(mod.id, level)
               return (
-                <div key={mod.id} className="relative">
+                <div key={mod.id} className="relative h-full">
                   {/* Kutlama balonu — kartın ÜSTÜNDE, kartı kapatmadan. Pop-in. */}
                   <AnimatePresence>
                     {bubbleModuleId === mod.id && (
@@ -193,7 +193,7 @@ export default function HomeScreen() {
                         navigate(`/module/${mod.id}`)
                       }
                     }}
-                    className={`kid-card p-3 text-center relative w-full ${
+                    className={`kid-card p-3 text-center relative w-full h-full flex flex-col items-center justify-start ${
                       mod.comingSoon || completed ? 'opacity-50' : ''
                     }`}
                   >
@@ -216,7 +216,11 @@ export default function HomeScreen() {
                         {mod.icon}
                       </div>
                     )}
-                    <div className="font-display font-bold text-xs text-savana-deep">
+                    {/* İsim: SABİT yükseklikli kapsayıcı (h-8 = 2 satır). Uzun EN
+                        kelimeleri (MULTIPLICATION, SUBTRACTION) break-words ile
+                        2 satıra sarar; kısa/uzun fark etmez kutu BÜYÜMEZ →
+                        ikon alanı (h-14) + bu sabit alan = TÜM kartlar eşit boy. */}
+                    <div className="w-full h-8 flex items-center justify-center overflow-hidden font-display font-bold text-[11px] leading-tight text-savana-deep break-words hyphens-auto">
                       {t(`modules.${mod.id}.name`)}
                     </div>
                   </button>

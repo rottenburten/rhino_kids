@@ -124,13 +124,21 @@ export default function ModuleScreen() {
   // önce kutlamayı göster (sırayla), kapanınca tur-sonu özetine geç; yoksa
   // doğrudan özete geç.
   const finishRound = useCallback((totalPoints: number, perfect: boolean) => {
-    finalizeRound(totalPoints, perfect).then((newBadges) => {
-      if (newBadges.length > 0) {
-        setPendingBadges(newBadges)
-      } else {
+    finalizeRound(totalPoints, perfect)
+      .then((newBadges) => {
+        if (newBadges.length > 0) {
+          setPendingBadges(newBadges)
+        } else {
+          setShowRoundEnd(true)
+        }
+      })
+      .catch((e) => {
+        // Cihazda Preferences I/O / rozet hesabı hata verirse: SESSİZCE
+        // tur-sonu ekranına geç. Aksi halde .then hiç çalışmaz ve ekran oyun
+        // gradient'inde SONSUZA KADAR takılırdı (BUG 2). Kilitlenme imkânsız.
+        console.error('finishRound failed, skipping badges', e)
         setShowRoundEnd(true)
-      }
-    })
+      })
   }, [])
 
   // Yeni tur başlat
