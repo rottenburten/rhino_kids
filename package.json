@@ -18,6 +18,7 @@
     "@capacitor/core": "^8.3.3",
     "@capacitor/ios": "^8.3.3",
     "@capacitor/preferences": "^8.0.1",
+    "@revenuecat/purchases-capacitor": "^13.1.4",
     "framer-motion": "^12.38.0",
     "i18next": "^26.3.0",
     "i18next-browser-languagedetector": "^8.2.1",

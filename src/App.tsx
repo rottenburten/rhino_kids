@@ -5,11 +5,13 @@ import ParentScreen from './screens/ParentScreen'
 import PaywallScreen from './screens/PaywallScreen'
 import { CarrotTimerProvider } from './contexts/CarrotTimerContext'
 import { LevelProvider } from './contexts/LevelContext'
+import { PremiumProvider } from './contexts/PremiumContext'
 
 function App() {
   return (
-    <LevelProvider>
-      <CarrotTimerProvider>
+    <PremiumProvider>
+      <LevelProvider>
+        <CarrotTimerProvider>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/module/:id" element={<ModuleScreen />} />
@@ -18,8 +20,9 @@ function App() {
               RevenueCat entegrasyonunda gelecek. */}
           <Route path="/paywall" element={<PaywallScreen />} />
         </Routes>
-      </CarrotTimerProvider>
-    </LevelProvider>
+        </CarrotTimerProvider>
+      </LevelProvider>
+    </PremiumProvider>
   )
 }
 
