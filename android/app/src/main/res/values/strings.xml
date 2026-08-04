@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Rhino Kids</string>
+    <string name="title_activity_main">Rhino Kids</string>
+    <string name="package_name">com.renan.rhinokids</string>
+    <string name="custom_url_scheme">com.renan.rhinokids</string>
+</resources>

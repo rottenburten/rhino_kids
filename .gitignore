@@ -39,3 +39,14 @@ dist-ssr
 google-services.json
 GoogleService-Info.plist
 secrets*.json
+
+# Android imzalama anahtarları — ASLA push etme (release keystore + şifreler).
+# (android/.gitignore zaten build/, *.aab, local.properties'i kapsar; bu kök
+#  seviye ek güvence keystore ve imza config'i içindir.)
+*.jks
+*.keystore
+keystore.properties
+android/keystore.properties
+android/app/*.jks
+android/app/*.keystore
+android/key.properties

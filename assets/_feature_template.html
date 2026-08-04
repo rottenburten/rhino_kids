@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="__LANG__">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1024px; height: 500px; overflow: hidden; }
+  .banner {
+    position: relative;
+    width: 1024px; height: 500px;
+    background: linear-gradient(180deg, #fef3c7 0%, #fde68a 30%, #f7cd72 58%, #d9a878 78%, #c2956a 100%);
+    font-family: 'Fredoka', system-ui, sans-serif;
+  }
+  /* Güneş */
+  .sun {
+    position: absolute; top: 38px; right: 70px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, #fffbe6 0%, #fde047 55%, #facc15 100%);
+    box-shadow: 0 0 80px rgba(251,191,36,0.55);
+  }
+  /* Bulutlar */
+  .cloud { position: absolute; background: #fff; border-radius: 50px; opacity: 0.85; }
+  .c1 { top: 70px; left: 360px; width: 120px; height: 34px; box-shadow: 60px -16px 0 6px #fff, 24px 10px 0 2px #fff; }
+  .c2 { top: 140px; left: 150px; width: 90px; height: 26px; opacity: 0.7; box-shadow: 44px -12px 0 4px #fff; }
+  /* Zemin */
+  .ground {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 130px;
+    background: linear-gradient(to bottom, #c2956a 0%, #a37448 55%, #7a5634 100%);
+  }
+  /* Dağlar */
+  .mt { position: absolute; width: 0; height: 0; }
+  .mt1 { bottom: 110px; left: 0; border-left: 120px solid transparent; border-right: 120px solid transparent; border-bottom: 110px solid #8b6f4a; opacity: 0.55; }
+  .mt2 { bottom: 110px; right: 60px; border-left: 130px solid transparent; border-right: 130px solid transparent; border-bottom: 95px solid #a78360; opacity: 0.5; }
+  /* Akasya agaclari */
+  .tree { position: absolute; }
+  .t1 { left: 24px; bottom: 96px; width: 150px; height: 128px; }
+  .t2 { right: 36px; bottom: 104px; width: 110px; height: 110px; opacity: 0.92; }
+  /* Reno */
+  .reno { position: absolute; left: 66px; bottom: 30px; width: 360px; height: 360px;
+          filter: drop-shadow(0 8px 14px rgba(0,0,0,0.18)); }
+  /* Metin blogu */
+  .text { position: absolute; left: 430px; top: 0; bottom: 0; right: 40px;
+          display: flex; flex-direction: column; justify-content: center; }
+  .title {
+    font-weight: 700; font-size: 104px; line-height: 0.95; color: #5d2906;
+    letter-spacing: -1px;
+    text-shadow: 0 3px 0 rgba(255,255,255,0.55);
+  }
+  .title .kids { color: #d97706; }
+  .tagline {
+    font-family: 'Nunito', system-ui, sans-serif; font-weight: 800;
+    font-size: 38px; color: #5d2906; margin-top: 18px; line-height: 1.15;
+  }
+  .glyphs {
+    margin-top: 26px; display: flex; gap: 14px; align-items: center;
+  }
+  .chip {
+    font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 34px;
+    background: #fff; color: #5d2906; border: 4px solid #5d2906;
+    border-radius: 22px; padding: 6px 20px; box-shadow: 0 4px 0 #5d2906;
+  }
+  .chip.accent { background: #f59e0b; color: #fff; border-color: #5d2906; }
+</style>
+</head>
+<body>
+  <div class="banner">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="ground"></div>
+    <div class="mt mt1"></div>
+    <div class="mt mt2"></div>
+
+    <!-- Akasya 1 -->
+    <svg class="tree t1" viewBox="0 0 120 100" fill="none">
+      <path d="M58 100 L58 46" stroke="#6b4a2b" stroke-width="7" stroke-linecap="round"/>
+      <path d="M58 58 L42 46 M58 58 L74 46" stroke="#6b4a2b" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="58" cy="40" rx="50" ry="14" fill="#6f9e57"/>
+      <ellipse cx="58" cy="32" rx="38" ry="11" fill="#86b86a"/>
+    </svg>
+    <!-- Akasya 2 -->
+    <svg class="tree t2" viewBox="0 0 100 100" fill="none">
+      <path d="M50 100 L50 50" stroke="#6b4a2b" stroke-width="6" stroke-linecap="round"/>
+      <path d="M50 62 L36 50 M50 62 L64 50" stroke="#6b4a2b" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="50" cy="44" rx="42" ry="12" fill="#6f9e57"/>
+      <ellipse cx="50" cy="37" rx="30" ry="9" fill="#86b86a"/>
+    </svg>
+
+    <!-- Reno maskotu (app ile birebir) -->
+    <svg class="reno" viewBox="0 0 200 200">
+      <ellipse cx="100" cy="180" rx="50" ry="6" fill="rgba(0,0,0,0.12)"/>
+      <ellipse cx="100" cy="135" rx="56" ry="40" fill="#a8b5c4"/>
+      <rect x="68" y="158" width="15" height="22" fill="#8896a8" rx="5"/>
+      <rect x="118" y="158" width="15" height="22" fill="#8896a8" rx="5"/>
+      <ellipse cx="100" cy="92" rx="44" ry="38" fill="#a8b5c4"/>
+      <ellipse cx="70" cy="64" rx="10" ry="14" fill="#8896a8" transform="rotate(-25 70 64)"/>
+      <ellipse cx="130" cy="64" rx="10" ry="14" fill="#8896a8" transform="rotate(25 130 64)"/>
+      <ellipse cx="70" cy="65" rx="4" ry="8" fill="#fbb6ce" transform="rotate(-25 70 65)"/>
+      <ellipse cx="130" cy="65" rx="4" ry="8" fill="#fbb6ce" transform="rotate(25 130 65)"/>
+      <path d="M 100 66 Q 95 44 100 28 Q 105 44 100 66" fill="#fef3e2" stroke="#5d2906" stroke-width="2.5"/>
+      <path d="M 100 88 Q 97 75 100 66 Q 103 75 100 88" fill="#fef3e2" stroke="#5d2906" stroke-width="2"/>
+      <ellipse cx="100" cy="112" rx="24" ry="19" fill="#c4ced8"/>
+      <circle cx="84" cy="88" r="7" fill="#fff"/>
+      <circle cx="116" cy="88" r="7" fill="#fff"/>
+      <circle cx="85" cy="89" r="4" fill="#2d2d2d"/>
+      <circle cx="117" cy="89" r="4" fill="#2d2d2d"/>
+      <circle cx="86.5" cy="87" r="1.5" fill="#fff"/>
+      <circle cx="118.5" cy="87" r="1.5" fill="#fff"/>
+      <ellipse cx="92" cy="115" rx="2" ry="3" fill="#2d2d2d"/>
+      <ellipse cx="108" cy="115" rx="2" ry="3" fill="#2d2d2d"/>
+      <path d="M 86 122 Q 100 130 114 122" stroke="#2d2d2d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="74" cy="104" rx="7" ry="5" fill="#fbb6ce" opacity="0.55"/>
+      <ellipse cx="126" cy="104" rx="7" ry="5" fill="#fbb6ce" opacity="0.55"/>
+    </svg>
+
+    <div class="text">
+      <div class="title">Rhino <span class="kids">Kids</span></div>
+      <div class="tagline">__TAGLINE__</div>
+      <div class="glyphs">
+        <span class="chip accent">__AGES__</span>
+        <span class="chip">＋ －</span>
+        <span class="chip">✕ ÷</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
