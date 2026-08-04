@@ -26,12 +26,6 @@ const WRONG_WAIT = 2800
 // diye tur-sonu/rozet ekranına geçmeden önce bu kadar beklenir (~2.8s).
 const BONUS_WAIT = 2800
 
-const EMOJIS = ['🍄', '🌰', '🍃', '🌿', '🐛', '🦋', '🐝', '🌸', '🍀', '🌻', '🫐', '🍓', '🥕']
-
-function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)]
-}
-
 // SAAT modülü için basit analog saat yüzü (akrep/yelkovan).
 function ClockFace({ hour, minute }: { hour: number; minute: number }) {
   // Açılar: 12 = -90°. Saat akrebi dakikaya göre hafif ilerler.
@@ -264,7 +258,6 @@ export default function ModuleScreen() {
   }
 
   const q = questions[qIndex]
-  const emoji = pick(EMOJIS)
   const Character = getCharacter(module.id)
 
   const onSelect = async (val: number) => {
@@ -451,16 +444,12 @@ export default function ModuleScreen() {
 
           {/* GÖRSEL */}
           <div className="flex flex-wrap justify-center gap-2 mb-6 min-h-[60px] items-center">
-            {q.type === 'count' &&
-              Array.from({ length: q.a }, (_, i) => (
-                <span key={i} className="text-4xl">
-                  {emoji}
-                </span>
-              ))}
-
-            {/* TOPLAMA/ÇIKARMA/ÇARPMA/BÖLME: emoji grup görselleri (QuestionVisual).
+            {/* SAYMA/TOPLAMA/ÇIKARMA/ÇARPMA/BÖLME: emoji görselleri (QuestionVisual).
+                Hepsi EmojiFitField ile kapsayıcıya sığacak şekilde otomatik küçülür
+                → çok emojide (Android'in geniş Noto emojileri dahil) taşmaz.
                 seed=qIndex → aynı soruda emoji sabit, soru değişince yenilenir. */}
-            {(q.type === 'add' ||
+            {(q.type === 'count' ||
+              q.type === 'add' ||
               q.type === 'sub' ||
               q.type === 'mul' ||
               q.type === 'div') && (

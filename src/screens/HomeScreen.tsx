@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import Reno from '../characters/Reno'
 import { getCharacter } from '../characters'
 import SavannaBackground from '../components/SavannaBackground'
+import FitText from '../components/FitText'
 import { MODULES } from '../modules/moduleList'
 import { usePlayerData } from '../hooks/usePlayerData'
 import { isCompleted, getPendingBubble, markBubbleShown } from '../services/dailyLock'
@@ -216,12 +217,19 @@ export default function HomeScreen() {
                         {mod.icon}
                       </div>
                     )}
-                    {/* İsim: SABİT yükseklikli kapsayıcı (h-8 = 2 satır). Uzun EN
-                        kelimeleri (MULTIPLICATION, SUBTRACTION) break-words ile
-                        2 satıra sarar; kısa/uzun fark etmez kutu BÜYÜMEZ →
-                        ikon alanı (h-14) + bu sabit alan = TÜM kartlar eşit boy. */}
-                    <div className="w-full h-8 flex items-center justify-center overflow-hidden font-display font-bold text-[11px] leading-tight text-savana-deep break-words hyphens-auto">
-                      {t(`modules.${mod.id}.name`)}
+                    {/* İsim: SABİT yükseklikli kapsayıcı (h-8 = ~2 satır). Kutu
+                        BÜYÜMEZ → ikon alanı (h-14) + bu sabit alan = TÜM kartlar
+                        eşit boy. FitText, adı bu kutuya sığacak şekilde otomatik
+                        küçültür: kısa adlar 11px'te kalır, uzun EN adları
+                        (MULTIPLICATION, SUBTRACTION) gerekince küçülür → hiçbir
+                        dilde/fontta (Android Roboto fallback dahil) taşmaz. */}
+                    <div className="w-full h-8 flex items-center justify-center overflow-hidden font-display font-bold text-savana-deep">
+                      <FitText
+                        text={t(`modules.${mod.id}.name`)}
+                        max={11}
+                        min={8}
+                        className="block w-full text-center leading-tight break-words"
+                      />
                     </div>
                   </button>
                 </div>

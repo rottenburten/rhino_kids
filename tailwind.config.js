@@ -40,7 +40,7 @@ export default {
       },
       fontFamily: {
         // Çocuk dostu, yuvarlak fontlar
-        display: ['"Fredoka"', 'system-ui', 'sans-serif'],
+        display: ['"Baloo 2"', 'system-ui', 'sans-serif'],
         body: ['"Nunito"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {

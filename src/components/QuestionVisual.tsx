@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import type { Question } from '../types'
+import EmojiFitField from './EmojiFitField'
 
 const EMOJIS = ['🍄', '🌰', '🍃', '🌿', '🐛', '🦋', '🐝', '🌸', '🍀', '🌻', '🫐', '🍓', '🥕', '🐞', '🌵']
 const ANIMALS = ['🦊', '🐰', '🦔', '🐿️', '🦌', '🐸', '🦉', '🐨']
@@ -18,6 +19,11 @@ function pickWithSeed<T>(arr: T[], seed: number): T {
 // sonra animasyon yardımcı olsun. Tüm aritmetik görsellerde ortak.
 const HINT_DELAY = 1.0
 
+// Tüm emojiler kapsayıcının font-size'ından miras alır (EmojiFitField bunu
+// ölçüp küçültür). 1em = ölçeklenen emoji; operatörler (+) biraz küçük.
+const EMOJI = { fontSize: '1em' } as const
+const OP = { fontSize: '0.7em' } as const
+
 export default function QuestionVisual({ question, seed }: Props) {
   const q = question
 
@@ -28,40 +34,54 @@ export default function QuestionVisual({ question, seed }: Props) {
   // ─── SAYMA ───
   if (q.type === 'count') {
     return (
-      <div className="flex flex-wrap justify-center gap-2 min-h-[60px] items-center">
+      <EmojiFitField
+        fitKey={`count-${q.a}`}
+        maxFont={36}
+        minFont={14}
+        maxHeight={150}
+        className="flex flex-wrap justify-center items-center gap-2"
+      >
         {Array.from({ length: q.a }, (_, i) => (
-          <span key={i} className="text-4xl">
+          <span key={i} style={EMOJI}>
             {emoji}
           </span>
         ))}
-      </div>
+      </EmojiFitField>
     )
   }
 
   // ─── TOPLAMA ───
   // Mantık: "iki şeyi bir araya getirince toplanır". İki grup ("+" ile ayrı)
   // başlar; ~1s sonra birbirine kayar, "+" kaybolur, tek sıra (a+b) olur.
-  // Toplamada İKİ grup DOĞRU (birleştirme) — çıkarmadaki tek-sıradan farklı.
+  // Her grup KENDİ İÇİNDE sarar (max-w) → çok emojide (9+9, hatta 20+20) bile
+  // taşmaz; EmojiFitField ayrıca tümünü kapsayıcıya sığacak boyuta küçültür.
   if (q.type === 'add' && q.b !== undefined) {
     const merge = { delay: HINT_DELAY, duration: 0.6, ease: 'easeOut' as const }
     return (
-      <div className="flex justify-center items-center min-h-[60px]">
+      <EmojiFitField
+        fitKey={`add-${q.a}-${q.b}`}
+        maxFont={30}
+        minFont={12}
+        maxHeight={150}
+        className="flex flex-row flex-wrap justify-center items-center gap-x-2 gap-y-1"
+      >
         {/* 1. grup (a tane) — sağa doğru kayıp birleşir */}
         <motion.div
-          className="flex gap-1"
-          initial={{ x: -28 }}
+          className="flex flex-wrap justify-center gap-1 max-w-[44%]"
+          initial={{ x: -20 }}
           animate={{ x: 0 }}
           transition={merge}
         >
           {Array.from({ length: q.a }, (_, i) => (
-            <span key={i} className="text-3xl">{emoji}</span>
+            <span key={i} style={EMOJI}>{emoji}</span>
           ))}
         </motion.div>
 
         {/* "+" — birleşince kaybolur ve yer kaplamaz olur */}
         <motion.span
-          className="text-2xl font-bold text-savana-deep overflow-hidden inline-block"
-          initial={{ opacity: 1, width: 28 }}
+          className="font-bold text-savana-deep overflow-hidden inline-block"
+          style={OP}
+          initial={{ opacity: 1, width: 22 }}
           animate={{ opacity: 0, width: 0 }}
           transition={{ delay: HINT_DELAY, duration: 0.4, ease: 'easeIn' }}
         >
@@ -70,16 +90,16 @@ export default function QuestionVisual({ question, seed }: Props) {
 
         {/* 2. grup (b tane) — sola doğru kayıp birleşir */}
         <motion.div
-          className="flex gap-1"
-          initial={{ x: 28 }}
+          className="flex flex-wrap justify-center gap-1 max-w-[44%]"
+          initial={{ x: 20 }}
           animate={{ x: 0 }}
           transition={merge}
         >
           {Array.from({ length: q.b }, (_, i) => (
-            <span key={i} className="text-3xl">{emoji2}</span>
+            <span key={i} style={EMOJI}>{emoji2}</span>
           ))}
         </motion.div>
-      </div>
+      </EmojiFitField>
     )
   }
 
@@ -91,13 +111,19 @@ export default function QuestionVisual({ question, seed }: Props) {
     const total = q.a
     const removeFrom = q.a - q.b // bu index ve sonrası "çıkan" (solar/uçar)
     return (
-      <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
+      <EmojiFitField
+        fitKey={`sub-${q.a}-${q.b}`}
+        maxFont={30}
+        minFont={12}
+        maxHeight={150}
+        className="flex flex-wrap justify-center items-center gap-2"
+      >
         {Array.from({ length: total }, (_, i) => {
           const leaving = i >= removeFrom
           return (
             <motion.span
               key={`${seed}-${i}`}
-              className="text-3xl"
+              style={EMOJI}
               initial={{ opacity: 1, scale: 1, y: 0 }}
               animate={
                 leaving
@@ -114,7 +140,7 @@ export default function QuestionVisual({ question, seed }: Props) {
             </motion.span>
           )
         })}
-      </div>
+      </EmojiFitField>
     )
   }
 
@@ -124,7 +150,13 @@ export default function QuestionVisual({ question, seed }: Props) {
   // ayrı dursun (boşluk + "+") ki "a kere b" hissi olsun. ~1s sonra başlar.
   if (q.type === 'mul' && q.b !== undefined) {
     return (
-      <div className="flex flex-wrap justify-center items-center gap-2 min-h-[60px]">
+      <EmojiFitField
+        fitKey={`mul-${q.a}-${q.b}`}
+        maxFont={24}
+        minFont={11}
+        maxHeight={160}
+        className="flex flex-wrap justify-center items-center gap-2"
+      >
         {Array.from({ length: q.a }, (_, i) => (
           <motion.div
             key={`${seed}-${i}`}
@@ -140,15 +172,15 @@ export default function QuestionVisual({ question, seed }: Props) {
           >
             <div className="flex gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
               {Array.from({ length: q.b! }, (_, j) => (
-                <span key={j} className="text-2xl">{emoji}</span>
+                <span key={j} style={EMOJI}>{emoji}</span>
               ))}
             </div>
             {i < q.a - 1 && (
-              <span className="text-lg font-bold text-savana-deep mx-1">+</span>
+              <span className="font-bold text-savana-deep mx-1" style={OP}>+</span>
             )}
           </motion.div>
         ))}
-      </div>
+      </EmojiFitField>
     )
   }
 
@@ -158,16 +190,22 @@ export default function QuestionVisual({ question, seed }: Props) {
   // (hayvanların önünde paylaştırılmış gibi). a = q.ans * q.b (toplam emoji).
   if (q.type === 'div' && q.b !== undefined) {
     return (
-      <div className="relative flex justify-center items-center min-h-[80px]">
+      <EmojiFitField
+        fitKey={`div-${q.a}-${q.b}`}
+        maxFont={24}
+        minFont={11}
+        maxHeight={170}
+        className="relative flex justify-center items-center"
+      >
         {/* 1) Başlangıç: a emoji tek küme — ~1s sonra solar */}
         <motion.div
-          className="absolute flex flex-wrap justify-center gap-1 max-w-[280px]"
+          className="absolute flex flex-wrap justify-center gap-1 max-w-full"
           initial={{ opacity: 1 }}
           animate={{ opacity: 0 }}
           transition={{ delay: HINT_DELAY, duration: 0.4, ease: 'easeIn' }}
         >
           {Array.from({ length: q.a }, (_, i) => (
-            <span key={i} className="text-2xl">{emoji}</span>
+            <span key={i} style={EMOJI}>{emoji}</span>
           ))}
         </motion.div>
 
@@ -193,17 +231,17 @@ export default function QuestionVisual({ question, seed }: Props) {
                   damping: 18,
                 }}
               >
-                <span className="text-2xl">{animal}</span>
-                <div className="flex gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
+                <span style={EMOJI}>{animal}</span>
+                <div className="flex flex-wrap justify-center gap-1 px-2 py-1 border-2 border-dashed border-savana-leaf rounded-xl bg-green-50">
                   {Array.from({ length: q.ans }, (_, j) => (
-                    <span key={j} className="text-2xl">{emoji}</span>
+                    <span key={j} style={EMOJI}>{emoji}</span>
                   ))}
                 </div>
               </motion.div>
             )
           })}
         </motion.div>
-      </div>
+      </EmojiFitField>
     )
   }
 
