@@ -1,43 +1,75 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { Browser } from '@capacitor/browser'
 import type { PurchasesPackage } from '@revenuecat/purchases-capacitor'
 import Reno from '../characters/Reno'
 import {
-  getAnnualPackage,
+  loadAnnualPackage,
   buyPackage,
   restorePurchases,
   isNative,
 } from '../services/purchases'
 import { usePremium } from '../contexts/PremiumContext'
 
+// Yasal link URL'leri (Apple 3.1.2(c) — paywall'da çalışır olmalı).
+const PRIVACY_URL = 'https://gist.github.com/rottenburten/4d229b887bda5d1a39de294e601b004b'
+const TERMS_URL = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/'
+
 /**
  * Abonelik davet ekranı (paywall) — RevenueCat'e bağlı.
  * Fiyat default offering'in $rc_annual paketinden DİNAMİK gelir (kullanıcının
- * ülkesi/para birimi). Web/dev'de native SDK no-op → placeholder fiyat gösterilir.
- * Çocuğun adı KULLANILMAZ.
+ * ülkesi/para birimi). Çocuğun adı KULLANILMAZ.
+ *
+ * FİYAT PLACEHOLDER'I YOK. App Review (2.1 + 3.1.2) reddinin kökü buydu:
+ * offering gelmeyince ekrana sahte bir placeholder fiyat basılıyor, CTA yine
+ * de basılabiliyordu. Artık üç durum var:
+ *   loading → iskelet (skeleton), CTA disabled
+ *   ready   → gerçek priceString, CTA aktif
+ *   failed  → "Fiyat alınamadı" + Tekrar Dene, CTA disabled
  *
  * NOT: Bu ekrana otomatik yönlendirme YOK (gate akışı sonra). Şu an yalnızca
  * /paywall ile elle açılır; satın alma altyapısını test etmek için.
  */
+type LoadState = 'loading' | 'ready' | 'failed'
+
 export default function PaywallScreen() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { refresh } = usePremium()
 
   const [pkg, setPkg] = useState<PurchasesPackage | null>(null)
-  const [loadingPkg, setLoadingPkg] = useState(true)
+  const [loadState, setLoadState] = useState<LoadState>('loading')
   // İşlem durumu: satın alma/restore sırasında butonları kilitler + mesaj.
   const [busy, setBusy] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
 
   // default offering'in yıllık paketini çek (dinamik fiyat için).
+  // initPurchases artık tek promise'e sarılı; loadAnnualPackage configure'ı
+  // BEKLER — erken çağrı sessizce null dönmez.
+  const load = useCallback(async () => {
+    setLoadState('loading')
+    setNotice(null)
+    const res = await loadAnnualPackage()
+    if (res.ok) {
+      setPkg(res.pkg)
+      setLoadState('ready')
+    } else {
+      setPkg(null)
+      setLoadState('failed')
+    }
+    return res
+  }, [])
+
   useEffect(() => {
     let cancelled = false
-    getAnnualPackage().then((p) => {
-      if (!cancelled) {
-        setPkg(p)
-        setLoadingPkg(false)
+    loadAnnualPackage().then((res) => {
+      if (cancelled) return
+      if (res.ok) {
+        setPkg(res.pkg)
+        setLoadState('ready')
+      } else {
+        setLoadState('failed')
       }
     })
     return () => {
@@ -45,16 +77,16 @@ export default function PaywallScreen() {
     }
   }, [])
 
-  // Gösterilecek fiyat: native'de gerçek localizedPriceString, yoksa placeholder.
-  const priceText =
-    pkg?.product?.priceString ?? t('paywall.pricePlaceholder')
-
   const onSubscribe = async () => {
     if (busy) return
     setNotice(null)
-    // Native değilse / paket yoksa: satın alma yapılamaz (cihazda test edilir).
-    if (!isNative() || !pkg) {
-      setNotice(t('paywall.unavailable'))
+    // Paket YOKSA satın alma yapılamaz. Ayrım önemli (Apple 3.1.2):
+    //  - gerçekten cihazda değilsek (web/dev) → "yalnızca uygulamada"
+    //  - cihazdayız ama mağazadan paket gelmediyse → "bağlanılamadı"
+    // Eskiden ikisi de "inside the app" diyordu; reviewer iPad'de bu yanlış
+    // mesajı gördü ve uygulamayı eksik saydı.
+    if (!pkg) {
+      setNotice(isNative() ? t('paywall.connectError') : t('paywall.unavailable'))
       return
     }
     setBusy(true)
@@ -91,9 +123,16 @@ export default function PaywallScreen() {
     }
   }
 
-  // Yasal linkler — placeholder (gizlilik gist URL'i sonra bağlanacak).
-  const onPrivacy = () => console.log('[paywall] open privacy (placeholder)')
-  const onTerms = () => console.log('[paywall] open terms (placeholder)')
+  // Yasal linkler — Apple 3.1.2(c) zorunlu, ÇALIŞAN (tıklanabilir) olmalı.
+  // @capacitor/browser ile in-app Safari (SFSafariViewController) açar; web'de
+  // yeni sekme. Açılamazsa window.open ile fallback.
+  const openUrl = (url: string) => {
+    Browser.open({ url }).catch(() => {
+      window.open(url, '_blank')
+    })
+  }
+  const onPrivacy = () => openUrl(PRIVACY_URL)
+  const onTerms = () => openUrl(TERMS_URL)
 
   const featureKeys = ['modules', 'animations', 'parent', 'safe'] as const
 
@@ -134,22 +173,54 @@ export default function PaywallScreen() {
           ))}
         </div>
 
-        {/* Plan kartı — fiyat DİNAMİK (RevenueCat) */}
+        {/* Plan kartı — abonelik adı + süre + fiyat (Apple 3.1.2(c) zorunlu).
+            Fiyat DİNAMİK (RevenueCat yıllık paket). */}
         <div className="bg-white border-[3px] border-mango rounded-3xl p-4 shadow-kid mb-4 text-center">
+          {/* Abonelik başlığı */}
+          <p className="font-display font-bold text-savana-deep text-base">
+            {t('paywall.planName')}
+          </p>
+          {/* Süre — yıllık / otomatik yenilenen */}
+          <p className="font-display font-semibold text-savana-deep/70 text-xs mb-2">
+            {t('paywall.planDuration')}
+          </p>
           <span className="inline-block bg-mango text-white font-display font-bold text-sm rounded-full px-4 py-1 mb-2">
             {t('paywall.trialBadge')}
           </span>
-          <p className="font-display font-semibold text-savana-deep">
-            {loadingPkg
-              ? t('paywall.loadingPrice')
-              : t('paywall.priceLine', { price: priceText })}
-          </p>
+          {/* Fiyat + süre — SAHTE FİYAT YOK.
+              loading → iskelet · ready → gerçek fiyat · failed → tekrar dene */}
+          {loadState === 'loading' && (
+            <div
+              className="mx-auto h-5 w-40 rounded-full bg-savana-deep/15 animate-pulse"
+              role="status"
+              aria-label={t('paywall.loadingPrice')}
+            />
+          )}
+          {loadState === 'ready' && pkg?.product?.priceString && (
+            <p className="font-display font-semibold text-savana-deep">
+              {t('paywall.priceLine', { price: pkg.product.priceString })}
+            </p>
+          )}
+          {loadState === 'failed' && (
+            <div>
+              <p className="font-display font-semibold text-savana-deep/70 text-sm">
+                {t('paywall.priceUnavailable')}
+              </p>
+              <button
+                onClick={() => void load()}
+                className="mt-1 font-display font-bold text-savana-deep underline text-sm"
+              >
+                {t('paywall.retry')}
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Ana CTA */}
+        {/* Ana CTA — fiyat gelmeden BASILAMAZ (Apple 3.1.2: fiyatsız satın
+            alma daveti gösterilemez). */}
         <button
           onClick={onSubscribe}
-          disabled={busy || loadingPkg}
+          disabled={busy || loadState !== 'ready'}
           className="kid-btn w-full bg-savana-grass border-savana-deep text-lg mb-3 disabled:opacity-60"
         >
           {busy ? t('paywall.processing') : t('paywall.cta')}
@@ -162,9 +233,9 @@ export default function PaywallScreen() {
           </p>
         )}
 
-        {/* İptal bilgisi (Apple zorunlu) */}
+        {/* Otomatik yenileme açıklaması (Apple 3.1.2 zorunlu tam metin) */}
         <p className="text-center text-[11px] text-savana-deep/60 leading-snug mb-3 px-2">
-          {t('paywall.cancelInfo')}
+          {t('paywall.autoRenew')}
         </p>
 
         {/* Restore + yasal linkler (Apple zorunlu) */}

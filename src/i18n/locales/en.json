@@ -26,14 +26,46 @@
     "title": "🏅 BADGES"
   },
   "modules": {
-    "count": { "name": "COUNTING", "character": "Zara the Giraffe", "description": "Learn numbers with Zara" },
-    "add": { "name": "ADDITION", "character": "Eko the Elephant", "description": "Play addition with Eko" },
-    "sub": { "name": "SUBTRACTION", "character": "Zigi the Zebra", "description": "Do subtraction with Zigi" },
-    "mul": { "name": "MULTIPLICATION", "character": "Leo the Lion", "description": "Become a multiplication pro with Leo" },
-    "div": { "name": "DIVISION", "character": "Momo the Monkey", "description": "Share with Momo" },
-    "seq": { "name": "SEQUENCE", "character": "Kira the Eagle", "description": "Find the missing number" },
-    "shape": { "name": "SHAPES", "character": "Tomi the Turtle", "description": "Recognize shapes" },
-    "clock": { "name": "CLOCK", "character": "Kalo the Kangaroo", "description": "Learn to tell time" }
+    "count": {
+      "name": "COUNTING",
+      "character": "Zara the Giraffe",
+      "description": "Learn numbers with Zara"
+    },
+    "add": {
+      "name": "ADDITION",
+      "character": "Eko the Elephant",
+      "description": "Play addition with Eko"
+    },
+    "sub": {
+      "name": "SUBTRACTION",
+      "character": "Zigi the Zebra",
+      "description": "Do subtraction with Zigi"
+    },
+    "mul": {
+      "name": "MULTIPLICATION",
+      "character": "Leo the Lion",
+      "description": "Become a multiplication pro with Leo"
+    },
+    "div": {
+      "name": "DIVISION",
+      "character": "Momo the Monkey",
+      "description": "Share with Momo"
+    },
+    "seq": {
+      "name": "SEQUENCE",
+      "character": "Kira the Eagle",
+      "description": "Find the missing number"
+    },
+    "shape": {
+      "name": "SHAPES",
+      "character": "Tomi the Turtle",
+      "description": "Recognize shapes"
+    },
+    "clock": {
+      "name": "CLOCK",
+      "character": "Kalo the Kangaroo",
+      "description": "Learn to tell time"
+    }
   },
   "module": {
     "notFound": "Module not found",
@@ -46,8 +78,20 @@
     "clock": "What time is it? ⏰"
   },
   "shapes": {
-    "name": ["Circle", "Square", "Triangle", "Star", "Heart"],
-    "acc": ["Circle", "Square", "Triangle", "Star", "Heart"]
+    "name": [
+      "Circle",
+      "Square",
+      "Triangle",
+      "Star",
+      "Heart"
+    ],
+    "acc": [
+      "Circle",
+      "Square",
+      "Triangle",
+      "Star",
+      "Heart"
+    ]
   },
   "feedback": {
     "correct": "Great!",
@@ -81,24 +125,78 @@
     "next": "Next ({{current}}/{{total}})"
   },
   "badges": {
-    "first_correct": { "name": "First Step", "description": "First correct answer" },
-    "correct_5": { "name": "Sprout", "description": "5 correct answers" },
-    "correct_10": { "name": "Bud", "description": "10 correct answers" },
-    "correct_20": { "name": "Flower", "description": "20 correct answers" },
-    "correct_50": { "name": "Tree", "description": "50 correct answers" },
-    "correct_100": { "name": "Forest", "description": "100 correct answers" },
-    "streak_3": { "name": "Warmed Up", "description": "3 correct in a row" },
-    "streak_5": { "name": "On Fire", "description": "5 correct in a row" },
-    "streak_10": { "name": "Blazing", "description": "10 correct in a row" },
-    "expert_count": { "name": "Counting Expert", "description": "10 correct in Counting" },
-    "expert_add": { "name": "Addition Expert", "description": "10 correct in Addition" },
-    "expert_sub": { "name": "Subtraction Expert", "description": "10 correct in Subtraction" },
-    "expert_mul": { "name": "Multiplication Expert", "description": "10 correct in Multiplication" },
-    "expert_div": { "name": "Division Expert", "description": "10 correct in Division" },
-    "perfect_1": { "name": "Flawless!", "description": "First 10/10" },
-    "perfect_5": { "name": "Champion", "description": "10/10 five times" },
-    "score_1000": { "name": "Score Monster", "description": "1000 points" },
-    "first_mango_bonus": { "name": "Mango Master", "description": "First mango bonus" }
+    "first_correct": {
+      "name": "First Step",
+      "description": "First correct answer"
+    },
+    "correct_5": {
+      "name": "Sprout",
+      "description": "5 correct answers"
+    },
+    "correct_10": {
+      "name": "Bud",
+      "description": "10 correct answers"
+    },
+    "correct_20": {
+      "name": "Flower",
+      "description": "20 correct answers"
+    },
+    "correct_50": {
+      "name": "Tree",
+      "description": "50 correct answers"
+    },
+    "correct_100": {
+      "name": "Forest",
+      "description": "100 correct answers"
+    },
+    "streak_3": {
+      "name": "Warmed Up",
+      "description": "3 correct in a row"
+    },
+    "streak_5": {
+      "name": "On Fire",
+      "description": "5 correct in a row"
+    },
+    "streak_10": {
+      "name": "Blazing",
+      "description": "10 correct in a row"
+    },
+    "expert_count": {
+      "name": "Counting Expert",
+      "description": "10 correct in Counting"
+    },
+    "expert_add": {
+      "name": "Addition Expert",
+      "description": "10 correct in Addition"
+    },
+    "expert_sub": {
+      "name": "Subtraction Expert",
+      "description": "10 correct in Subtraction"
+    },
+    "expert_mul": {
+      "name": "Multiplication Expert",
+      "description": "10 correct in Multiplication"
+    },
+    "expert_div": {
+      "name": "Division Expert",
+      "description": "10 correct in Division"
+    },
+    "perfect_1": {
+      "name": "Flawless!",
+      "description": "First 10/10"
+    },
+    "perfect_5": {
+      "name": "Champion",
+      "description": "10/10 five times"
+    },
+    "score_1000": {
+      "name": "Score Monster",
+      "description": "1000 points"
+    },
+    "first_mango_bonus": {
+      "name": "Mango Master",
+      "description": "First mango bonus"
+    }
   },
   "parent": {
     "title": "👨‍👩‍👧 Parent Panel",
@@ -113,7 +211,15 @@
     "playTimeDesc": "Your child's daily mango (carrot) time. Changes apply from today.",
     "minutesShort": "min",
     "weekChart": "Last 7 Days",
-    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "days": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
     "legendCorrect": "Correct",
     "legendWrong": "Wrong",
     "stats": "Statistics",
@@ -145,19 +251,24 @@
       "safe": "Ad-free and safe — all data stays on the device"
     },
     "trialBadge": "3 DAYS FREE",
-    "priceLine": "Then {{price}}",
-    "pricePlaceholder": "$XX.XX/year",
+    "priceLine": "Then {{price}}/year",
     "loadingPrice": "Loading price…",
+    "priceUnavailable": "Price unavailable",
+    "retry": "Try Again",
     "processing": "Processing…",
     "purchaseSuccess": "Thank you! All sections unlocked 🎉",
     "purchaseError": "Purchase couldn't be completed. Please try again.",
     "restoreSuccess": "Your subscription was restored 🎉",
     "restoreNone": "No active subscription found to restore.",
     "unavailable": "Purchases can only be made inside the app (on device).",
+    "connectError": "Couldn't reach the App Store. Please check your connection and try again.",
     "cta": "Start 3 Days Free",
     "cancelInfo": "Cancel before the trial ends and you won't be charged. Cancel: App Store → Account → Subscriptions.",
     "restore": "Restore purchase",
     "privacy": "Privacy Policy",
-    "terms": "Terms of Use"
+    "terms": "Terms of Use",
+    "planName": "Rhino Kids Premium",
+    "planDuration": "Yearly subscription · auto-renewable",
+    "autoRenew": "Payment is charged to your Apple ID at confirmation of purchase. The subscription renews automatically for one year unless canceled at least 24 hours before the period ends. Manage or cancel anytime in App Store → Account → Subscriptions."
   }
 }

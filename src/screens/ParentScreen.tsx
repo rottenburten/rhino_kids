@@ -13,6 +13,93 @@ import { useLocalizeNumber, normalizeDigits } from '../i18n/digits'
 import { numberToWords, randomGateNumber } from '../i18n/numberWords'
 import { clearDailyLock } from '../services/dailyLock'
 import { usePremium } from '../contexts/PremiumContext'
+import { getPurchasesDiag, loadAnnualPackage, type PurchasesDiag } from '../services/purchases'
+
+// ── Gizli satın alma tanı satırı ───────────────────────────────────────────
+// App Review reddinde (2.1 + 3.1.2) reviewer'ın iPad'inde paywall fiyatı
+// gelmedi; cihazda NE olduğunu görecek hiçbir yüzey yoktu ("configure mi
+// patladı, offering mi boş?"). Bu satır TestFlight'ta cihazda okunur.
+// Gizli: ⭐ başlığına 5 kez dokun. Ebeveyn kapısının arkasında, çocuk erişemez.
+// API ANAHTARI GÖSTERİLMEZ — yalnızca "var mı" + 'appl_'/'goog_' öneki.
+function PurchasesDiagLine() {
+  const [taps, setTaps] = useState(0)
+  const [diag, setDiag] = useState<PurchasesDiag | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+  const open = taps >= 5
+
+  // 5. dokunuşta defteri oku (effect değil — cascading render yok).
+  const tap = () => {
+    const next = taps + 1
+    setTaps(next)
+    if (next >= 5) setDiag(getPurchasesDiag())
+  }
+
+  // Yeniden dene: offering'i tekrar çeker ve defteri tazeler.
+  const retry = async () => {
+    setRefreshing(true)
+    await loadAnnualPackage()
+    setDiag(getPurchasesDiag())
+    setRefreshing(false)
+  }
+
+  const rows: [string, string][] = diag
+    ? [
+        ['platform', `${diag.platform}${diag.native ? ' (native)' : ' (web)'}`],
+        ['api key', diag.keyPresent ? `present ${diag.keyPrefix}…` : 'MISSING'],
+        ['configured', diag.configured ? 'yes' : 'NO'],
+        ['offerings', diag.offeringCount < 0 ? 'not fetched' : String(diag.offeringCount)],
+        ['packages', diag.packageCount < 0 ? 'not fetched' : String(diag.packageCount)],
+        ['package id', diag.packageId ?? '—'],
+        ['price', diag.priceString ?? '—'],
+        ['step', diag.step],
+        ['last error', diag.lastError ?? '—'],
+      ]
+    : []
+
+  return (
+    <>
+      {/* Gizli tetik: başlığın altındaki ince şerit, 5 dokunuşta açılır. */}
+      {!open && (
+        <button
+          onClick={tap}
+          aria-hidden="true"
+          tabIndex={-1}
+          className="block w-full h-3 opacity-0"
+        />
+      )}
+      {open && diag && (
+        <div className="mt-3 rounded-xl bg-savana-deep/5 border border-savana-deep/20 p-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className="font-mono text-[10px] font-bold text-savana-deep/70">
+              IAP DIAGNOSTICS
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={retry}
+                disabled={refreshing}
+                className="font-mono text-[10px] underline text-savana-deep/70 disabled:opacity-50"
+              >
+                {refreshing ? 'retrying…' : 'retry'}
+              </button>
+              <button
+                onClick={() => setTaps(0)}
+                className="font-mono text-[10px] underline text-savana-deep/70"
+              >
+                hide
+              </button>
+            </div>
+          </div>
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-2 font-mono text-[10px] leading-relaxed">
+              <span className="text-savana-deep/55 shrink-0">{k}</span>
+              <span className="text-savana-deep font-semibold text-right break-all">{v}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
 
 // ── Ebeveyn kapısı: ekranda YAZIYLA 4 basamaklı sayı (1000-9999), kullanıcı
 // RAKAMLA girer. Çocuk yazamaz; ebeveyn kolay çözer. Sayı kelimeleri aktif
@@ -298,6 +385,9 @@ export default function ParentScreen() {
               </button>
             </>
           )}
+          {/* Gizli tanı satırı — bu kartın en altındaki görünmez şeride
+              5 kez dokun. TestFlight'ta cihazda IAP durumu okunur. */}
+          <PurchasesDiagLine />
         </section>
 
         {/* VERİLERİ SIFIRLA */}

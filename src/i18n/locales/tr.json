@@ -26,14 +26,46 @@
     "title": "🏅 ROZETLER"
   },
   "modules": {
-    "count": { "name": "SAYMA", "character": "Zürafa Zara", "description": "Zara ile sayıları öğren" },
-    "add": { "name": "TOPLAMA", "character": "Fil Eko", "description": "Eko ile toplama oyna" },
-    "sub": { "name": "ÇIKARMA", "character": "Zebra Zigi", "description": "Zigi ile çıkarma yap" },
-    "mul": { "name": "ÇARPMA", "character": "Aslan Leo", "description": "Leo ile çarpma uzmanı ol" },
-    "div": { "name": "BÖLME", "character": "Maymun Momo", "description": "Momo ile paylaş" },
-    "seq": { "name": "SIRA", "character": "Kartal Kira", "description": "Eksik sayıyı bul" },
-    "shape": { "name": "ŞEKİL", "character": "Kaplumbağa Tomi", "description": "Şekilleri tanı" },
-    "clock": { "name": "SAAT", "character": "Kanguru Kalo", "description": "Saati öğren" }
+    "count": {
+      "name": "SAYMA",
+      "character": "Zürafa Zara",
+      "description": "Zara ile sayıları öğren"
+    },
+    "add": {
+      "name": "TOPLAMA",
+      "character": "Fil Eko",
+      "description": "Eko ile toplama oyna"
+    },
+    "sub": {
+      "name": "ÇIKARMA",
+      "character": "Zebra Zigi",
+      "description": "Zigi ile çıkarma yap"
+    },
+    "mul": {
+      "name": "ÇARPMA",
+      "character": "Aslan Leo",
+      "description": "Leo ile çarpma uzmanı ol"
+    },
+    "div": {
+      "name": "BÖLME",
+      "character": "Maymun Momo",
+      "description": "Momo ile paylaş"
+    },
+    "seq": {
+      "name": "SIRA",
+      "character": "Kartal Kira",
+      "description": "Eksik sayıyı bul"
+    },
+    "shape": {
+      "name": "ŞEKİL",
+      "character": "Kaplumbağa Tomi",
+      "description": "Şekilleri tanı"
+    },
+    "clock": {
+      "name": "SAAT",
+      "character": "Kanguru Kalo",
+      "description": "Saati öğren"
+    }
   },
   "module": {
     "notFound": "Modül bulunamadı",
@@ -46,8 +78,20 @@
     "clock": "Saat kaç? ⏰"
   },
   "shapes": {
-    "name": ["Daire", "Kare", "Üçgen", "Yıldız", "Kalp"],
-    "acc": ["Daireyi", "Kareyi", "Üçgeni", "Yıldızı", "Kalbi"]
+    "name": [
+      "Daire",
+      "Kare",
+      "Üçgen",
+      "Yıldız",
+      "Kalp"
+    ],
+    "acc": [
+      "Daireyi",
+      "Kareyi",
+      "Üçgeni",
+      "Yıldızı",
+      "Kalbi"
+    ]
   },
   "feedback": {
     "correct": "Doğru!",
@@ -81,24 +125,78 @@
     "next": "Sıradaki ({{current}}/{{total}})"
   },
   "badges": {
-    "first_correct": { "name": "İlk Adım", "description": "İlk doğru cevap" },
-    "correct_5": { "name": "Filiz", "description": "5 doğru cevap" },
-    "correct_10": { "name": "Tomurcuk", "description": "10 doğru cevap" },
-    "correct_20": { "name": "Çiçek", "description": "20 doğru cevap" },
-    "correct_50": { "name": "Ağaç", "description": "50 doğru cevap" },
-    "correct_100": { "name": "Orman", "description": "100 doğru cevap" },
-    "streak_3": { "name": "Isındı", "description": "3 doğru üst üste" },
-    "streak_5": { "name": "Alev", "description": "5 doğru üst üste" },
-    "streak_10": { "name": "Yangın", "description": "10 doğru üst üste" },
-    "expert_count": { "name": "Sayma Uzmanı", "description": "Saymada 10 doğru" },
-    "expert_add": { "name": "Toplama Uzmanı", "description": "Toplamada 10 doğru" },
-    "expert_sub": { "name": "Çıkarma Uzmanı", "description": "Çıkarmada 10 doğru" },
-    "expert_mul": { "name": "Çarpma Uzmanı", "description": "Çarpmada 10 doğru" },
-    "expert_div": { "name": "Bölme Uzmanı", "description": "Bölmede 10 doğru" },
-    "perfect_1": { "name": "Kusursuz!", "description": "İlk kez 10/10" },
-    "perfect_5": { "name": "Şampiyon", "description": "5 kez 10/10" },
-    "score_1000": { "name": "Puan Canavarı", "description": "1000 puan" },
-    "first_mango_bonus": { "name": "Mango Ustası", "description": "İlk mango bonusu" }
+    "first_correct": {
+      "name": "İlk Adım",
+      "description": "İlk doğru cevap"
+    },
+    "correct_5": {
+      "name": "Filiz",
+      "description": "5 doğru cevap"
+    },
+    "correct_10": {
+      "name": "Tomurcuk",
+      "description": "10 doğru cevap"
+    },
+    "correct_20": {
+      "name": "Çiçek",
+      "description": "20 doğru cevap"
+    },
+    "correct_50": {
+      "name": "Ağaç",
+      "description": "50 doğru cevap"
+    },
+    "correct_100": {
+      "name": "Orman",
+      "description": "100 doğru cevap"
+    },
+    "streak_3": {
+      "name": "Isındı",
+      "description": "3 doğru üst üste"
+    },
+    "streak_5": {
+      "name": "Alev",
+      "description": "5 doğru üst üste"
+    },
+    "streak_10": {
+      "name": "Yangın",
+      "description": "10 doğru üst üste"
+    },
+    "expert_count": {
+      "name": "Sayma Uzmanı",
+      "description": "Saymada 10 doğru"
+    },
+    "expert_add": {
+      "name": "Toplama Uzmanı",
+      "description": "Toplamada 10 doğru"
+    },
+    "expert_sub": {
+      "name": "Çıkarma Uzmanı",
+      "description": "Çıkarmada 10 doğru"
+    },
+    "expert_mul": {
+      "name": "Çarpma Uzmanı",
+      "description": "Çarpmada 10 doğru"
+    },
+    "expert_div": {
+      "name": "Bölme Uzmanı",
+      "description": "Bölmede 10 doğru"
+    },
+    "perfect_1": {
+      "name": "Kusursuz!",
+      "description": "İlk kez 10/10"
+    },
+    "perfect_5": {
+      "name": "Şampiyon",
+      "description": "5 kez 10/10"
+    },
+    "score_1000": {
+      "name": "Puan Canavarı",
+      "description": "1000 puan"
+    },
+    "first_mango_bonus": {
+      "name": "Mango Ustası",
+      "description": "İlk mango bonusu"
+    }
   },
   "parent": {
     "title": "👨‍👩‍👧 Ebeveyn Paneli",
@@ -113,7 +211,15 @@
     "playTimeDesc": "Çocuğun günlük mango (havuç) süresi. Değiştirince bugünden geçerli olur.",
     "minutesShort": "dk",
     "weekChart": "Son 7 Gün",
-    "days": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+    "days": [
+      "Paz",
+      "Pzt",
+      "Sal",
+      "Çar",
+      "Per",
+      "Cum",
+      "Cmt"
+    ],
     "legendCorrect": "Doğru",
     "legendWrong": "Yanlış",
     "stats": "İstatistikler",
@@ -145,19 +251,24 @@
       "safe": "Reklamsız ve güvenli — tüm veriler cihazda kalır"
     },
     "trialBadge": "3 GÜN ÜCRETSİZ",
-    "priceLine": "Sonra yıllık {{price}}",
-    "pricePlaceholder": "₺XXX/yıl",
+    "priceLine": "Sonra {{price}}/yıl",
     "loadingPrice": "Fiyat yükleniyor…",
+    "priceUnavailable": "Fiyat alınamadı",
+    "retry": "Tekrar Dene",
     "processing": "İşleniyor…",
     "purchaseSuccess": "Teşekkürler! Tüm bölümler açıldı 🎉",
     "purchaseError": "Satın alma tamamlanamadı. Lütfen tekrar dene.",
     "restoreSuccess": "Aboneliğin geri yüklendi 🎉",
     "restoreNone": "Geri yüklenecek aktif abonelik bulunamadı.",
     "unavailable": "Satın alma yalnızca uygulamada (cihazda) yapılabilir.",
+    "connectError": "Bağlanılamadı. İnternet bağlantını kontrol edip tekrar dene.",
     "cta": "3 Gün Ücretsiz Başla",
     "cancelInfo": "Deneme bitmeden iptal et, ücret alınmaz. İptal: App Store → Hesap → Abonelikler.",
     "restore": "Satın alımı geri yükle",
     "privacy": "Gizlilik Politikası",
-    "terms": "Kullanım Şartları"
+    "terms": "Kullanım Şartları",
+    "planName": "Rhino Kids Premium",
+    "planDuration": "Yıllık abonelik · otomatik yenilenir",
+    "autoRenew": "Ödeme, satın alma onayında Apple ID hesabınızdan alınır. Abonelik, dönem bitiminden en az 24 saat önce iptal edilmezse bir yıllığına otomatik yenilenir. App Store → Hesap → Abonelikler'den dilediğiniz zaman yönetebilir veya iptal edebilirsiniz."
   }
 }

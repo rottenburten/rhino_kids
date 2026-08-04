@@ -26,14 +26,46 @@
     "title": "🏅 الأوسمة"
   },
   "modules": {
-    "count": { "name": "العدّ", "character": "زارا الزرافة", "description": "تعلّم الأرقام مع زارا" },
-    "add": { "name": "الجمع", "character": "إيكو الفيل", "description": "العب الجمع مع إيكو" },
-    "sub": { "name": "الطرح", "character": "زيجي الحمار الوحشي", "description": "اطرح مع زيجي" },
-    "mul": { "name": "الضرب", "character": "ليو الأسد", "description": "كن بطل الضرب مع ليو" },
-    "div": { "name": "القسمة", "character": "مومو القرد", "description": "شارك مع مومو" },
-    "seq": { "name": "التسلسل", "character": "كيرا النسر", "description": "جد الرقم الناقص" },
-    "shape": { "name": "الأشكال", "character": "تومي السلحفاة", "description": "تعرّف على الأشكال" },
-    "clock": { "name": "الساعة", "character": "كالو الكنغر", "description": "تعلّم قراءة الساعة" }
+    "count": {
+      "name": "العدّ",
+      "character": "زارا الزرافة",
+      "description": "تعلّم الأرقام مع زارا"
+    },
+    "add": {
+      "name": "الجمع",
+      "character": "إيكو الفيل",
+      "description": "العب الجمع مع إيكو"
+    },
+    "sub": {
+      "name": "الطرح",
+      "character": "زيجي الحمار الوحشي",
+      "description": "اطرح مع زيجي"
+    },
+    "mul": {
+      "name": "الضرب",
+      "character": "ليو الأسد",
+      "description": "كن بطل الضرب مع ليو"
+    },
+    "div": {
+      "name": "القسمة",
+      "character": "مومو القرد",
+      "description": "شارك مع مومو"
+    },
+    "seq": {
+      "name": "التسلسل",
+      "character": "كيرا النسر",
+      "description": "جد الرقم الناقص"
+    },
+    "shape": {
+      "name": "الأشكال",
+      "character": "تومي السلحفاة",
+      "description": "تعرّف على الأشكال"
+    },
+    "clock": {
+      "name": "الساعة",
+      "character": "كالو الكنغر",
+      "description": "تعلّم قراءة الساعة"
+    }
   },
   "module": {
     "notFound": "الوحدة غير موجودة",
@@ -46,8 +78,20 @@
     "clock": "كم الساعة؟ ⏰"
   },
   "shapes": {
-    "name": ["دائرة", "مربع", "مثلث", "نجمة", "قلب"],
-    "acc": ["الدائرة", "المربع", "المثلث", "النجمة", "القلب"]
+    "name": [
+      "دائرة",
+      "مربع",
+      "مثلث",
+      "نجمة",
+      "قلب"
+    ],
+    "acc": [
+      "الدائرة",
+      "المربع",
+      "المثلث",
+      "النجمة",
+      "القلب"
+    ]
   },
   "feedback": {
     "correct": "أحسنت!",
@@ -81,24 +125,78 @@
     "next": "التالي ({{current}}/{{total}})"
   },
   "badges": {
-    "first_correct": { "name": "الخطوة الأولى", "description": "أول إجابة صحيحة" },
-    "correct_5": { "name": "برعم", "description": "٥ إجابات صحيحة" },
-    "correct_10": { "name": "زهرة صغيرة", "description": "١٠ إجابات صحيحة" },
-    "correct_20": { "name": "زهرة", "description": "٢٠ إجابة صحيحة" },
-    "correct_50": { "name": "شجرة", "description": "٥٠ إجابة صحيحة" },
-    "correct_100": { "name": "غابة", "description": "١٠٠ إجابة صحيحة" },
-    "streak_3": { "name": "بدأ الحماس", "description": "٣ إجابات صحيحة متتالية" },
-    "streak_5": { "name": "مشتعل", "description": "٥ إجابات صحيحة متتالية" },
-    "streak_10": { "name": "نار متّقدة", "description": "١٠ إجابات صحيحة متتالية" },
-    "expert_count": { "name": "خبير العدّ", "description": "١٠ صحيحة في العدّ" },
-    "expert_add": { "name": "خبير الجمع", "description": "١٠ صحيحة في الجمع" },
-    "expert_sub": { "name": "خبير الطرح", "description": "١٠ صحيحة في الطرح" },
-    "expert_mul": { "name": "خبير الضرب", "description": "١٠ صحيحة في الضرب" },
-    "expert_div": { "name": "خبير القسمة", "description": "١٠ صحيحة في القسمة" },
-    "perfect_1": { "name": "بلا أخطاء!", "description": "أول ١٠/١٠" },
-    "perfect_5": { "name": "بطل", "description": "١٠/١٠ خمس مرات" },
-    "score_1000": { "name": "وحش النقاط", "description": "١٠٠٠ نقطة" },
-    "first_mango_bonus": { "name": "سيّد المانجو", "description": "أول مكافأة مانجو" }
+    "first_correct": {
+      "name": "الخطوة الأولى",
+      "description": "أول إجابة صحيحة"
+    },
+    "correct_5": {
+      "name": "برعم",
+      "description": "٥ إجابات صحيحة"
+    },
+    "correct_10": {
+      "name": "زهرة صغيرة",
+      "description": "١٠ إجابات صحيحة"
+    },
+    "correct_20": {
+      "name": "زهرة",
+      "description": "٢٠ إجابة صحيحة"
+    },
+    "correct_50": {
+      "name": "شجرة",
+      "description": "٥٠ إجابة صحيحة"
+    },
+    "correct_100": {
+      "name": "غابة",
+      "description": "١٠٠ إجابة صحيحة"
+    },
+    "streak_3": {
+      "name": "بدأ الحماس",
+      "description": "٣ إجابات صحيحة متتالية"
+    },
+    "streak_5": {
+      "name": "مشتعل",
+      "description": "٥ إجابات صحيحة متتالية"
+    },
+    "streak_10": {
+      "name": "نار متّقدة",
+      "description": "١٠ إجابات صحيحة متتالية"
+    },
+    "expert_count": {
+      "name": "خبير العدّ",
+      "description": "١٠ صحيحة في العدّ"
+    },
+    "expert_add": {
+      "name": "خبير الجمع",
+      "description": "١٠ صحيحة في الجمع"
+    },
+    "expert_sub": {
+      "name": "خبير الطرح",
+      "description": "١٠ صحيحة في الطرح"
+    },
+    "expert_mul": {
+      "name": "خبير الضرب",
+      "description": "١٠ صحيحة في الضرب"
+    },
+    "expert_div": {
+      "name": "خبير القسمة",
+      "description": "١٠ صحيحة في القسمة"
+    },
+    "perfect_1": {
+      "name": "بلا أخطاء!",
+      "description": "أول ١٠/١٠"
+    },
+    "perfect_5": {
+      "name": "بطل",
+      "description": "١٠/١٠ خمس مرات"
+    },
+    "score_1000": {
+      "name": "وحش النقاط",
+      "description": "١٠٠٠ نقطة"
+    },
+    "first_mango_bonus": {
+      "name": "سيّد المانجو",
+      "description": "أول مكافأة مانجو"
+    }
   },
   "parent": {
     "title": "👨‍👩‍👧 لوحة الوالدين",
@@ -113,7 +211,15 @@
     "playTimeDesc": "وقت المانجو (الجزرة) اليومي لطفلك. يسري التغيير من اليوم.",
     "minutesShort": "د",
     "weekChart": "آخر ٧ أيام",
-    "days": ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"],
+    "days": [
+      "أحد",
+      "إثن",
+      "ثلا",
+      "أرب",
+      "خمي",
+      "جمع",
+      "سبت"
+    ],
     "legendCorrect": "صحيح",
     "legendWrong": "خطأ",
     "stats": "الإحصائيات",
@@ -145,19 +251,24 @@
       "safe": "بلا إعلانات وآمن — كل البيانات تبقى على الجهاز"
     },
     "trialBadge": "٣ أيام مجاناً",
-    "priceLine": "ثم {{price}}",
-    "pricePlaceholder": "XX.XX$/سنة",
+    "priceLine": "ثم {{price}}/سنة",
     "loadingPrice": "جارٍ تحميل السعر…",
+    "priceUnavailable": "تعذّر تحميل السعر",
+    "retry": "أعد المحاولة",
     "processing": "جارٍ المعالجة…",
     "purchaseSuccess": "شكراً لك! تم فتح جميع الأقسام 🎉",
     "purchaseError": "تعذّر إتمام الشراء. يرجى المحاولة مرة أخرى.",
     "restoreSuccess": "تمت استعادة اشتراكك 🎉",
     "restoreNone": "لم يتم العثور على اشتراك نشط للاستعادة.",
     "unavailable": "يمكن إجراء الشراء داخل التطبيق فقط (على الجهاز).",
+    "connectError": "تعذّر الاتصال بـ App Store. تحقّق من اتصالك وحاول مرة أخرى.",
     "cta": "ابدأ ٣ أيام مجاناً",
     "cancelInfo": "ألغِ قبل انتهاء التجربة ولن يتم خصم أي مبلغ. الإلغاء: App Store ← الحساب ← الاشتراكات.",
     "restore": "استعادة الشراء",
     "privacy": "سياسة الخصوصية",
-    "terms": "شروط الاستخدام"
+    "terms": "شروط الاستخدام",
+    "planName": "Rhino Kids Premium",
+    "planDuration": "اشتراك سنوي · يتجدد تلقائيًا",
+    "autoRenew": "يُخصم المبلغ من حساب Apple ID عند تأكيد الشراء. يتجدد الاشتراك تلقائيًا لمدة سنة ما لم يتم إلغاؤه قبل 24 ساعة على الأقل من نهاية الفترة. يمكنك الإدارة أو الإلغاء في أي وقت من App Store ← الحساب ← الاشتراكات."
   }
 }
