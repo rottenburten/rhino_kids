@@ -31,6 +31,11 @@ function assertStoreKeys(mode: string) {
     if (!value) problems.push(`${name} yok/boş`)
     else if (!value.startsWith(prefix)) {
       problems.push(`${name} '${prefix}' ile başlamıyor (yanlış platform anahtarı?)`)
+    } else if (value.startsWith(prefix + prefix)) {
+      // Kopyala-yapıştır kazası: '.env'e önek iki kez yazılmış
+      // (appl_appl_…). RevenueCat böyle bir anahtarı reddeder → offering
+      // boş döner → paywall'da fiyat gelmez. 2.1 + 3.1.2 reddinin KÖKÜ buydu.
+      problems.push(`${name} öneki İKİ KEZ yazılmış ('${prefix}${prefix}…') — bir tanesini sil`)
     }
   }
   if (problems.length > 0) {
